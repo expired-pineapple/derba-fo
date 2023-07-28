@@ -23,8 +23,13 @@ const upgradeBanner = computed(() => {
       class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
     >
       <!-- ℹ️ You can also use img tag or VImg here -->
-      <div v-html="logo" />
-
+      <VImg
+        :src="logo"
+        alt="logo"
+        width="40"
+        height="40"
+        transition="scale-transition"
+      />
       <Transition name="vertical-nav-app-title">
         <h1 class="font-weight-semibold leading-normal text-xl text-uppercase">
           Derba MIDROC
