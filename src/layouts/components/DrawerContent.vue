@@ -24,7 +24,7 @@ const upgradeBanner = computed(() => {
     >
       <!-- ℹ️ You can also use img tag or VImg here -->
       <VImg
-        :src="logo"
+        :src="src/assets/images/logo.png"
         alt="logo"
         width="40"
         height="40"
