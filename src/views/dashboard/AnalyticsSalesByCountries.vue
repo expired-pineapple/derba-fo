@@ -1,111 +1,90 @@
 <script setup>
-const salesByCountries = [
-  {
-    abbr: 'AA',
-    amount: '$8,656k',
-    country: 'Addis Ababa',
-    change: '+25.8%',
-    sales: '894k',
-    color: 'success',
-  },
-  {
-    abbr: 'AD',
-    amount: '$2,415k',
-    country: 'Adama',
-    change: '-6.2%',
-    sales: '645k',
-    color: 'error',
-  },
-  {
-    abbr: 'AS',
-    amount: '$865k',
-    country: 'Assosa',
-    change: '+12.4%',
-    sales: '148k',
-    color: 'warning',
-  },
-  {
-    abbr: 'DD',
-    amount: '$745k',
-    country: 'Dire Dawa',
-    change: '-11.9%',
-    sales: '86k',
-    color: 'secondary',
-  },
-  {
-    abbr: 'BD',
-    amount: '$45k',
-    country: 'Bahir Dar',
-    change: '+16.2%',
-    sales: '42k',
-    color: 'error',
-  },
-]
+import { hexToRgb } from '@layouts/utils'
+import VueApexCharts from 'vue3-apexcharts'
+import { useTheme } from 'vuetify'
+
+const vuetifyTheme = useTheme()
+const currentTheme = controlledComputed(() => vuetifyTheme.name.value, () => vuetifyTheme.current.value.colors)
+const variableTheme = controlledComputed(() => vuetifyTheme.name.value, () => vuetifyTheme.current.value.variables)
+
+const series = [{
+  name: 'Completed Shipments',
+  data: [31, 40, 28, 51, 42, 109, 100],
+
+},
+{
+  name: 'Cancelled Shipments',
+  data: [41, 32, 45, 32, 34, 52, 41],
+}]
+
+const chartOptions = controlledComputed(() => vuetifyTheme.name.value, () => {
+  return {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+    },
+    tooltip: { enabled: false },
+    grid: {
+      borderColor: `rgba(${ hexToRgb(String(variableTheme.value['border-color'])) },${ variableTheme.value['border-opacity'] })`,
+      strokeDashArray: 6,
+      xaxis: { lines: { show: true } },
+      yaxis: { lines: { show: false } },
+      padding: {
+        top: -10,
+        left: -7,
+        right: 5,
+        bottom: 10,
+      },
+    },
+    stroke: {
+      width: 3,
+      lineCap: 'butt',
+      curve: 'straight',
+    },
+    colors: [currentTheme.value.primary, currentTheme.value.error],
+    markers: {
+      size: 6,
+      offsetY: 4,
+      offsetX: -2,
+      strokeWidth: 3,
+      colors: ['transparent'],
+      strokeColors: 'transparent',
+      discrete: [{
+        size: 5.5,
+        seriesIndex: 0,
+        strokeColor: currentTheme.value.primary,
+        fillColor: currentTheme.value.surface,
+        dataPointIndex: series[0].data.length - 1,
+      }],
+      hover: { size: 7 },
+    },
+    xaxis: {
+      labels: { show: false },
+      axisTicks: { show: false },
+      axisBorder: { show: false },
+    },
+    yaxis: { labels: { show: false } },
+  }
+})
 </script>
 
 <template>
-  <VCard>
-    <VCardItem>
-      <VCardTitle>Customers by Countries</VCardTitle>
-
-      <template #append>
-        <div class="me-n3">
-          <MoreBtn />
-        </div>
-      </template>
-    </VCardItem>
-
+  <VCard
+    width="400"
+    height="180"
+  >
     <VCardText>
-      <VList class="card-list">
-        <VListItem
-          v-for="data in salesByCountries"
-          :key="data.country"
-        >
-          <template #prepend>
-            <VAvatar
-              size="40"
-              variant="tonal"
-              :color="data.color"
-              class="me-3"
-            >
-              {{ data.abbr }}
-            </VAvatar>
-          </template>
+      <VueApexCharts
+        type="line"
+        :options="chartOptions"
+        :series="series"
+        :height="150"
+        class="mb-4"
+      />
 
-          <VListItemTitle class="mb-1">
-            <span class="text-sm font-weight-medium">{{ data.amount }}</span>
-            <VIcon
-              size="22"
-              :color="data.change.charAt(0) === '+' ? 'success' : 'error'"
-              class="mx-1"
-            >
-              {{ data.change.charAt(0) === '+' ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
-            </VIcon>
-            <span :class="`text-xs ${data.change.charAt(0) === '+' ? 'text-success' : 'text-error'}`">
-              {{ data.change.slice(1) }}
-            </span>
-          </VListItemTitle>
-
-          <VListItemSubtitle class="text-xs">
-            {{ data.country }}
-          </VListItemSubtitle>
-
-          <template #append>
-            <div>
-              <h4 class="font-weight-medium">
-                {{ data.sales }}
-              </h4>
-              <span class="text-xs text-medium-emphasis">Sales</span>
-            </div>
-          </template>
-        </VListItem>
-      </VList>
+      <p class="text-center font-weight-medium mb-0">
+        Shipment Status
+      </p>
     </VCardText>
   </VCard>
 </template>
-
-  <style lang="scss" scoped>
-  .card-list {
-    --v-card-list-gap: 1.5rem;
-  }
-  </style>

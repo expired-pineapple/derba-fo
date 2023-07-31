@@ -1,33 +1,32 @@
 <template>
   <VCard>
-    <VCardTitle> List</VCardTitle>
+    <VCardTitle>Drivers</VCardTitle>
     <VCardText>
       <p>
         This is a list of all drivers in the system.  You can search for a driver by name, or filter by DMC ID.
       </p>
     </VCardText>
     <div
-      class="d-flex"
-      style="margin: 0 10px 5px;"
+      class="d-flex h-100 align-center justify-end"
+      style="margin: 0 8px 5px;"
     >
-      <VSelect
-
-        v-model="searchField"
-        label="Search Field:"
-        :items="['driver_name', 'driver_dmc_id', 'Job_title']"
-      />
-      <VTextField
+      <VTextField 
         v-model="searchValue"
-        label="Search Value:"
-        style="width: 0.5px; margin-left: 10px;"
+        hide-details="auto"
+        label="Search"
+        placeholder="Serach by Name or DMC ID"
+        height="40"
+        width="100"
+        prepend-icon="mdi-magnify"
       />
     </div>
-
     <EasyDataTable
       :headers="headers"
       :items="items"
       :search-field="searchField"
       :search-value="searchValue"
+      :theme-color="background"
+      :table-class-name="background"
     >
       <template #empty-message>
         <div class="text-center">
@@ -40,8 +39,14 @@
 
 <script lang="ts" setup>
 import { ref } from "vue"
+import { useTheme } from 'vuetify'
 
-const searchField = ref("")
+const theme = useTheme()
+const currentTheme = theme.current.value.colors
+const background = currentTheme.background
+
+
+const searchField = ["driver_name", "driver_dmc_id"]
 const searchValue = ref("")
   
 const headers = [

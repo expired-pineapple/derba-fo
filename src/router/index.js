@@ -9,10 +9,12 @@ const router = createRouter({
       component: () => import('../layouts/default.vue'),
       children: [
         {
+          name: 'dashboard',
           path: 'dashboard',
           component: () => import('../pages/dashboard.vue'),
         },
         {
+          name: 'account-settings',
           path: 'account-settings',
           component: () => import('../pages/account-settings.vue'),
         },
@@ -23,6 +25,11 @@ const router = createRouter({
         {
           path: 'drivers',
           component: () => import('../pages/Drivers/DriverList.vue'),
+        },
+        { 
+          name: "driver-edit",
+          path: 'driver-edit/:id',
+          component: () => import('../pages/Drivers/DriverEdit.vue'),
         },
         {
           path: 'register-drivers',

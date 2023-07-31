@@ -90,5 +90,6 @@
         "borderStyle": "solid"
       }
     ]
-  }
+  },
+  "vue.codeActions.enabled": false
 }

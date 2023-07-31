@@ -1,4 +1,6 @@
 <script setup>
+import logo from '../../assets/images/logo.png'
+
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
 
@@ -60,10 +62,27 @@ const handleNavScroll = evt => {
         >
           <div class="d-flex" />
           <div>
-            <VImg
-              src="src/assets/images/logo.png"
-              style="width: 6rem; height: 6rem; margin-bottom: 0.5rem;"
-            />
+            <div
+              v-if="logo"
+              class="logo-wrapper d-flex align-center justify-center mb-4 mt-2"
+            >
+              <VImg
+                :src="logo"
+                style="width: 6rem; height: 6rem; margin-bottom: 0.5rem;"
+              />
+            </div>
+            <div
+              v-else
+              class="logo"
+            >
+              <VAvatar size="6rem">
+                <VIcon
+                  size="5rem"
+                  color="grey lighten-1"
+                  icon="mdi-account-circle-outline"
+                />
+              </VAvatar>
+            </div>
             <span class="text-h6 font-weight-semibold text-primary">
               John Doe  
             </span>

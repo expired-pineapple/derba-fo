@@ -1,7 +1,5 @@
 <script setup>
-import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 import { useTheme } from 'vuetify'
 
 // Components
@@ -10,6 +8,44 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 
 const vuetifyTheme = useTheme()
+
+const drivers = [
+  ['Drivers', 'mdi-account-tie-outline', '/drivers'],
+  ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
+  ['Infractions', 'mdi-account-remove-outline', '/'],
+]
+
+const Trucks = [
+  ['Truck', 'mdi-truck-outline', '/truck/list'],
+  ['Maintenance', 'mdi-wrench-cog-outline', '/truck/bolo/list'],
+  ['Tire', 'mdi-tire', '/tire'],
+
+
+]
+
+const   Dispatch = [
+  ['Shipments', 'mdi-truck-delivery-outline', '/customers/list'],
+  ['Routes', 'mdi-map-marker-path', '/dispatch/list'],
+  ['Frieght Order', 'mdi-file-document-multiple-outline', '/driver/leave-logs'],
+]
+
+const Accounting = [
+  ['Advance Payment', 'mdi-account-cash-outline', '/advance-payment' ],
+  ['Settlements', 'mdi-piggy-bank-outline', '/settlements'],
+]
+
+const Customers = [
+  ['Customers', 'mdi-account-cash-outline', '/customers/list'],
+  ['Customer Contacts', 'mdi-card-account-mail-outline', '/customers/contact/list'],
+]
+
+const Settings = [
+  ['Fuel', 'mdi-fuel', '/fuel'],
+  ['Infraction Type', 'mdi-account-remove-outline', '/infration-type'],
+  ['Maintenance Type', 'mdi-wrench-cog-outline', '/maintenance-type'],
+  ['Insurance', 'mdi-shield-car'],
+
+]
 </script>
 
 <template>
@@ -36,74 +72,122 @@ const vuetifyTheme = useTheme()
     </template>
 
     <template #vertical-nav-content>
-      <VerticalNavLink
-        :item="{
-          title: 'Dashboard',
-          icon: 'mdi-home-outline',
-          to: '/dashboard',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Account Settings',
-          icon: 'mdi-gear-outline',
-          to: '/account-settings',
-        }"
-      />
-      <!-- 👉 Pages -->
-      <VerticalNavSectionTitle
-        :item="{
-          heading: 'Driver',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Driver',
-          icon:'mdi-account-tie-outline',
-          to: '/drivers',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Driver Leave Logs',
-          icon: 'mdi-account-minus-outline',
-          to: '/driver-leave-logs',
-        }"
-      />
-        
-      <!-- 👉Trucks -->
-      <VerticalNavSectionTitle
-        :item="{
-          heading: 'Fleet',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Trucks',
-          icon: 'mdi-truck-outline',
-          to: '/trucks',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Trip Information',
-          icon: 'mdi-truck-delivery-outline',
-          to: '/trip-information',
-        }"
-      />
-      <!-- 👉FO -->
-      <VerticalNavSectionTitle
-        :item="{
-          heading: 'Freight Order',
-        }"
-      />
-      <VerticalNavLink
-        :item="{
-          title: 'Freight Orders',
-          icon: 'mdi-truck-fast-outline',
-          to: '/freight-orders',
-        }"
-      />
+      <VList>
+        <VListItem
+          prepend-icon="mdi-view-dashboard-outline"
+          title="Dashboard"
+          to="/"
+          color="primary"
+        />
+        <VListItem
+          prepend-icon="mdi-account-cog-outline"
+          title="Account Settings"
+          to="/account-settings"
+          color="primary"
+        />
+        <VListGroup value="Drivers">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-account-tie-outline"
+              title="Drivers"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in drivers"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Trucks">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-truck-outline"
+              title="Vehicles"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Trucks"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Dispatch">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-truck-fast-outline"
+              title="Dispatch"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Dispatch"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Accounting">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-account-cash-outline"
+              title="Accounting"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Accounting"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Customers">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-account-multiple-outline"
+              title="Customers"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Customers"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Settings">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-cog-outline"
+              title="Settings"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Settings"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+      </VList>
     </template>
 
 
