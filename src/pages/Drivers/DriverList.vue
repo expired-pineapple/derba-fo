@@ -1,36 +1,73 @@
 <template>
-  <VBtn color="primary mb-3">
-    <VIcon>mdi-plus</VIcon>
-
-    <span
-      class="d-none d-sm-block"
-      @click="addDriver"
-    >Add new driver</span>
-  </VBtn>
   <VCard>
     <VCardTitle>Driver List</VCardTitle>
-    <VCardText>
-      <p>
-        This is a list of all drivers in the system.  You can search for a driver by name, or filter by DMC ID.
-      </p>
-    </VCardText>
-    <div
-      class="d-flex"
-      style="margin: 0 10px 5px;"
-    >
-      <VSelect
+    <p class="text-caption mx-4">
+      This is a list of all drivers in the system.  You can search for a driver by name, or filter by DMC ID.
+    </p>
+    <div class="d-flex">
+      <VBtn
+        variant="outlined"
+        color="primary"
+        height="30"
+        class="ml-4 mt-3 mb-2"
+      >
+        <VIcon>mdi-plus</VIcon>
+  
+        <span
+          class="d-none d-sm-block"
+          @click="addDriver"
+        >Add new driver</span>
+      </VBtn>
+      <div
+        class="d-flex"
+        style="margin: 0 10px 5px 30rem;"
+      >
+        <div class="search mr-4">
+          <VIcon
+            size="23"
+            color="primary"
+            class="mt-1"
+          >
+            mdi-magnify
+          </VIcon>
+          <input
+            v-model="searchValue"
+            class="search-field"
+            type="text"
+            placeholder="Search"
+          >
+        </div>
+        <VMenu
+          transition="slide-x-transition"
+          class="mr-4"
+        >
+          <template #activator="{ props }">
+            <VBtn
+              icon="mdi-filter"
+              v-bind="props"
+              color="primary"
+              variant="outlined"
+              size="4"
+              class="mt-3 mr-3"
+            />
+          </template>
 
-        v-model="searchField"
-        label="Search Field:"
-        :items="['driver_name', 'driver_dmc_id', 'Job_title']"
-      />
-      <VTextField
-        v-model="searchValue"
-        label="Search Value:"
-        style="width: 0.5px; margin-left: 10px;"
-      />
+          <VList width="100">
+            <VListItem
+              v-for="(item, i) in headers"
+              :key="i"
+              v-model="searchField"
+              :value="item.value"
+              @click="searchField = item.value"
+            >
+              <VListItemTitle class="text-center text-caption">
+                {{ item.text }}
+              </VListItemTitle>
+            </VListItem>
+          </VList>
+        </VMenu>
+      </div>
     </div>
-
     <EasyDataTable
       :headers="headers"
       :items="items"
@@ -48,9 +85,9 @@
 </template>
 
 <script lang="ts" setup>
-import router from "@/router";
-import { ref } from "vue";
-import { ClickRowArgument } from "vue3-easy-data-table";
+import router from "@/router"
+import { ref } from "vue"
+import { ClickRowArgument } from "vue3-easy-data-table"
 
 const searchField = ref("")
 const searchValue = ref("")
@@ -124,11 +161,31 @@ const items = [
 const addDriver = () => {
   router.push('/register-drivers')
 }
+
 const clickedRow = ref({})
 
-const editDriver = (item: ClickRowArgument) => {
-  console.log(item)
-  clickedRow.value = item
-  router.push({ name: "driver-edit", params: { id: item.id } })
+const editDriver = clickedRow => {
+  console.log(clickedRow)
+  router.push({ name: "driver-edit", params: { id: clickedRow.id } })
 }
 </script>
+
+<style scoped>
+.search {
+  padding: 5px;
+  border-block-end: 1px solid #0f8e3d;
+  inline-size: 100%;
+  margin-block-end: 10px;
+}
+
+.search-field {
+  padding: 5px;
+  border-block-end: none;
+  font-size: 0.8rem;
+  inline-size: 60%;
+}
+
+.search-field:focus {
+  outline: none;
+}
+</style>
