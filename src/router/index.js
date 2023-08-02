@@ -63,6 +63,31 @@ const router = createRouter({
           path: 'trip-form',
           component: () => import('../pages/Trips/TripFormView.vue'),
         },
+        {
+          name: 'infractions',
+          path: 'infractions',
+          component: () => import('../pages/Infractions/InfractionView.vue'),
+        },
+        {
+          name: 'register-infractions',
+          path: 'register-infractions',
+          component: () => import('../pages/Infractions/InfractionFormView.vue'),
+        },
+        {
+          name: 'maintenance',
+          path: 'maintenance',
+          component: () => import('../pages/Trucks/MaintenanceView.vue'),
+        },
+        {
+          name: 'customer',
+          path: 'customer',
+          component: () => import('../pages/Customer/CustomerView.vue'),
+        },
+        {
+          name: 'register-advance',
+          path: 'register-advance',
+          component: () => import('../pages/Advance/AdvanceFormView.vue'),
+        },
       ],
     },
     {

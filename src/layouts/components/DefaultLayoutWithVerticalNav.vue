@@ -12,15 +12,12 @@ const vuetifyTheme = useTheme()
 const drivers = [
   ['Drivers', 'mdi-account-tie-outline', '/drivers'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
-  ['Infractions', 'mdi-account-remove-outline', '/'],
+  ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
 const Trucks = [
-  ['Truck', 'mdi-truck-outline', '/truck/list'],
-  ['Maintenance', 'mdi-wrench-cog-outline', '/truck/bolo/list'],
-  ['Tire', 'mdi-tire', '/tire'],
-
-
+  ['Truck', 'mdi-truck-outline', '/trucks'],
+  ['Maintenance', 'mdi-wrench-cog-outline', '/maintenance'],
 ]
 
 const   Dispatch = [
@@ -35,7 +32,7 @@ const Accounting = [
 ]
 
 const Customers = [
-  ['Customers', 'mdi-account-cash-outline', '/customers/list'],
+  ['Customers', 'mdi-account-cash-outline', '/customer'],
   ['Customer Contacts', 'mdi-card-account-mail-outline', '/customers/contact/list'],
 ]
 

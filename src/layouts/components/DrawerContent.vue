@@ -1,7 +1,5 @@
 <script setup>
 import logo from '@images/logo.png?raw'
-import upgradeBannerDark from '@images/pro/upgrade-banner-dark.png'
-import upgradeBannerLight from '@images/pro/upgrade-banner-light.png'
 import {
   VerticalNavLink,
   VerticalNavSectionTitle,
@@ -9,10 +7,6 @@ import {
 import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()
-
-const upgradeBanner = computed(() => {
-  return vuetifyTheme.global.name.value === 'light' ? upgradeBannerLight : upgradeBannerDark
-})
 </script>
 
 <template>

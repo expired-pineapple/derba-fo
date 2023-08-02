@@ -136,9 +136,9 @@ const submitForm = () => {
                 <!-- 👉 Remarks -->
                 <VCol
                   cols="12"
-                  md="6"
+                  md="12"
                 >
-                  <VTextField
+                  <VTextarea
                     v-model="truckDataLocal.remarks"
                     label="Remarks"
                   />
@@ -156,8 +156,10 @@ const submitForm = () => {
                 <!-- 👉 Form Actions -->
                 <VCol
                   cols="12"
-                  class=""
+                  class="d-flex flex-wrap gap-4"
                 >
+                  <VBtn>Save</VBtn>
+
                   <VBtn
                     color="secondary"
                     variant="tonal"
@@ -165,12 +167,6 @@ const submitForm = () => {
                     @click.prevent="resetForm"
                   >
                     Reset
-                  </VBtn>
-                  <VBtn
-                    color="primary"
-                    @click="submitForm"
-                  >
-                    Submit
                   </VBtn>
                 </VCol>
               </VRow>
@@ -181,3 +177,5 @@ const submitForm = () => {
     </VRow>
   </div>
 </template>
+
+
