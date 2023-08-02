@@ -18,12 +18,11 @@ const resetForm = () => {
   accountDataLocal.value = structuredClone(accountData)
 }
 
-
 const submitForm = () => {
+  successAlert.value = false // Set successAlert to false at the beginning
   // Submit form data to backend
   console.log('Form submitted')
   successAlert.value = true
-  resetForm()
 }
 </script>
 
@@ -61,6 +60,7 @@ const submitForm = () => {
                     v-model="accountDataLocal.driver_name"
                     label="Full Name"
                     placeholder="John Doe"
+                    required
                   />
                 </VCol>
   
@@ -97,6 +97,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="accountDataLocal.phone"
                     label="Phone Number"
+                    placeholder="+251 912 3456 78"
                   />
                 </VCol>
   
@@ -108,6 +109,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="accountDataLocal.driver_dmc_id"
                     label="Driver DMC ID"
+                    placeholder="D01234"
                   />
                 </VCol>
   
@@ -119,6 +121,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="accountDataLocal.department"
                     label="Department"
+                    placeholder="Logistics"
                   />
                 </VCol>
   
@@ -130,6 +133,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="accountDataLocal.Job_title"
                     label="Job Title"
+                    placeholder="Driver"
                   />
                 </VCol>
   
@@ -159,15 +163,16 @@ const submitForm = () => {
                 <VCol
                   cols="12"
                   class="d-flex flex-wrap gap-4"
-                  @click.prevent="submitForm"
                 >
-                  <VBtn>Save</VBtn>
+                  <VBtn @click.prevent="submitForm">
+                    Save
+                  </VBtn>
 
                   <VBtn
                     color="secondary"
                     variant="tonal"
                     type="reset"
-                    @click.prevent="resetForm"
+                    @click="resetForm"
                   >
                     Reset
                   </VBtn>
