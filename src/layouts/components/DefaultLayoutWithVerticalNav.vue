@@ -10,7 +10,7 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 const vuetifyTheme = useTheme()
 
 const drivers = [
-  ['Drivers', 'mdi-account-tie-outline', '/drivers'],
+  ['Drivers List', 'mdi-account-tie-outline', '/drivers'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
   ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
@@ -73,7 +73,7 @@ const Settings = [
         <VListItem
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
-          to="/"
+          to="/dashboard"
           color="primary"
         />
         <VListItem
