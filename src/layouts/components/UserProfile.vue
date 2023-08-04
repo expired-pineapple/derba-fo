@@ -39,7 +39,18 @@
         <!-- Divider -->
         <VDivider class="my-2" />
 
-        <!-- 👉 Logout -->
+        <!-- 👉 Account Settings -->
+        <VListItem to="/account-settings">
+          <template #prepend>
+            <VIcon
+              class="me-2"
+              icon="mdi-account-cog-outline"
+              size="22"
+            />
+          </template>
+
+          <VListItemTitle>Account Settings</VListItemTitle>
+        </VListItem>
         <VListItem to="/login">
           <template #prepend>
             <VIcon
