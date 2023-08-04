@@ -4,8 +4,12 @@
     <p class="text-caption mx-4">
       {{ props.subheader }}
     </p>
-    <div class="d-flex">
+    <div 
+      v-if="buttonVisible"
+      class="d-flex"
+    >
       <VBtn
+        v-if="props.buttonVisible"
         variant="outlined"
         color="primary"
         height="30"
@@ -68,7 +72,19 @@
         </VMenu>
       </div>
     </div>
+    <div v-else>
+      <VTextField
+        v-model="searchValue"
+        density="underlined"
+        variant="solo"
+        label="Search drivers "
+        prepend-inner-icon="mdi-magnify"
+        single-line
+        hide-details
+      />
+    </div>
     <EasyDataTable
+      table-class-name="customize-table"
       :headers="props.tableHeader.headers"
       :items="props.tableHeader.items"
       :search-field="searchField"
@@ -99,11 +115,16 @@ const props = defineProps({
   },
   button: {
     type: Object,
-    required: true,
+    required: false,
   },
   tableHeader: {
     type: Object,
     required: true,
+  },
+  buttonVisible: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
 })
 
@@ -128,5 +149,20 @@ const searchValue = ref("")
 
 .search-field:focus {
   outline: none;
+}
+
+.customize-table {
+  --easy-table-header-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-header-background-color: rgba(var(--v-theme-on-table), var(--v-hover-opacity)) !important;
+  --easy-table-body-even-row-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-body-even-row-background-color: rgb(var(--v-theme-surface));
+  --easy-table-body-row-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-body-row-background-color: rgb(var(--v-theme-surface)) !important;
+  --easy-table-body-row-hover-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-footer-background-color: background-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
+  --easy-table-footer-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-scrollbar-track-color: background-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
+  --easy-table-loading-mask-background-color: #0f8e3d;
+  --easy-table-body-row-hover-background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
 }
 </style>

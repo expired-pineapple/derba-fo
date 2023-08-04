@@ -1,93 +1,12 @@
 <template>
-  <VCard>
-    <VCardTitle>Driver List</VCardTitle>
-    <p class="text-caption mx-4">
-      This is a list of all drivers in the system.  You can search for a driver by name, or filter by DMC ID.
-    </p>
-    <div class="d-flex">
-      <VBtn
-        variant="outlined"
-        color="primary"
-        height="30"
-        class="ml-4 mt-3 mb-2"
-      >
-        <VIcon>mdi-plus</VIcon>
-  
-        <span
-          class="d-none d-sm-block"
-          @click="addDriver"
-        >Add new driver</span>
-      </VBtn>
-      <div
-        class="d-flex"
-        style="margin: 0 10px 5px 30rem;"
-      >
-        <div class="search mr-4">
-          <VIcon
-            size="23"
-            color="primary"
-            class="mt-1"
-          >
-            mdi-magnify
-          </VIcon>
-          <input
-            v-model="searchValue"
-            class="search-field"
-            type="text"
-            placeholder="Search"
-          >
-        </div>
-        <VMenu
-          transition="slide-x-transition"
-          class="mr-4"
-        >
-          <template #activator="{ props }">
-            <VBtn
-              icon="mdi-filter"
-              v-bind="props"
-              color="primary"
-              variant="outlined"
-              size="4"
-              class="mt-3 mr-3"
-            />
-          </template>
-
-          <VList width="100">
-            <VListItem
-              v-for="(item, i) in headers"
-              :key="i"
-              v-model="searchField"
-              :value="item.value"
-              @click="searchField = item.value"
-            >
-              <VListItemTitle class="text-center text-caption">
-                {{ item.text }}
-              </VListItemTitle>
-            </VListItem>
-          </VList>
-        </VMenu>
-      </div>
-    </div>
-    <EasyDataTable
-      :headers="headers"
-      :items="items"
-      :search-field="searchField"
-      :search-value="searchValue"
-      @click-row="editDriver"
-    >
-      <template #empty-message>
-        <div class="text-center">
-          <p>No drivers found.</p>
-        </div>
-      </template>
-    </EasyDataTable>
-  </VCard>
+  <ListLayout v-bind="props" />
 </template>
 
 <script lang="ts" setup>
-import router from "@/router"
 import { ref } from "vue"
-import { ClickRowArgument } from "vue3-easy-data-table"
+
+import router from "@/router"
+import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 
 const searchField = ref("")
 const searchValue = ref("")
@@ -167,6 +86,21 @@ const clickedRow = ref({})
 const editDriver = clickedRow => {
   console.log(clickedRow)
   router.push({ name: "driver-edit", params: { id: clickedRow.id } })
+}
+
+const props = {
+  header: "Driver List",
+  subheader: "This is a list of all drivers in the system.",
+  button: {
+    text: "Add Driver",
+    onClick: addDriver,
+  },
+  tableHeader: {
+    headers,
+    items,
+    searchField,
+    searchValue,
+  },
 }
 </script>
 

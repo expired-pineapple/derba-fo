@@ -4,11 +4,12 @@
 import { ref, onMounted } from "vue"
 import Form from '@/views/pages/driver/FormView.vue'
 
+
 import { useRoute } from 'vue-router'
 import router from "@/router"
    
 const route = useRoute()
-
+const activeTab = ref(route.params.tab)
 
 const items = [
   {
@@ -180,7 +181,7 @@ const filterItems = () => {
   })
   
   return filteredItems 
-}
+}  
 
 
 const onSearch = () => {

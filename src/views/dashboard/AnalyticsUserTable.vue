@@ -1,45 +1,13 @@
 <template>
-  <VCard>
-    <VCardTitle>Drivers</VCardTitle>
-    <VCardText>
-      <p>
-        This is a list of all drivers in the system.  You can search for a driver by name, or filter by DMC ID.
-      </p>
-    </VCardText>
-    <div
-      class="d-flex h-100 align-center justify-end"
-      style="margin: 0 8px 5px;"
-    >
-      <VTextField 
-        v-model="searchValue"
-        hide-details="auto"
-        label="Search"
-        placeholder="Serach by Name or DMC ID"
-        height="40"
-        width="100"
-        prepend-icon="mdi-magnify"
-      />
-    </div>
-    <EasyDataTable
-      :headers="headers"
-      :items="items"
-      :search-field="searchField"
-      :search-value="searchValue"
-      :theme-color="background"
-      :table-class-name="background"
-    >
-      <template #empty-message>
-        <div class="text-center">
-          <p>No drivers found.</p>
-        </div>
-      </template>
-    </EasyDataTable>
-  </VCard>
+  <ListLayout v-bind="props" />
 </template>
 
 <script lang="ts" setup>
+import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 import { ref } from "vue"
 import { useTheme } from 'vuetify'
+import { list } from "postcss"
+import router from "@/router"
 
 const theme = useTheme()
 const currentTheme = theme.current.value.colors
@@ -287,4 +255,20 @@ const items = [
     "note_on_driver": "Needs additional training on new delivery routes",
   },
 ]
+
+const props = {
+  header: "Driver List",
+  subheader: "This is a list of all drivers in the system.",
+  button: {
+    text: "Add Driver",
+    onClick: () => router.push({ name: "driver-form" }),
+  },
+  tableHeader: {
+    headers,
+    items,
+    searchField,
+    searchValue,
+  },
+  buttonVisible: false,
+}
 </script>

@@ -16,6 +16,7 @@ const theme = {
         'on-warning': '#FFFFFF',
         'background': '#FFFFFF',
         'on-background': '#3A3541',
+        'on-table': "#FFFFFF",
         'on-surface': '#3A3541',
         'grey-50': '#FAFAFA',
         'grey-100': '#F0F2F8',
