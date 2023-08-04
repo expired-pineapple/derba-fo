@@ -19,10 +19,6 @@ const router = createRouter({
           component: () => import('../pages/account-settings.vue'),
         },
         {
-          path: 'typography',
-          component: () => import('../pages/typography.vue'),
-        },
-        {
           path: 'drivers',
           component: () => import('../pages/Drivers/DriverList.vue'),
         },
@@ -108,3 +104,4 @@ const router = createRouter({
 })
 
 export default router
+
