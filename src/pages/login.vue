@@ -55,8 +55,7 @@ const isPasswordVisible = ref(false)
             <VCol cols="12">
               <VTextField
                 v-model="form.email"
-                label="Email"
-                type="email"
+                label="Username"
               />
             </VCol>
 
@@ -87,17 +86,7 @@ const isPasswordVisible = ref(false)
       </VCardText>
     </VCard>
 
-    <VImg
-      class="auth-footer-start-tree d-none d-md-block"
-      :src="authV1Tree"
-      :width="250"
-    />
 
-    <VImg
-      :src="authV1Tree2"
-      class="auth-footer-end-tree d-none d-md-block"
-      :width="350"
-    />
 
     <!-- bg img -->
     <VImg
