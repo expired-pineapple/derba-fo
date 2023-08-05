@@ -3,7 +3,12 @@
 <script setup>
 import { ref, onMounted } from "vue"
 import Form from '@/views/pages/driver/FormView.vue'
-
+import EmergencyContact from '@/views/pages/driver/EmergencyContact.vue'
+import Passport from '@/views/pages/driver/Passport.vue'
+import Licence from '@/views/pages/driver/Licence.vue'
+import DriverLeave from '@/views/pages/driver/DriverLeave.vue'
+import Truck from '@/views/pages/driver/Truck.vue'
+import DjiboutiPass from '@/views/pages/driver/DjiboutiPass.vue'
 
 import { useRoute } from 'vue-router'
 import router from "@/router"
@@ -14,14 +19,14 @@ const activeTab = ref(route.params.tab)
 const items = [
   {
     "id": 1,
-    "fullName": "John Doe",
+    "fullName": "Mulugeta Bekele",
     "dmc_ID": "123456",
     "department": "Marketing",
     "phoneNumber": "555-1234",
     "residenceCity": "New York",
     "job_title": "Marketing Manager",
     "tin": "123-456-789",
-    "email": "johndoe@example.com",
+    "email": "mulugetaBekele@example.com",
     "DOB": "1985-07-20",
     "drvEmplStartDate": "2010-01-01",
     "drvEmplEndDate": "",
@@ -55,7 +60,7 @@ const items = [
     "DOB": "1988-02-28",
     "drvEmplStartDate": "2012-01-01",
     "drvEmplEndDate": "",
-    "isActive": true,
+    "isActive": "true",
   },
   {
     "id": 4,
@@ -167,10 +172,10 @@ const items = [
 ]
 
 
-
-const expand=ref(false)
+const expand=ref(true)
 const search = ref('')
 const filteredItems = ref(items)
+const editEmergencyContact = ref(false)
 
 const filterItems = () => {
   if (!search.value) {
@@ -181,7 +186,7 @@ const filterItems = () => {
   })
   
   return filteredItems 
-}  
+}
 
 
 const onSearch = () => {
@@ -190,27 +195,48 @@ const onSearch = () => {
 
 const model = items[0]
 
+const tabItems = [
+  { title: 'Driver Info', icon: 'mdi-account-outline', tab: 'info' },
+  { title: 'Emergency Contact', icon: 'mdi-card-account-phone-outline', tab: 'emergency' },
+  { title: 'Passport', icon: 'mdi-card-account-details-outline', tab: 'passport' },
+  { title: 'Licence', icon: 'mdi-card-account-details-outline', tab: 'licence' },
+  { title: 'Driver Leave', icon: 'mdi-account-minus-outline', tab: 'drvLeave' },
+  { title: 'Assigned Truck', icon: 'mdi-truck-outline', tab: 'truck' },
+  { title: 'Djibouti Pass', icon: 'mdi-card-account-details-outline', tab: 'djiboutPass' },
+]
+
 const editSelected = item => {
   router.push(`/driver-edit/${item.id}`)
 }
 </script>
 
 <template>
-  <div class="d-flex justify-space-between">
-    <div class="d-flex mb-4">
-      <VIcon
-        class="text-primary"
-        @click="router.go(-1)"
+  <div class="">
+    <VTabs
+      v-model="activeTab"
+      show-arrows
+    >
+      <VTab
+        v-for="item in tabItems"
+        :key="item.icon"
+        :value="item.tab"
       >
-        mdi-arrow-left
-      </VIcon>
-    </div>
+        <VIcon
+          size="20"
+          start
+          :icon="item.icon"
+        />
+        <span class="text-caption">
+          {{ item.title }}
+        </span>
+      </VTab>
+    </VTabs>
   </div>
   <div class="d-flex">
     <VCard
       v-if="!expand"
       width="250"
-      class="mr-4 driver-list"
+      class="gap-4 driver-list"
     >
       <VCardItem>
         <div class="d-flex">
@@ -272,7 +298,7 @@ const editSelected = item => {
         <div class="d-flex">
           <VAvatar 
             size="100"
-            class="mr-4"
+            class="gap-4"
           >
             <VIcon size="100">
               mdi-account-circle-outline
@@ -281,11 +307,11 @@ const editSelected = item => {
           <div class="driver-info mt-6">
             <p class="mb-0">
               <strong class="text-primary">Driver Name:</strong>
-              John Doe
+              {{ model.fullName }}
             </p>
             <p>
               <strong class="text-primary">Driver DMC ID:</strong>
-              123456789
+              {{ model.dmc_ID }}
             </p>
           </div>  
           <div class="form" />
@@ -295,9 +321,38 @@ const editSelected = item => {
         color="primary"
         class="mb-4"
       />
-      <VCardText>
-        <Form v-bind="model" />
-      </VCardText>
+      <VWindow v-model="activeTab">
+        <!-- Driver -->
+        <VWindowItem value="info">
+          <VCardText>
+            <Form v-bind="model" />
+          </VCardText>
+        </VWindowItem>
+        <!-- Emergency Contact -->
+        <VWindowItem value="emergency">
+          <EmergencyContact />
+        </VWindowItem>
+        <!-- Passport -->
+        <VWindowItem value="passport">
+          <Passport />
+        </VWindowItem>
+        <!-- Licence -->
+        <VWindowItem value="licence">
+          <Licence />
+        </VWindowItem>
+        <!-- Driver Leave -->
+        <VWindowItem value="drvLeave">
+          <DriverLeave />
+        </VWindowItem>
+        <!-- Truck -->
+        <VWindowItem value="truck">
+          <Truck />
+        </VWindowItem>
+        <!-- Djibouti Pass -->
+        <VWindowItem value="djiboutPass">
+          <DjiboutiPass />
+        </VWindowItem>
+      </VWindow>
     </VCard>
   </div>
 </template>
