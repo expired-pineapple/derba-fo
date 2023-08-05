@@ -125,7 +125,7 @@ const props = {
   subheader: "This is a list of maintenance registered in the system.",
   button: {
     text: "Add Maintenance",
-    onClick: registerForm,
+    to: "/register-maintenance",
   },
   tableHeader: {
     headers,

@@ -21,7 +21,7 @@ const Trucks = [
 ]
 
 const   Dispatch = [
-  ['Shipments', 'mdi-truck-delivery-outline', '/customers/list'],
+  ['Shipments', 'mdi-truck-delivery-outline', '/shipment'],
   ['Routes', 'mdi-map-marker-path', '/dispatch/list'],
   ['Frieght Order', 'mdi-file-document-multiple-outline', '/driver/leave-logs'],
 ]

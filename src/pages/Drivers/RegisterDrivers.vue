@@ -277,7 +277,7 @@ const submitForm = () => {
                     >
                       <VTextField
                         v-model="formDataLocal.emergency_contact.drvContactRelatinship"
-                        label="Contact Relatinship"
+                        label="Contact Relationship"
                         placeholder="Sister"
                         required
                       />

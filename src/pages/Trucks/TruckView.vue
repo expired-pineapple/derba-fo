@@ -145,7 +145,7 @@ const props = {
   subheader: "This is a list of trucks registered in the system.",
   button: {
     text: "Add Trucks",
-    onClick: registerForm,
+    to: "/register-trucks",
   },
   tableHeader: {
     headers,

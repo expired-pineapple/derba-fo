@@ -1,7 +1,58 @@
+<script lang="ts" setup>
+import router from "@/router"
+import { ref } from "vue"
+
+const props = defineProps({
+  header: {
+    type: String,
+    required: false,
+  },
+  subheader: {
+    type: String,
+    required: false,
+  },
+  button: {
+    type: Object,
+    required: false,
+  },
+  tableHeader: {
+    type: Object,
+    required: true,
+  },
+  buttonVisible: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  searchVisible: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+  rows: {
+    type: Number,
+    required: false,
+    default: 20,
+  },
+  clickedRow: {
+    type: Object,
+    required: true,
+  },
+})
+
+const searchField = ref("")
+const searchValue = ref("")
+</script>
+
 <template>
   <VCard>
-    <VCardTitle>{{ props.header }}</VCardTitle>
-    <p class="text-caption mx-4">
+    <VCardTitle v-if="props.header">
+      {{ props.header }}
+    </VCardTitle>
+    <p
+      v-if="props.subheader"
+      class="text-caption mx-4"
+    >
       {{ props.subheader }}
     </p>
     <div 
@@ -14,13 +65,11 @@
         color="primary"
         height="30"
         class="ml-4 mt-3 mb-2"
+        :to="props.button.to"
       >
         <VIcon>mdi-plus</VIcon>
   
-        <span
-          class="d-none d-sm-block"
-          @click="props.button.onClick"
-        >{{ props.button.text }}</span>
+        <span class="d-none d-sm-block">{{ props.button.text }}</span>
       </VBtn>
       <div
         class="d-flex"
@@ -77,7 +126,7 @@
         v-model="searchValue"
         density="underlined"
         variant="solo"
-        label="Search drivers "
+        label="Search"
         prepend-inner-icon="mdi-magnify"
         single-line
         hide-details
@@ -85,12 +134,21 @@
     </div>
     <EasyDataTable
       table-class-name="customize-table"
+      :rows-per-page="props.rows"
       :headers="props.tableHeader.headers"
       :items="props.tableHeader.items"
       :search-field="searchField"
       :search-value="searchValue"
-      @click-row="editDriver"
+      @click-row="props.clickedRow"
     >
+      <template #item-operation="item"> 
+        <div class="cursor-pointer">
+          <VIcon
+            icon="mdi-pencil" 
+            @click="editDriver(item)"
+          />
+        </div>
+      </template>
       <template #empty-message>
         <div class="text-center">
           <p>No Data found.</p>
@@ -99,38 +157,6 @@
     </EasyDataTable>
   </VCard>
 </template>
-
-<script lang="ts" setup>
-import router from "@/router"
-import { ref } from "vue"
-
-const props = defineProps({
-  header: {
-    type: String,
-    required: true,
-  },
-  subheader: {
-    type: String,
-    required: false,
-  },
-  button: {
-    type: Object,
-    required: false,
-  },
-  tableHeader: {
-    type: Object,
-    required: true,
-  },
-  buttonVisible: {
-    type: Boolean,
-    required: false,
-    default: true,
-  },
-})
-
-const searchField = ref("")
-const searchValue = ref("")
-</script>
 
 <style scoped>
 .search {

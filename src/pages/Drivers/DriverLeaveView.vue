@@ -10,10 +10,6 @@ import { ref } from "vue"
 const searchField = ref("")
 const searchValue = ref("")
 
-const leaveForm = () => {
-  router.push({ name: "driver-leave-form" })
-}
-
 const headers = [
   { text: "Full Name", value: "driver_name", sortable: true },
   { text: "Leave Type", value: "drvLeaveType", sortable: true },
@@ -31,7 +27,7 @@ const props = {
   subheader: "This is a list of all leave logs in the system.",
   button: {
     text: "Add Leave",
-    onClick: leaveForm,
+    to: "/driver-leave-form",
   },
   tableHeader: {
     headers,

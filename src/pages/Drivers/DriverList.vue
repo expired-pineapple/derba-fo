@@ -77,10 +77,6 @@ const items = [
 
 ]
 
-const addDriver = () => {
-  router.push('/register-drivers')
-}
-
 const clickedRow = ref({})
 
 const editDriver = clickedRow => {
@@ -93,7 +89,7 @@ const props = {
   subheader: "This is a list of all drivers in the system.",
   button: {
     text: "Add Driver",
-    onClick: addDriver,
+    to: '/register-drivers',
   },
   tableHeader: {
     headers,
@@ -101,6 +97,7 @@ const props = {
     searchField,
     searchValue,
   },
+  clickedRow: editDriver,
 }
 </script>
 

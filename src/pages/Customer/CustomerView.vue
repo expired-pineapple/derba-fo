@@ -79,10 +79,6 @@ const items =
     },
   ]
 
-const registerForm = () => {
-  router.push('/register-customer')
-}
-
 const clickedRow = ref({})
 
 const editDriver = clickedRow => {
@@ -95,7 +91,7 @@ const props = {
   subheader: "This is a list of all Customer registered in the system.",
   button: {
     text: "Add Customer",
-    onClick: registerForm,
+    to: '/register-customer',
   },
   tableHeader: {
     headers,
@@ -103,6 +99,7 @@ const props = {
     searchField,
     searchValue,
   },
+  
 }
 </script>
 

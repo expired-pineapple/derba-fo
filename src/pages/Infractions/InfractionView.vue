@@ -10,16 +10,13 @@ import { ref } from "vue"
 const searchField = ref("")
 const searchValue = ref("")
 
-const leaveForm = () => {
-  router.push({ name: "register-infractions" })
-}
-
 const headers = [
   { text: "Infraction Type", value: "infractionType", sortable: true },
   { text: "Driver", value: "driverName", sortable: true },
   { text: "Infraction Date", value: "infractionDate" },
   { text: "Infraction Notes", value: "infractionNote" },
   { text: "Created At", value: "createdAt",  sortable: true  },
+  { text: "Operation", value: "operation" },
 ]
 
 const items = [
@@ -110,7 +107,7 @@ const props = {
   subheader: "This is a list of infractions registered in the system.",
   button: {
     text: "Add Infractions",
-    onClick: leaveForm,
+    to: "/register-infractions",
   },
   tableHeader: {
     headers,
