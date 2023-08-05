@@ -270,5 +270,6 @@ const props = {
     searchValue,
   },
   buttonVisible: false,
+  rows: 10,
 }
 </script>
