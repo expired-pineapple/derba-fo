@@ -28,6 +28,11 @@ const router = createRouter({
           component: () => import('../pages/Drivers/DriverEdit.vue'),
         },
         {
+          name: "driver-view",
+          path: 'driver-view/:id',
+          component: () => import('../pages/Drivers/DriverEdit-2.vue'),
+        },
+        {
           path: 'register-drivers',
           component: () => import('../pages/Drivers/RegisterDrivers.vue'),
         },
@@ -84,12 +89,21 @@ const router = createRouter({
           path: 'register-advance',
           component: () => import('../pages/Advance/AdvanceFormView.vue'),
         },
+        {
+          name: 'shipment',
+          path: 'shipment',
+          component: () => import('../pages/FO/FOView.vue'),
+        },
       ],
     },
     {
       path: '/',
       component: () => import('../layouts/blank.vue'),
       children: [
+        {
+          path: "register",
+          component: () => import('../pages/register.vue'),
+        },  
         {
           path: 'login',
           component: () => import('../pages/login.vue'),
