@@ -8,12 +8,10 @@ import router from "@/router"
 import { ref, onMounted } from "vue"
 import { useStore, mapActions } from "vuex"
   
-const headers = [
-  { text: "Customer Code", value: "cmrCode", sortable: true },  
-  { text: "Customer Name", value: "cmrName", sortable: true },
-  { text: "TIN Number", value: "cmrTIN", sortable: true },
-  { text: "Address", value: "cmrAddress", sortable: true },
-  { text: "Phone Number", value: "cmrPhone", sortable: true },
+const headers = [ 
+  { text: "Customer Name", value: "customerID.cmrName", sortable: true },
+  { text: "Contact Name", value: "cntName", sortable: true },
+  { text: "Contact Phone", value: "cntPhone", sortable: true },
 ]
 
 const store = useStore()
@@ -27,9 +25,9 @@ const items = ref([])
 onMounted(() => {
   try {
     loading.value = true
-    store.dispatch('fetchCustomers')
-    items.value = store.getters.customers
-    console.log(store.getters.customers)
+    store.dispatch('fetchCustomerContacts')
+    items.value = store.getters.customerContacts
+    console.log(store.getters.customerContacts)
   } catch (err) {
     console.error('Error dispatching fetchCustomers action:', err)
   } finally {
@@ -47,10 +45,10 @@ const edit = clickedRow => {
 
 const props = {
   header: "Customer List",
-  subheader: "This is a list of all Customer registered in the system.",
+  subheader: "This is a list of all Customer Contacts registered in the system.",
   button: {
-    text: "Add Customer",
-    to: '/register-customer',
+    text: "Add Customer Contacts",
+    to: '/register-customer-contact',
   },
   tableHeader: {
     headers,
