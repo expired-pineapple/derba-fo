@@ -1,54 +1,13 @@
 <template>
-  <VBtn
-    color="primary mb-3"
-    @click="registerForm"
-  >
-    <VIcon>mdi-plus</VIcon>
-
-    <span class="d-none d-sm-block">Register Trips</span>
-  </VBtn>
-  <VCard>
-    <VCardTitle>Trip List</VCardTitle>
-    <VCardText>
-      <p>
-        This is a list of all trips registered in the system.
-      </p>
-    </VCardText>
-    <div
-      class="d-flex"
-      style="margin: 0 10px 5px;"
-    >
-      <VSelect
-
-        v-model="searchField"
-        label="Search Field:"
-        :items="headers.map((h) => h.value)"
-      />
-      <VTextField
-        v-model="searchValue"
-        label="Search Value:"
-        style="width: 0.5px; margin-left: 10px;"
-      />
-    </div>
-
-    <EasyDataTable
-      :headers="headers"
-      :items="items"
-      :search-field="searchField"
-      :search-value="searchValue"
-    >
-      <template #empty-message>
-        <div class="text-center">
-          <p>No Data Available.</p>
-        </div>
-      </template>
-    </EasyDataTable>
-  </VCard>
+  <ListLayout v-bind="props" />
 </template>
 
-<script setup>
+<script lang="ts" setup>
+import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
+
 import router from "@/router"
 import { ref } from "vue"
+
 
 const searchField = ref("")
 const searchValue = ref("")
@@ -107,7 +66,18 @@ const headers = [
 
 const items = []
 
-const registerForm = () => {
-  router.push({ name: "trip-form" })
+const props = {
+  header: "Routes",
+  subheader: "This is a list of routes registered in the system.",
+  button: {
+    text: "Add Routes",
+    to: "/trip-form",
+  },
+  tableHeader: {
+    headers,
+    items,
+    searchField,
+    searchValue,
+  },
 }
 </script>

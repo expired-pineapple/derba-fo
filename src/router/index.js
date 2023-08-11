@@ -25,18 +25,40 @@ const router = createRouter({
         { 
           name: "driver-edit",
           path: 'driver-edit/:id',
-          component: () => import('../pages/Drivers/DriverEdit.vue'),
+          component: () => import('../pages/Drivers/DriverEdit-2.vue'),
         },
         {
-          name: "driver-view",
-          path: 'driver-view/:id',
-          component: () => import('../pages/Drivers/DriverEdit-2.vue'),
+          name: "driver-leave-edit",
+          path: 'driver-leave-edit/:id',
+          component: () => import('../pages/Drivers/DriverLeaveEditView.vue'),
+        },
+        {
+          name: "emergency-contact",
+          path: 'emergency-contact',
+          component: () => import('../pages/Drivers/DriverEmergencyContactsView.vue'),
+
+        },
+        {
+          name: "licence",
+          path: 'licence',
+          component: () => import('../pages/Drivers/DriverLicenceView.vue'),
+        },
+        {
+          name: "driver-djibouti-pass",
+          path: 'driver-djibouti-pass',
+          component: () => import('../pages/Drivers/DjibouiPassView.vue'),
+        },
+        {
+          name: "driver-passport",
+          path: 'driver-passport',
+          component: () => import('../pages/Drivers/DriverPassView.vue'),
         },
         {
           path: 'register-drivers',
           component: () => import('../pages/Drivers/RegisterDrivers.vue'),
         },
         {
+          name: "driver-leave-logs",
           path: 'driver-leave-logs',
           component: () => import('../pages/Drivers/DriverLeaveView.vue'),
         },
@@ -50,9 +72,19 @@ const router = createRouter({
           component: () => import('../pages/Trucks/TruckView.vue'),
         },
         {
+          name: "truck-details",
+          path: 'truck/:id',
+          component: () => import('../pages/Trucks/TrucksDetails.vue'),
+        },
+        {
           name: 'register-trucks',
           path: 'register-trucks',
           component: () => import('../pages/Trucks/TruckFormView.vue'),
+        },
+        {
+          name: "trailers",
+          path: 'trailers',
+          component: () => import('../pages/Trailers/TrailerView.vue'),
         },
         {
           name: 'trip-information',
@@ -85,6 +117,27 @@ const router = createRouter({
           component: () => import('../pages/Customer/CustomerView.vue'),
         },
         {
+          name: 'register-customer',
+          path: 'register-customer',
+          component: () => import('../pages/Customer/CustomerForm.vue'),
+        },
+        {
+          name: 'edit-customer',
+          path: 'edit-customer/:id',
+          component: () => import('../pages/Customer/CustomerEdit.vue'),
+        },
+        {
+          name: 'register-customer-contact',
+          path: 'register-customer-contact',
+          component: () => import('../pages/Customer/CustomerContact/CustomerContactFormView.vue'),
+        },
+        {
+          name: 'customer-contact',
+          path: 'customer-contact',
+          component: () => import('../pages/Customer/CustomerContact/CustomerContactView.vue'),
+
+        },
+        {
           name: 'register-advance',
           path: 'register-advance',
           component: () => import('../pages/Advance/AdvanceFormView.vue'),
@@ -93,6 +146,16 @@ const router = createRouter({
           name: 'shipment',
           path: 'shipment',
           component: () => import('../pages/FO/FOView.vue'),
+        },
+        {
+          name: "sample",
+          path: 'sample',
+          component: () => import('../pages/sample.vue'),
+        },
+        {
+          name: "fleet",
+          path: "fleet",
+          component: () => import('../pages/Fleet/FleetView.vue'),
         },
       ],
     },
