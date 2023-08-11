@@ -1,5 +1,5 @@
 {
-  "name": "materio-vuetify-vuejs-admin-template-free",
+  "name": "DerbaFOManager",
   "version": "2.1.0",
   "private": true,
   "scripts": {
@@ -33,7 +33,7 @@
     "vue-flatpickr-component": "11.0.3",
     "vue-i18n": "^9.2.2",
     "vue-prism-component": "^2.0.0",
-    "vue-router": "^4.2.0",
+    "vue-router": "^4.2.4",
     "vue3-apexcharts": "^1.4.1",
     "vue3-easy-data-table": "^1.5.47",
     "vue3-perfect-scrollbar": "^1.6.0",
