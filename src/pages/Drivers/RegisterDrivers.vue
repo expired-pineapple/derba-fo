@@ -42,7 +42,8 @@ const activeTab = ref(route.params.tab)
 const tabs = [
   { title: 'Driver', icon: 'mdi-account-tie-outline', tab: 'Driver' },
   { title: 'Emergency Contact', icon: 'mdi-card-account-phone-outline', tab: 'emergency' },
-  { title: 'Licence', icon: 'mdi-card-account-details-outline', tab: 'licence' },
+  { title: 'Passport', icon: 'mdi-passport', tab: 'passport' },
+  { title: 'Licence', icon: 'mdi-license', tab: 'licence' },
 ]
 
 const nextTab = () => {
