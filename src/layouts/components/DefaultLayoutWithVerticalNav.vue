@@ -11,19 +11,29 @@ const vuetifyTheme = useTheme()
 
 const drivers = [
   ['Drivers List', 'mdi-account-tie-outline', '/drivers'],
+  ['Driver Emergency Contact', 'mdi-account-alert-outline', '/emergency-contact'],
+  ['Driver Licence', "mdi-license", '/licence' ],
+  ['Driver Djibouti Pass', "mdi-card-account-details-outline", "/driver-djibouti-pass"],
+  ['Driver Passport', 'mdi-passport', '/driver-passport'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
+  ['Assigned Trucks', 'mdi-truck-outline', '/trucks'],
   ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
 const Trucks = [
-  ['Truck', 'mdi-truck-outline', '/trucks'],
-  ['Maintenance', 'mdi-wrench-cog-outline', '/maintenance'],
+  ['Fleet', 'mdi-truck-outline', '/fleet'],
+  ['Trailers', 'mdi-truck-trailer', '/trailers'],
+]
+
+const TrucksConfig = [
+  ['Truck List', 'mdi-truck-outline', '/trucks'],
+  ['Insurance Claim', 'mdi-shield-car', '/insurance'],
+  ['Maintainence Request', 'mdi-wrench-cog-outline', '/maintainance'],
 ]
 
 const   Dispatch = [
-  ['Shipments', 'mdi-truck-delivery-outline', '/shipment'],
-  ['Routes', 'mdi-map-marker-path', '/dispatch/list'],
-  ['Frieght Order', 'mdi-file-document-multiple-outline', '/driver/leave-logs'],
+  ['Frieght Order', 'mdi-truck-delivery-outline', '/driver/leave-logs'],
+  ['Routes', 'mdi-map-marker-path', '/trip-information'],
 ]
 
 const Accounting = [
@@ -33,15 +43,24 @@ const Accounting = [
 
 const Customers = [
   ['Customers', 'mdi-account-cash-outline', '/customer'],
-  ['Customer Contacts', 'mdi-card-account-mail-outline', '/customers/contact/list'],
+  ['Customer Contacts', 'mdi-card-account-mail-outline', '/customer-contact'],
 ]
 
 const Settings = [
-  ['Fuel', 'mdi-fuel', '/fuel'],
+  ['Comodities', 'mdi-cash', '/comodities' ],
   ['Infraction Type', 'mdi-account-remove-outline', '/infration-type'],
+  ['Routes', 'mdi-map-marker-path', '/trip-information'],
   ['Maintenance Type', 'mdi-wrench-cog-outline', '/maintenance-type'],
-  ['Insurance', 'mdi-shield-car'],
+  ['Truck Status', 'mdi-car-info', '/truck-status'],
+]
 
+const Tire = [
+  ['Tire Provision', 'mdi-tire', '/tire-provision'],
+  ['Tire Return', 'mdi-tire', '/tire-provision'],
+]
+
+const Report = [
+  ['FO Report'],
 ]
 </script>
 
@@ -74,12 +93,6 @@ const Settings = [
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
           to="/dashboard"
-          color="primary"
-        />
-        <VListItem
-          prepend-icon="mdi-account-cog-outline"
-          title="Account Settings"
-          to="/account-settings"
           color="primary"
         />
         <VListGroup value="Drivers">
@@ -116,6 +129,41 @@ const Settings = [
             :value="title"
           />
         </VListGroup>
+        <VListGroup value="TrucksConfig">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-truck-outline"
+              title="Trucks"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in TrucksConfig"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+          <VListGroup value="Tire">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-tire"
+                title="Tire"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in Tire"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
+        </VListGroup>
+
         <VListGroup value="Dispatch">
           <template #activator="{ props }">
             <VListItem
