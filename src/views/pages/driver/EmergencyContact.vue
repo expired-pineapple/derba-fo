@@ -1,22 +1,28 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { ref, onMounted, computed } from "vue"
+import { useStore } from 'vuex'
 
-const emergency_contact = {
-  drvContactName: "Jane Doe",
-  drvContactPhone: "+251 912 3456 78",
-  drvContactRelationship: "Sister",
-  drvContactAdress: "Addis Ababa, Ethiopia",
-  drvContactActiveStatus: true,
-}
+import { useRoute } from 'vue-router'
 
-const emergency_contact_local = ref(structuredClone(emergency_contact))
+const emergencyProps = defineProps({
+  emergencyContact: {
+    type: Array,
+    required: true,
+  },
+})
+
+const store = useStore()
+const route = useRoute()
+
+const loading = ref(false)
 
 const editEmergencyContact = ref(false)
 
-const submitForm = () => {
-  console.log(emergency_contact_local.value)
-}
+const emergencyContact = ref(emergencyProps.emergencyContact)
+
+console.log(emergencyContact.value, "asdfg")
 </script>
+
 
 <template>
   <div
@@ -34,14 +40,17 @@ const submitForm = () => {
   </div>
   <VCardText>
     <VForm class="">
-      <VRow>
+      <VRow
+        v-for="emergencyCont in emergencyContact"
+        :key="emergencyCont"
+      >
         <!-- 👉 Full Name -->
         <VCol
           md="6"
           cols="12"
         >
           <VTextField
-            v-model="emergency_contact_local.drvContactName "
+            v-model="emergencyCont.drvContactName"
             :disabled="!editEmergencyContact"
             label="Contact Name "
             placeholder="Jane Doe"
@@ -52,7 +61,7 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="emergency_contact_local.drvContactPhone"
+            v-model="emergencyCont.drvContactPhone"
             label="Contact Phone"
             placeholder="+251 912 3456 78"
             :disabled="!editEmergencyContact"
@@ -63,7 +72,7 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="emergency_contact_local.drvContactRelationship"
+            v-model="emergencyCont.drvContactRelatinship"
             label="Contact Relationship"
             placeholder="Sister"
             :disabled="!editEmergencyContact"
@@ -74,7 +83,7 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="emergency_contact_local.drvContactAdress"
+            v-model="emergencyCont.drvContactAdress"
             label="Contact Adress"
             placeholder="Addis Ababa, Ethiopia"
             :disabled="!editEmergencyContact"
@@ -85,7 +94,7 @@ const submitForm = () => {
           cols="12"
         >
           <VSwitch
-            v-model="emergency_contact_local.drvContactActiveStatus"
+            v-model="emergencyCont.drvContactActiveStatus"
             label="Contact Active Status"
             :disabled="!editEmergencyContact"
           />

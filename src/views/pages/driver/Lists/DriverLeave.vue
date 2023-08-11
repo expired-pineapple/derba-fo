@@ -8,6 +8,11 @@ import { ref } from "vue"
 import router from "@/router"
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
   
+const leaveProps = defineProps({
+  driverLeave: Array,
+})
+
+
 const headers = [
   { text: "Leave Start Date", value: "drvLeaveStartDate", sortable: true },
   { text: "Leave End Date", value: "drvLeaveEndDate", sortable: true },
@@ -15,14 +20,10 @@ const headers = [
   { text: "Active Status", value: "drvLeaveActiveStatus", sortable: true },
 ]
 
-const items = [
-  {
-    "drvLeaveStartDate": "2021-12-11",
-    "drvLeaveEndDate": "2021-12-11",
-    "drvLeaveReason": "Vacation",
-    "drvLeaveActiveStatus": true,
-  },
-]
+
+const items = ref(leaveProps.driverLeave)
+
+console.log(items.value, "leave")
 
 const props = {
   buttonVisible: false,
