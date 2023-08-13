@@ -20,9 +20,21 @@ const drivers = [
   ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
-const Trucks = [
-  ['Fleet', 'mdi-truck-outline', '/fleet'],
+
+const TrailerChildren = [
   ['Trailers', 'mdi-truck-trailer', '/trailers'],
+  ['Bolo', 'mdi-truck-trailer', '/trailer-bolo'],
+  ['COMESA ', 'mdi-truck-trailer', '/trailer-comesa'],
+  ['Insurance', 'mdi-truck-trailer', '/trailer-insurance'],
+  ['Third Party', 'mdi-truck-trailer', '/trailer-third-party'],
+]
+
+const FleetChildren = [
+  ['Fleet', 'mdi-truck-outline', '/fleet'],
+  ['Bolo', 'mdi-truck-outline', '/fleet-bolo'],
+  ['COMESA ', 'mdi-truck-outline', '/fleet-comesa'],
+  ['Insurance', 'mdi-truck-outline', '/fleet-insurance'],
+  ['Third Party', 'mdi-truck-outline', '/fleet-third-party'],
 ]
 
 const TrucksConfig = [
@@ -60,7 +72,9 @@ const Tire = [
 ]
 
 const Report = [
-  ['FO Report'],
+  ['FO Report', 'mdi-chart-box-outline', '/fo-report'],
+  ['Fuel Report', 'mdi-fuel', '/fuel-report'],
+  ['Truck Status Report', 'mdi-car-info', '/truck-status-report'],
 ]
 </script>
 
@@ -120,14 +134,40 @@ const Report = [
               title="Vehicles"
             />
           </template>
-          <VListItem
-            v-for="([title, icon,to], i) in Trucks"
-            :key="i"
-            :title="title"
-            :to="to"
-            :prepend-icon="icon"
-            :value="title"
-          />
+          <VListGroup value="FleetChildren">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-truck-outline"
+                title="Fleet"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in FleetChildren"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
+          <VListGroup value="TrailerChildren">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-truck-trailer"
+                title="Trailers"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in TrailerChildren"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
         </VListGroup>
         <VListGroup value="TrucksConfig">
           <template #activator="{ props }">

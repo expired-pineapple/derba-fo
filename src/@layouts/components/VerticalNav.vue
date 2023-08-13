@@ -53,12 +53,12 @@ const handleNavScroll = evt => {
     ]"
   >
     <!-- 👉 Header -->
-    <div class="nav-header">
+    <div class="nav-header mb-4">
       <slot name="nav-header">
         <RouterLink
           to="/"
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
-          style="margin: 1rem;"
+          style="margin: 1rem 0 0 1rem;"
         >
           <div class="d-flex" />
           <div>
@@ -90,7 +90,7 @@ const handleNavScroll = evt => {
         </RouterLink>
       </slot>
     </div>
-    <slot name="before-nav-items">
+    <slot name="before-nav-items mt-8">
       <div class="vertical-nav-items-shadow" />
     </slot>
     <slot
