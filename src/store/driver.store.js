@@ -385,15 +385,33 @@ const driverModule = {
     },
 
 
-    async createDriver({ commit }, driverData) {
+    async createDriver({ commit }, data) {
       try {
         commit('isLoading', true)
 
-        const response = await axios.post('/drivers', driverData)
+        const response = await axiosIns.post('/drivers/', data.driverData)
+
+        const emergencyContactResponse = await axiosIns.post('/drvery/', {
+          ...data.emergency_contact,
+          driverID: response.data.id,
+        })
+
+        const driverLicenseResponse = await axiosIns.post('/drvls/', {
+          ...data.licence,
+          driverID: response.data.id,
+        })
+
+        const driverPassportResponse = await axiosIns.post('/drvps/', {
+          ...data.passport,
+          DrvId: response.data.id,
+        })
 
         commit('SET_DRIVER', response.data)
+        commit('SET_EMERGENCY_CONTACT', emergencyContactResponse.data)
+        commit('SET_DRIVER_LICENCE', driverLicenseResponse.data)
+        commit('SET_DRIVER_PASSPORT', driverPassportResponse.data)
       } catch (error) {
-        commit('SET_CREATE_ERROR', error.message)
+        commit('SET_CREATE_ERROR', error.response.data)
         console.error('Error creating driver:', error)
       } finally {
         commit('isLoading', false)
@@ -403,7 +421,7 @@ const driverModule = {
       try {
         commit('isLoading', true)
 
-        const response = await axios.put(`${BASE_URL}/drivers/${driverId}`, driverData)
+        const response = await axiosIns.put(`/drivers/${driverId}/`, driverData)
 
         commit('SET_DRIVER', response.data)
       } catch (error) {
@@ -435,6 +453,74 @@ const driverModule = {
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
         console.error('Error updating driver leave log:', error)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
+
+    async updateEmergencyContact({ commit }, { emergencyId, emergencyData }) {
+      try {
+        commit('isLoading', true)
+        commit('clear_emergency_contact')
+
+        const response = await axiosIns.put(`/drvery/${emergencyId}/`, emergencyData)
+
+        commit('SET_EMERGENCY_CONTACT', response.data)
+        console.log(response.data, "emergency")
+      } catch (error) {
+        commit('SET_CREATE_ERROR', error.message)
+        console.error('Error updating emergency contact:', error)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
+
+    async updateDriverLicence({ commit }, { licenceId, licenceData }) {
+      try {
+        commit('isLoading', true)
+        commit('clear_driver_licence')
+
+        const response = await axiosIns.put(`/drvls/${licenceId}/`, licenceData)
+
+        commit('SET_DRIVER_LICENCE', response.data)
+        console.log(response.data, "licence")
+      } catch (error) {
+        commit('SET_CREATE_ERROR', error.message)
+        console.error('Error updating driver licence:', error)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
+
+    async updateDriverPassport({ commit }, { passportId, passportData }) {
+      try {
+        commit('isLoading', true)
+        commit('clear_driver_passport')
+
+        const response = await axiosIns.put(`/drvps/${passportId}/`, passportData)
+
+        commit('SET_DRIVER_PASSPORT', response.data)
+        console.log(response.data, "passport")
+      } catch (error) {
+        commit('SET_CREATE_ERROR', error.message)
+        console.error('Error updating driver passport:', error)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
+
+    async updateDjiboutiPass({ commit }, { djiboutiPassId, djiboutiPassData }) {
+      try {
+        commit('isLoading', true)
+        commit('clear_djibouti_pass')
+
+        const response = await axiosIns.put(`/djiboutipass/${djiboutiPassId}/`, djiboutiPassData)
+
+        commit('SET_DJIBOUTI_PASS', response.data)
+        console.log(response.data, "djibouti pass")
+      } catch (error) {
+        commit('SET_CREATE_ERROR', error.message)
+        console.error('Error updating djibouti pass:', error)
       } finally {
         commit('isLoading', false)
       }
