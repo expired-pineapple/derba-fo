@@ -21,7 +21,7 @@
           <template #prepend>
             <VListItemAction start>
               <VAvatar
-                color="primary"
+                color="white"
                 variant="tonal"
               >
                 <VIcon>

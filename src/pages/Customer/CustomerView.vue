@@ -18,7 +18,7 @@ const headers = [
 
 const store = useStore()
 
-const loading = ref(false)
+const loading = ref(true)
 
 const { fetchCustomers } = mapActions('FOModule', ['fetchCustomers'])
 
@@ -26,7 +26,6 @@ const items = ref([])
 
 onMounted(() => {
   try {
-    loading.value = true
     store.dispatch('fetchCustomers')
     items.value = store.getters.customers
     console.log(store.getters.customers)
@@ -58,7 +57,7 @@ const props = {
   },
 
   clickedRow: edit,
-  loading: loading.value,
+  loading: loading,
 
 }
 </script>
