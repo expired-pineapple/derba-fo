@@ -71,8 +71,8 @@ const Tire = [
   ['Tire Return', 'mdi-tire', '/tire-provision'],
 ]
 
-const Report = [
-  ['FO Report', 'mdi-chart-box-outline', '/fo-report'],
+const Reports = [
+  ['FO Report', 'mdi-truck-delivery-outline', '/fo-report'],
   ['Fuel Report', 'mdi-fuel', '/fuel-report'],
   ['Truck Status Report', 'mdi-car-info', '/truck-status-report'],
 ]
@@ -97,7 +97,7 @@ const Report = [
 
         <NavbarThemeSwitcher class="me-2" />
 
-        <UserProfile />
+        <UserProfile style="color: white;" />
       </div>
     </template>
 
@@ -248,6 +248,23 @@ const Report = [
           </template>
           <VListItem
             v-for="([title, icon,to], i) in Customers"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Reports">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-file-chart-outline"
+              title="Reports"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Reports"
             :key="i"
             :title="title"
             :to="to"
