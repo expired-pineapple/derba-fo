@@ -20,17 +20,17 @@ const headers = [
 ]
 
 
-const registerForm = () => {
-  router.push({ name: "register-trucks" })
-}
-
-
-
-const { fetchTrailers } = mapActions('vehicleModule', ['fetchTrailers'])
 
 const store = useStore()
 
 const items = ref([])
+
+const loading = ref(true)
+
+const edit = clickedRow => {
+  console.log(clickedRow)
+  router.push(`/trailer/${clickedRow.id}`)
+}
 
 onMounted(async () => {
   try {
@@ -38,7 +38,9 @@ onMounted(async () => {
     items.value = store.getters.trailers
   } catch (err) {
     console.error('Error dispatching fetchTrailers action:', err)
-  } 
+  } finally {
+    loading.value = !loading.value
+  }
 })
 
 
@@ -55,5 +57,7 @@ const props = {
     headers,
     items,
   },
+  loading,
+  clickedRow: edit,
 }
 </script>

@@ -5,18 +5,18 @@
 <script lang="ts" setup>
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 import router from "@/router"
-import { ref, onMounted } from "vue"
+import { ref, onBeforeMount } from "vue"
 import { mapActions, useStore } from 'vuex'
 
-const loading = ref(false)
+const loading = ref(true)
 
 const { fetchFleets } = mapActions('vehicleModule', ['fetchFleets'])
 
 const store = useStore()
 
-onMounted(async () => {
+
+onBeforeMount(async () => {
   try {
-    loading.value = true
     await store.dispatch("fetchFleets")
   } catch (err) {
     console.error('Error dispatching fetchFleet action:', err)
@@ -43,12 +43,12 @@ const headers = [
   { text: "Active Status", value: "fltActive", sortable: true },
 ]
 
-const registerForm = () => {
-  router.push({ name: "register-trucks" })
+
+
+const edit = clickedRow => {
+  console.log(clickedRow)
+  router.push(`/fleet/${clickedRow.id}`)
 }
-
-
-
 
 
 const props = {
@@ -62,6 +62,7 @@ const props = {
     headers,
     items,
   },
-  loading: loading.value,
+  loading: loading,
+  clickedRow: edit,
 }
 </script>
