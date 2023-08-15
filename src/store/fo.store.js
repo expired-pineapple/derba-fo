@@ -346,17 +346,30 @@ const FOModule = {
         commit("setLoading", false)
       }
     },
-    async fetchCommodities({ commit }, id){
-      const url = id ? `/bbmtrl/${id}` : "/bbmtrl/"
+    async fetchCommodities({ commit }){
+      try{
+        const response = await axiosIns.get("/bbmtrl/")
 
-      const response = await axiosIns.get(url)
-      const commodities = response.data
+        const bbmtrlPromise = response.data.map(async bbmtrl => {
+          console.log(bbmtrl)
 
-      if(id){
-        commit("setCommodity", commodities)
-      }else{
+          const mtrcatPromise = axiosIns.get(`/mtrcat/${bbmtrl.mtrCat}`)
+          const [mtrcat] = await Promise.all([mtrcatPromise])
+
+          bbmtrl.mtrCat = mtrcat.data
+
+          return bbmtrl
+        })
+
+        const commodities = await Promise.all(bbmtrlPromise)
+
         commit("setCommodities", commodities)
+
+      }catch(error){
+        commit("setError", error.message)
+        console.log(error)
       }
+
     },
     async createCommodity({ commit }, commodity){
       commit("setLoading", true)

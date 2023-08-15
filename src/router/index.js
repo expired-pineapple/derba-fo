@@ -68,6 +68,7 @@ const router = createRouter({
           component: () => import('../pages/Drivers/LeaveForm.vue'),
         },
         {
+          name: "trucks",
           path: 'trucks',
           component: () => import('../pages/Trucks/TruckView.vue'),
         },
@@ -85,6 +86,16 @@ const router = createRouter({
           name: "trailers",
           path: 'trailers',
           component: () => import('../pages/Trailers/TrailerView.vue'),
+        },
+        {
+          name: "register-trailers",
+          path: 'register-trailers',
+          component: () => import('../pages/Trailers/TrailerFormView.vue'),
+        },
+        {
+          name: "trailer-edit",
+          path: 'trailer/:id',
+          component: () => import('../pages/Trailers/TrailerEditView.vue'),
         },
         {
           name: 'trip-information',
@@ -148,14 +159,24 @@ const router = createRouter({
           component: () => import('../pages/FO/FOView.vue'),
         },
         {
-          name: "sample",
-          path: 'sample',
-          component: () => import('../pages/sample.vue'),
-        },
-        {
           name: "fleet",
           path: "fleet",
           component: () => import('../pages/Fleet/FleetView.vue'),
+        },
+        {
+          name: 'register-fleet',
+          path: 'register-fleet',
+          component: () => import('../pages/Fleet/FleetFormView.vue'),
+        },
+        {
+          name: 'edit-fleet',
+          path: 'fleet/:id',
+          component: () => import('../pages/Fleet/FleetEditView.vue'),
+        },
+        {
+          name: 'comodities',
+          path: 'comodities',
+          component: () => import('../pages/Comodities/ComoditiesView.vue'),
         },
       ],
     },

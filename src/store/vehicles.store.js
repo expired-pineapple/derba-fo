@@ -4,17 +4,19 @@ const vehicleModule = {
   namespaced: false,
   state: {
     isLoading: false,
-    assignedTrucks: [],
     driverAssignedTrucks: [],
     fleet: {},
     fleets: [],
     trucks: [],
     truck: {},
-    error: "",
+    vehicleError: null,
     trip: {},
     trips: [],
     trailers: [],
     trailer: {},
+    condition: {},
+    conditions: [],
+
   },
   mutations: {
     // Mutation to set the loading state
@@ -24,7 +26,7 @@ const vehicleModule = {
 
     // Mutation to set the error message
     setError(state, error) {
-      state.error = error
+      state.vehicleError = error
     },
 
     // Mutation to set the fleet list
@@ -68,263 +70,583 @@ const vehicleModule = {
     },
 
     // Mutation to set the assigned trucks
-    setAssignedTrucks(state, trucks) {
-      state.assignedTrucks = trucks
-    },
-
-    // Mutation to set the assigned trucks
     setDriverAssignedTrucks(state, trucks) {
       state.driverAssignedTrucks = trucks
+    },
+
+    // Mutation to set the condition list
+    setConditions(state, conditions) {
+      state.conditions = conditions
+    },
+
+    // Mutation to set a single condition
+    setCondition(state, condition) {
+      state.condition = condition
     },
 
     // Mutation to clear the error message
     clearError(state) {
       state.error = ""
     },
+    clearTruck(state) {
+      state.truck = {}
+    },
+    clearTrucks(state) {
+      state.trucks = []
+    },
+    clearFleet(state) {
+      state.fleet = {}
+    },
+    clearTrailer(state) {
+      state.trailer = {}
+    },
+    clearTrailers(state) {
+      state.trailers = []
+    },
+    clearTrip(state) {
+      state.trip = {}
+    },
+    clearTrips(state) {
+      state.trips = []
+    },
+
   },
   actions: {
-    // Action to fetch the fleet list
-    fetchFleets({ commit }) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get("/fleet")
-        .then(response => {
-          commit("setFleets", response.data)
-          console.log(response.data, "fleets")
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
 
-    // Action to fetch a single fleet
-    fetchFleet({ commit }, id) {
+    async fetchFleets({ commit }) {
       commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get(`/fleet/${id}/`)
-        .then(response => {
-          commit("setFleet", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
 
-    // Action to fetch the truck list
-    fetchTrucks({ commit }) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get("/truckList")
-        .then(response => {
-          commit("setTrucks", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
+      try {
+        const response = await axiosIns.get("/fleet")
 
-    // Action to fetch a single truck
-    fetchTruck({ commit }, id) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get(`/truckDetail/${id}/`)
-        .then(response => {
-          commit("setTruck", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
-
-    // Action to fetch the trailer list
-    fetchTrailers({ commit }) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get("/trailers")
-        .then(response => {
-          commit("setTrailers", response.data)
-          console.log(response.data, "trailers")
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
-
-    // Action to fetch a single trailer
-    fetchTrailer({ commit }, id) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get(`/trailers/${id}/`)
-        .then(response => {
-          commit("setTrailer", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
-
-    // Action to fetch the trip list
-    fetchTrips({ commit }) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get("/trip")
-        .then(response => {
-          commit("setTrips", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
-    },
-
-    // Action to fetch a single trip
-    fetchTrip({ commit }, id) {
-      commit("setLoading", true)
-      commit("clearError")
-      axiosIns.get(`/tripDetail/${id}/`)
-        .then(response => {
-          commit("setTrip", response.data)
-          commit("setLoading", false)
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
+        commit("setFleets", response.data)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
     },
 
 
-
-    // Action to fetch all trucks with fleet, driver, and trailer data and set them as assigned trucks
-    fetchDriverAssignedTrucks({ commit }, driverId = null) {
+    async fetchFleet({ commit }, fleetId) {
       commit("setLoading", true)
       commit("clearError")
 
-      const url = driverId
-        ? `/truck?DrvId=${driverId}`
-        : "/truck"
 
-      console.log(url, "url")
-  
-      axiosIns.get(url)
-        .then(response => {
-          const trucks = response.data
-
-          console.log(trucks, "trucks")
-
-          
-          const truckPromises = trucks.map(async truck => {
-            const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
-            const driverPromise = truck.DrvId ? axiosIns.get(`/drivers/${truck.DrvId}/`) : Promise.resolve(null)
-            const trailerPromise = axiosIns.get(`/trailers/${truck.TrlId}/`)
-  
-            const [fleetResponse, driverResponse, trailerResponse] = await Promise.all([fleetPromise, driverPromise, trailerPromise])
-
-            truck.FltId = fleetResponse.data
-            truck.DrvId = driverResponse ? driverResponse.data : null
-            truck.TrlId = trailerResponse.data
-
-            const conditionPromise = axiosIns.get(`/condition/${trailerResponse.data.condition}/`)
-            const [conditionResponse] = await Promise.all([conditionPromise])
-
-            truck.TrlId.condition = conditionResponse.data
-
-            console.log(truck, "trucktruck")
-            
-            return truck
-          })
-  
-          Promise.all(truckPromises)
-            .then(updatedTrucks => {
-              commit("setDriverAssignedTrucks", updatedTrucks)
-              commit("setLoading", false)
-            })
-            .catch(error => {
-              commit("setError", error.message)
-              commit("setLoading", false)
-            })
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
+      try {
+        const response = await axiosIns.get(`/fleet/${fleetId}`)
+        
+        commit("clearFleet")
+        commit("setFleet", response.data)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
     },
 
 
-
-    // Action to create a fleet
-    createFleet({ commit }, fleetData) {
+    async fetchTrailers({ commit }) {
       commit("setLoading", true)
-      commit("clearError")
-      axiosIns.post("/fleetList", fleetData)
-        .then(response => {
-          commit("setLoading", false)
 
-          // Handle the created fleet response if needed
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
+      try {
+        const response = await axiosIns.get("/trailers")
+
+        commit("setTrailers", response.data)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
     },
 
-    // Action to update a fleet
-    updateFleet({ commit }, fleetData) {
+    async fetchTrailer({ commit }, trailerId) {
       commit("setLoading", true)
       commit("clearError")
-      axiosIns.put(`/fleetDetail/${fleetData.id}/`, fleetData)
-        .then(response => {
-          commit("setLoading", false)
+      commit("clearTrailer")
 
-          // Handle the updated fleet response if needed
-        })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
+      try {
+        const response = await axiosIns.get(`/trailers/${trailerId}`)
+
+        commit("setTrailer", response.data)
+        commit("setLoading", false)
+      }catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
     },
 
-    // Action to delete a fleet
-    deleteFleet({ commit }, id) {
+    async fetchTrips({ commit }) {
+      commit("setLoading", true)
+
+      try {
+        const response = await axiosIns.get("/trips")
+
+        commit("setTrips", response.data)
+        commit("setLoading", false)
+      }catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async fetchTrip({ commit }, tripId) {
+      commit("setLoading", true)
+
+      try {
+        const response = await axiosIns.get(`/trips/${tripId}`)
+
+        commit("setTrip", response.data)
+        commit("setLoading", false)
+      }catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    }, 
+    async fetchTrucks({ commit }) {
       commit("setLoading", true)
       commit("clearError")
-      axiosIns.delete(`/fleetDetail/${id}/`)
-        .then(response => {
-          commit("setLoading", false)
+    
+      try {
+        const response = await axiosIns.get("/truck")
+        const trucks = response.data
+    
+        console.log(trucks, "trucks")
+    
+        const truckPromises = trucks.map(async truck => {
+          const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
+          const driverPromise = truck.DrvId ? axiosIns.get(`/drivers/${truck.DrvId}/`) : Promise.resolve(null)
+          const trailerPromise = axiosIns.get(`/trailers/${truck.TrlId}/`)
+    
+          const [fleetResponse, driverResponse, trailerResponse] = await Promise.all([
+            fleetPromise,
+            driverPromise,
+            trailerPromise,
+          ])
+    
+          truck.FltId = fleetResponse.data
+          truck.DrvId = driverResponse ? driverResponse.data : null
+          truck.TrlId = trailerResponse.data
+    
+          const conditionPromise = axiosIns.get(`/condition/${trailerResponse.data.condition}/`)
+          const [conditionResponse] = await Promise.all([conditionPromise])
+    
+          truck.TrlId.condition = conditionResponse.data
+    
+          console.log(truck, "trucktruck")
+    
+          return truck
+        })
+    
+        const updatedTrucks = await Promise.all(truckPromises)
+    
+        commit("setTrucks", updatedTrucks)
+        console.log(updatedTrucks, "updatedTrucks")
 
-          // Handle the deleted fleet response if needed
+    
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+    async fetchTruck({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearTruck")
+
+      try {
+        const response = await axiosIns.get(`/truck/${id}`)
+        const truck = response.data
+    
+        console.log(truck, "truck")
+    
+        const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
+        const driverPromise = truck.DrvId ? axiosIns.get(`/drivers/${truck.DrvId}/`) : Promise.resolve(null)
+        const trailerPromise = axiosIns.get(`/trailers/${truck.TrlId}/`)
+
+        const [fleetResponse, driverResponse, trailerResponse] = await Promise.all([
+          fleetPromise,
+          driverPromise,
+          trailerPromise,
+        ])
+
+        truck.FltId = fleetResponse.data
+        truck.DrvId = driverResponse ? driverResponse.data : null
+        truck.TrlId = trailerResponse.data
+
+        const conditionPromise = axiosIns.get(`/condition/${trailerResponse.data.condition}/`)
+        const [conditionResponse] = await Promise.all([conditionPromise])
+
+        truck.TrlId.condition = conditionResponse.data
+
+        
+        console.log(truck, "updatedTruck")
+       
+        commit("setTruck", truck)    
+        commit("setLoading", false)
+      } catch (error) {
+        console.log(error)
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async fetchTruckOnly({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearTruck")
+
+      try {
+        const response = await axiosIns.get(`/truck/${id}`)
+        const truck = response.data
+
+        console.log(truck, "truck")
+
+        commit("setTruck", truck)
+      } catch (error) {
+        console.log(error)
+        commit("setError", error.message)
+      }finally{
+        commit("setLoading", false)
+      }
+    },
+    
+    async fetchDriverAssignedTrucks({ commit }, driverId) {
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.get(`/truck/?DrvId=${driverId}`)
+        
+        const trucks = response.data
+    
+        console.log(trucks, "trucks")
+    
+        const truckPromises = trucks.map(async truck => {
+          const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
+          const driverPromise = truck.DrvId ? axiosIns.get(`/drivers/${truck.DrvId}/`) : Promise.resolve(null)
+          const trailerPromise = axiosIns.get(`/trailers/${truck.TrlId}/`)
+    
+          const [fleetResponse, driverResponse, trailerResponse] = await Promise.all([
+            fleetPromise,
+            driverPromise,
+            trailerPromise,
+          ])
+    
+          truck.FltId = fleetResponse.data
+          truck.DrvId = driverResponse ? driverResponse.data : null
+          truck.TrlId = trailerResponse.data
+    
+          const conditionPromise = axiosIns.get(`/condition/${trailerResponse.data.condition}/`)
+          const [conditionResponse] = await Promise.all([conditionPromise])
+    
+          truck.TrlId.condition = conditionResponse.data
+    
+          console.log(truck, "trucktruck")
+    
+          return truck
         })
-        .catch(error => {
-          commit("setError", error.message)
-          commit("setLoading", false)
-        })
+    
+        const updatedTrucks = await Promise.all(truckPromises)
+    
+
+        commit("setDriverAssignedTrucks", updatedTrucks)
+    
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async fetchCondition({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.get(`/condition/${id}/`)
+    
+        commit("setCondition", response.data)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+    async fetchConditions({ commit }) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.get(`/condition/`)
+    
+        commit("setConditions", response.data)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async createTruck({ commit }, truck) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.post("/truck/", truck)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateTruck({ commit }, truck) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.put(`/truck/${truck.id}/`, truck)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteTruck({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.delete(`/truck/${id}/`)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async createTrailer({ commit }, trailer) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.post("/trailers/", trailer)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        console.log(error, "here")
+        commit("setError", error)
+        commit("setLoading", false)
+      }
+    },
+    
+    async updateTrailer({ commit }, trailer) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.put(`/trailer/${trailer.id}/`, trailer)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteTrailer({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.delete(`/trailer/${id}/`)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async createFleet({ commit }, fleet) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.post("/fleet/", fleet)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateFleet({ commit }, fleet) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.put(`/fleet/${fleet.id}/`, fleet)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteFleet({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.delete(`/fleet/${id}/`)
+
+        commit("setLoading", false)
+
+        return response.data
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async createTrip({ commit }, trip) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.post("/trip/", trip)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateTrip({ commit }, trip) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.put(`/trip/${trip.id}/`, trip)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteTrip({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.delete(`/trip/${id}/`)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async createCondition({ commit }, condition) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.post("/condition/", condition)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateCondition({ commit }, condition) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.put(`/condition/${condition.id}/`, condition)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      } 
+    },
+
+    async deleteCondition({ commit }, id) {
+      commit("setLoading", true)
+      commit("clearError")
+    
+      try {
+        const response = await axiosIns.delete(`/condition/${id}/`)
+    
+        commit("setLoading", false)
+
+        return response.data
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false) 
+      }
     },
   },
   getters: {
-    isLoading: state => state.isLoading,
-    assignedTrucks: state => state.assignedTrucks,
+    vehicleLoading: state => state.isLoading,
     driverAssignedTrucks: state => state.driverAssignedTrucks, 
     fleet: state => state.fleet,
     fleets: state => state.fleets,
     trucks: state => state.trucks,
-    truck: state => state.truck,
-    error: state => state.error,
+    detailTruck: state => state.truck,
+    vehicleError: state => state.vehicleError,
     trip: state => state.trip,
     trips: state => state.trips,
     trailers: state => state.trailers,
     trailer: state => state.trailer,
+    conditions: state => state.conditions,
   },
 }
 
