@@ -1,5 +1,8 @@
 <script setup>
-import { ref, defineProps } from "vue"
+import router from "@/router"
+import { ref, defineProps, computed, onBeforeMount } from "vue"
+import { useStore } from "vuex"
+import { useRoute } from "vue-router"
 
 const model = defineProps({
   id: String,
@@ -15,9 +18,47 @@ const model = defineProps({
   is_active: Boolean,
 })
 
-const accountData = ref(model)
+const store = useStore()
+const route = useRoute()
+
+const accountData = ref("")
+const driverID = route.params.id 
+const loading = ref(true)
+
+onBeforeMount(async () => {
+  await store.dispatch('fetchDriver', driverID)
+  accountData.value = store.getters.driver
+  loading.value = false
+
+})
+
+
+const error= computed(() => store.getters.createError)
 
 const editInfo = ref(false)
+const errorMessage = ref(false)
+const success = ref(false)
+
+const  submitForm = () => {
+  try{
+    store.dispatch('updateDriver', { driverId: accountData.value.id, driverData: accountData.value })
+    if(!error.value){
+      store.dispatch('fetchDriver', accountData.value.id)
+      success.value = true
+      setTimeout(() => {
+        success.value = false
+      }, 3000)
+    }else{
+      errorMessage.value = true
+      setTimeout(() => {
+        errorMessage.value = false
+      }, 3000)
+    }
+  }catch(e){
+    console.log(e)
+  }
+  
+}
 </script>
 
 <template>
@@ -35,10 +76,34 @@ const editInfo = ref(false)
     />
   </div>
   <VCardText>
+    <VAlert
+      v-if="success"
+      type="success"
+      text="Driver updated successfully"
+      dismissible
+      border="left"
+      elevation="2"
+      colored-border
+      icon="mdi-check-circle-outline"
+      class="mb-4"
+    />
+    <VAlert
+      v-if="errorMessage"
+      text="Something went wrong. Please try again later."
+      type="error"
+      dismissible
+      border="left"
+      elevation="2"
+      colored-border
+      icon="mdi-alert-circle-outline"
+      class="mb-4"
+    />
+    
     <VForm
       :disabled="!editInfo"
+      :loading="loading"
       @submit.prevent="() => {}"
-    >
+    >   
       <VRow>
         <VCol
           md="6"
@@ -136,6 +201,7 @@ const editInfo = ref(false)
         color="primary"
         type="submit"
         class="mt-4"
+        @click="submitForm"
       >
         Save
       </VBtn>   
