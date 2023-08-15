@@ -15,14 +15,16 @@ const searchValue = ref("")
 
 const store = useStore()
 
-const loading = ref(false)
+const loading = ref(true)
 
 const { fetchDriverAssignedTrucks } = mapActions('vehicleModule', ['fetchDriverAssignedTrucks'])
 
+const items = ref([])
+
 onMounted(async () => {
   try {
-    loading.value = true
-    await store.dispatch("fetchDriverAssignedTrucks")
+    await store.dispatch("fetchTrucks")
+    items.value = store.getters.trucks
   } catch (err) {
     console.error('Error dispatching fetchDriverAssignedTrucks action:', err)
   }finally{
@@ -30,27 +32,15 @@ onMounted(async () => {
   }
 })
 
+
 const headers = [
   { text: "Driver", value: "DrvId.driver_name", sortable: true, width: "150" },
   { text: "Fleet Number", value: "TrlId.fleet_number", sortable: true },
   { text: "Fleet Plate Number", value: "FltId.fltPlateNo", sortable: true },
   { text: "Trailer Plate Number", value: "TrlId.plate_number", sortable: true },
-  { 
-    text: "Trailer Model", 
-    value: "TrlId.trailer_model", 
-    sortable: true, 
-  },
-  { text: "Trailer Type", value: "TrlId.trailer_type", sortable: true },
-  { text: "Capacity", value: "TrlId.capacity",  sortable: true },
-  { text: "Chasis Number", value: "TrlId.chasis_number", sortable: true  },
   { text: "Condition", value: "TrlId.condition.condition",  sortable: true  },
-  { text: "Remarks", value: "TrlId.remarks", sortable: true  },
+  { text: "Active", value: "trkActive", sortable: true  },
 ]
-
-
-
-
-const items = ref(store.getters.driverAssignedTrucks)
 
 
 const registerForm = () => {
@@ -76,6 +66,6 @@ const props = {
     searchValue,
   },
   clickedRow: editTrucks,
-  loading: loading.value,
+  loading: loading,
 }
 </script>
