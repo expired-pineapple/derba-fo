@@ -95,6 +95,7 @@ const deleteTrailer = async item => {
 
 const disabled = ref(true)
 const dialog = ref(false)
+const expanded = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
@@ -103,7 +104,10 @@ const editEnabled = () => {
 
 <template>
   <VCard class="d-flex gap-6">
-    <div class="searchable">
+    <div
+      v-if="expanded"
+      class="searchable"
+    >
       <VCardText> 
         <div class="d-flex">
           <VTextField
@@ -169,252 +173,264 @@ const editEnabled = () => {
         </div>
       </VCardText>
     </div>
-    <VDivider vertical />
+    <VDivider
+      v-if="expanded"
+      vertical
+    />
     <div class="">
-      <VRow width="20%">
-        <VCol cols="12">
-          <VAlert
-            v-model="successAlert"
-            border="start"
-            variant="tonal"
-            closable
-            close-label="Close Alert"
-            type="success"
-            title="Success!"
-            text="Trailer details saved successfully"
-          />
-          <VAlert
-            v-model="errorAlert"
-            border="start"
-            variant="tonal"
-            closable
-            close-label="Close Alert"
-            type="error"
-            title="Error!"
-            text="Trailer details not saved successfully"
-          />
-          <!-- 👉 Form -->
-          <VForm
-            class="mt-10"
-            :disabled="disabled"
-            @submit.prevent="submitForm"
-          >
-            <VCardText>
-              <div class="icons d-flex justify-end">
-                <VIcon
-                  size="24"
-                  icon="mdi-pencil-outline"
-                  class="me-6"
-                  @click="editEnabled"
-                />
-                <VDialog
-                  v-model="dialog"
-                  persistent
-                  width="auto"
-                >
-                  <template #activator="{ props }">
-                    <VIcon
-                      size="24"
-                      icon="mdi-delete-outline"
-                      class="me-6"
-                      v-bind="props"
-                      color="error"
-                    />
-                  </template>
-                  <VCard>
-                    <VCardTitle class="headline">
-                      Delete Trailer
-                    </VCardTitle>
-                    <VCardText>
-                      Are you sure you want to delete this Trailer?
-                    </VCardText>
-                    <VCardActions>
-                      <VSpacer />
-                      <VBtn
-                        color="green-darken-1"
-                        variant="text"
-                        @click="dialog = false"
-                      >
-                        No
-                      </VBtn>
-                      <VBtn
-                        color="error"
-                        variant="text"
-                        @click="deleteTrailer(trailer)"
-                      >
-                        Yes
-                      </VBtn>
-                    </VCardActions>
-                  </VCard>
-                </VDialog>
-              </div>
-              <div class="d-flex">
-                <VIcon
-                  size="70"
-                  icon="mdi-truck-trailer"
-                  class="me-6"  
-                />
-                <div>
-                  <h3 class="font-weight-semibold mb-2">
-                    Trailer Details
-                  </h3>
-                  <p class="mb-2">
-                    Please fill in the form below to edit selected trailer
-                  </p>
-                </div>
-              </div>
-            </VCardText>
-            <VRow
-              md="6"
-              cols="12"
+      <VCardText>
+        <VRow width="20%">
+          <VCol cols="12">
+            <VAlert
+              v-model="successAlert"
+              border="start"
+              variant="tonal"
+              closable
+              close-label="Close Alert"
+              type="success"
+              title="Success!"
+              text="Trailer details saved successfully"
+            />
+            <VAlert
+              v-model="errorAlert"
+              border="start"
+              variant="tonal"
+              closable
+              close-label="Close Alert"
+              type="error"
+              title="Error!"
+              text="Trailer details not saved successfully"
+            />
+            <!-- 👉 Form -->
+            <VForm
+              class="mt-10"
+              :disabled="disabled"
+              @submit.prevent="submitForm"
             >
-              <VSwitch
-                v-model="trailer.is_active"
-                label="Is Active"
-                required
-                outlined
-                dense
-              />
-            </VRow>
-            <VRow>
-              <VCol
+              <VCardText>
+                <div class="icons d-flex justify-end">
+                  <VIcon
+                    size="24"
+                    icon="mdi-pencil-outline"
+                    class="me-6"
+                    @click="editEnabled"
+                  />
+                  <VDialog
+                    v-model="dialog"
+                    persistent
+                    width="auto"
+                  >
+                    <template #activator="{ props }">
+                      <VIcon
+                        size="24"
+                        icon="mdi-delete-outline"
+                        class="me-6"
+                        v-bind="props"
+                        color="error"
+                      />
+                    </template>
+                    <VCard>
+                      <VCardTitle class="headline">
+                        Delete Trailer
+                      </VCardTitle>
+                      <VCardText>
+                        Are you sure you want to delete this Trailer?
+                      </VCardText>
+                      <VCardActions>
+                        <VSpacer />
+                        <VBtn
+                          color="green-darken-1"
+                          variant="text"
+                          @click="dialog = false"
+                        >
+                          No
+                        </VBtn>
+                        <VBtn
+                          color="error"
+                          variant="text"
+                          @click="deleteTrailer(trailer)"
+                        >
+                          Yes
+                        </VBtn>
+                      </VCardActions>
+                    </VCard>
+                  </VDialog>
+                </div>
+                <div class="d-flex">
+                  <VIcon
+                    size="70"
+                    icon="mdi-truck-trailer"
+                    class="me-6"  
+                  />
+                  <div>
+                    <h3 class="font-weight-semibold mb-2">
+                      Trailer Details
+                    </h3>
+                    <p class="mb-2">
+                      Please fill in the form below to edit selected trailer
+                    </p>
+                  </div>
+                </div>
+              </VCardText>
+              <VRow
                 md="6"
                 cols="12"
               >
-                <VTextField
-                  v-model="trailer.fleet_number"
-                  label="Fleet Number"
+                <VSwitch
+                  v-model="trailer.is_active"
+                  label="Is Active"
                   required
                   outlined
                   dense
                 />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="trailer.plate_number"
-                  label="Plate Number"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="trailer.trailer_model"
-                  label="Trailer Model"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="trailer.trailer_type"
-                  label="Trailer Type"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VSelect
-                  v-model="trailer.driver"
-                  :items="drivers"
-                  item-title="driver_name"
-                  item-value="id"
-                  label="Driver"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="trailer.capacity"
-                  label="Capacity"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VTextField
-                  v-model="trailer.chasis_number"
-                  label="Chasis Number"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="6"
-                cols="12"
-              >
-                <VSelect
-                  v-model="trailer.condition"
-                  :items="conditions"
-                  item-title="condition"
-                  item-value="id"
-                  label="Condition"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
-              <VCol
-                md="12"
-                cols="12"
-              >
-                <VTextarea
-                  v-model="trailer.remarks"
-                  label="Remarks"
-                  required
-                  outlined
-                  dense
-                />
-              </VCol>
+              </VRow>
+              <VRow>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.fleet_number"
+                    label="Fleet Number"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.plate_number"
+                    label="Plate Number"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.trailer_model"
+                    label="Trailer Model"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.trailer_type"
+                    label="Trailer Type"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VSelect
+                    v-model="trailer.driver"
+                    :items="drivers"
+                    item-title="driver_name"
+                    item-value="id"
+                    label="Driver"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.capacity"
+                    label="Capacity"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VTextField
+                    v-model="trailer.chasis_number"
+                    label="Chasis Number"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VSelect
+                    v-model="trailer.condition"
+                    :items="conditions"
+                    item-title="condition"
+                    item-value="id"
+                    label="Condition"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
+                <VCol
+                  md="12"
+                  cols="12"
+                >
+                  <VTextarea
+                    v-model="trailer.remarks"
+                    label="Remarks"
+                    required
+                    outlined
+                    dense
+                  />
+                </VCol>
 
-              <VCol
-                cols="12"
-                class="d-flex flex-wrap gap-4"
-              >
-                <VBtn
-                  color="primary"
-                  @click="submitForm"
+                <VCol
+                  cols="12"
+                  class="d-flex flex-wrap gap-4"
                 >
-                  Save
-                </VBtn>
-                <VBtn
-                  color="secondary"
-                  variant="tonal"
-                  type="reset"
-                >
-                  Reset
-                </VBtn>
-              </VCol>
-            </VRow>
-          </VForm>
-        </VCol>
-      </VRow> 
+                  <VBtn
+                    color="primary"
+                    @click="submitForm"
+                  >
+                    Save
+                  </VBtn>
+                  <VBtn
+                    color="secondary"
+                    variant="tonal"
+                    type="reset"
+                  >
+                    Reset
+                  </VBtn>
+                </VCol>
+              </VRow>
+            </VForm>
+          </VCol>
+        </VRow> 
+      </VCardText>
     </div>     
+    <div class="justify-end mt-4">
+      <VIcon 
+        color="primary"
+        :icon="expanded ? 'mdi-arrow-expand' :'mdi-arrow-collapse'"
+        @click="expanded=!expanded"
+      />
+    </div>
   </VCard>
 </template>
 
