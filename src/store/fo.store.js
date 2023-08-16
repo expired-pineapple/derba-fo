@@ -15,6 +15,8 @@ const FOModule = {
     route: {},
     commodities: [],
     commodity: {},
+    mtrcats: [],
+    mtrcat: {},
   },
   mutations: {
     setLoading(state, foLoading){
@@ -53,6 +55,12 @@ const FOModule = {
     setCommodity(state, commodity){
       state.commodity = commodity
     },
+    setMtrcats(state, mtrcats){
+      state.mtrcats = mtrcats
+    },
+    setMtrcat(state, mtrcat){
+      state.mtrcat = mtrcat
+    },
     clearFo(state){
       state.fo = {}
     },
@@ -67,6 +75,12 @@ const FOModule = {
     },
     clearCommodity(state){
       state.commodity = {}
+    },
+    clearMtrcat(state){
+      state.mtrcat = {}
+    },
+    clearError(state){
+      state.error = ""
     },
   },
   actions: {
@@ -371,6 +385,21 @@ const FOModule = {
       }
 
     },
+    async fetchCommodity({ commit }, id){
+      try{
+        const response = await axiosIns.get(`/bbmtrl/${id}`)
+        const commodity = response.data
+
+
+        commit("setCommodity", commodity)
+
+      }catch(error){
+        commit("setError", error.message)
+        console.log(error)
+      }
+
+    },
+
     async createCommodity({ commit }, commodity){
       commit("setLoading", true)
       try {
@@ -385,9 +414,8 @@ const FOModule = {
       }
     },
     async updateCommodity({ commit }, { id, commodity }){
-      commit(setLoading, true)
       try {
-        const response = await axiosIns.put(`/bbmtrl/${id}`, commodity)
+        const response = await axiosIns.put(`/bbmtrl/${id}/`, commodity)
         const updatedCommodity = response.data
         
         commit("setCommodity", updatedCommodity)
@@ -401,7 +429,7 @@ const FOModule = {
     async deleteCommodity({ commit }, id){
       commit("setLoading", true)
       try {
-        await axiosIns.delete(`/bbmtrl/${id}`)
+        await axiosIns.delete(`/bbmtrl/${id}/`)
         commit("clearCommodity")
         commit("setLoading", false)
       } catch (error) {
@@ -409,7 +437,76 @@ const FOModule = {
         commit("setLoading", false)
       }
     },
+
+    async fetchMtrcats({ commit } ){
+      try{
+        const response = await axiosIns.get("/mtrcat/")
+        const mtrcat = response.data
+
+        commit("setMtrcats", mtrcat)
+
+      }catch(error){
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+
+
+    async fetchMtrcat({ commit }, id ){
+      try{
+        const response = await axiosIns.get(`/mtrcat/${id}/`)
+
+        const mtrcat = response.data
+
+        commit("setMtrcat", mtrcat)
+
+      }catch(error){
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createMtrcat({ commit }, mtrcat){
+      commit("setLoading", true)
+      try {
+        const response = await axiosIns.post("/mtrcat/", mtrcat)
+        const newMtrcat = response.data
     
+        commit("setMtrcat", newMtrcat)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateMtrcat({ commit }, { id, mtrcat }){
+      commit(setLoading, true)
+      try {
+        const response = await axiosIns.put(`/mtrcat/${id}/`, mtrcat)
+        const updatedMtrcat = response.data
+        
+        commit("setMtrcat", updatedMtrcat)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
+
+
+    async deleteMtrcat({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/mtrcat/${id}`)
+        commit("clearMtrcat")
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.message)
+        commit("setLoading", false)
+      }
+    },
   },
 
   getters: {
@@ -422,7 +519,11 @@ const FOModule = {
     commodities: state => state.commodities,
     commodity: state => state.commodity,
     foloading: state => state.foLoading,
-    error: state => state.error,
+    foError: state => state.error,
+    fos: state => state.fos,
+    fo: state => state.fo,
+    mtrcats: state => state.mtrcats,
+    mtrcat: state => state.mtrcat,
   },
 }
 

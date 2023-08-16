@@ -6,6 +6,7 @@
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 import { useStore } from "vuex"
 import { onBeforeMount, ref } from "vue"
+import router from "@/router"
 
 const headers = [
   { text: "Material Name", value: "mtrName", sortable: true, width: "150" },
@@ -24,6 +25,10 @@ onBeforeMount(async () => {
   loading.value = false
 })
 
+const clickedRow = (item: any) => {
+  router.push(`/comodities/${item.id}`)
+}
+
 const props = {
   header: "Comodity List",
   subheader: "This is a list of comodities registered in the system.",
@@ -36,6 +41,7 @@ const props = {
     items,
   },
   loading,
+  clickedRow:clickedRow
 }
 </script>
 

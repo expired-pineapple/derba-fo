@@ -178,6 +178,16 @@ const router = createRouter({
           path: 'comodities',
           component: () => import('../pages/Comodities/ComoditiesView.vue'),
         },
+        {
+          name: 'edit-comodity',
+          path: 'comodities/:id',
+          component: () => import('../pages/Comodities/ComoditiesEditView.vue'),
+        },
+        {
+          name: 'register-comodity',
+          path: 'register-comodity',
+          component: () => import('../pages/Comodities/ComoditiesFormView.vue'),
+        },
       ],
     },
     {
