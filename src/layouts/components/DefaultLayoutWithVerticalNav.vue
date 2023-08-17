@@ -31,10 +31,10 @@ const TrailerChildren = [
 
 const FleetChildren = [
   ['Fleet', 'mdi-truck-outline', '/fleet'],
-  ['Bolo', 'mdi-truck-outline', '/fleet-bolo'],
-  ['COMESA ', 'mdi-truck-outline', '/fleet-comesa'],
-  ['Insurance', 'mdi-truck-outline', '/fleet-insurance'],
-  ['Third Party', 'mdi-truck-outline', '/fleet-third-party'],
+  ['Fleet Bolo', 'mdi-truck-outline', '/fleet-bolo'],
+  ['Fleet COMESA ', 'mdi-truck-outline', '/fleet-comesa'],
+  ['Fleet Insurance', 'mdi-truck-outline', '/fleet-insurance'],
+  ['Fleet Third Party', 'mdi-truck-outline', '/fleet-third-party'],
 ]
 
 const TrucksConfig = [
@@ -102,7 +102,14 @@ const Reports = [
     </template>
 
     <template #vertical-nav-content>
-      <VList>
+      <VList
+        v-model="verticalNavActive"
+        style="width: 100%;"
+        dense
+        nav
+        color="primary"
+        class="py-0"
+      >
         <VListItem
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
