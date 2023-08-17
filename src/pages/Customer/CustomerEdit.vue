@@ -91,9 +91,10 @@
                 <VCol
                   cols="12"
                   class="d-flex flex-wrap gap-4"
-                  @click.prevent="submitForm"
                 >
-                  <VBtn>Save</VBtn>
+                  <VBtn @click.prevent="submitForm">
+                    Save
+                  </VBtn>
                 </VCol>
               </VRow>
             </VContainer>
