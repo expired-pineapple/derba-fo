@@ -184,7 +184,7 @@ const editEnabled = () => {
       class="d-flex gap-6"
       width="650"
     >
-      <VCardItem>
+      <VCardText>
         <div class="">
           <VRow width="20%">
             <VCol cols="20">
@@ -282,7 +282,7 @@ const editEnabled = () => {
                 <VContainer>
                   <VRow>
                     <VCol
-                      md="6"
+                      md="12"
                       cols="12"
                     >
                       <VTextField
@@ -293,7 +293,7 @@ const editEnabled = () => {
                       />
                     </VCol>
                     <VCol
-                      md="6"
+                      md="12"
                       cols="12"
                     >
                       <VSelect
@@ -307,7 +307,7 @@ const editEnabled = () => {
                       />
                     </VCol>
                     <VCol
-                      md="6"
+                      md="12"
                       cols="12"
                     >
                       <VTextField
@@ -319,18 +319,11 @@ const editEnabled = () => {
                     </VCol>
                     <VCol
                       cols="12"
+                      md="10"
                       class="d-flex flex-wrap gap-4"
-                      @click.prevent="submitForm"
                     >
-                      <VBtn>Save</VBtn>
-
-                      <VBtn
-                        color="secondary"
-                        variant="tonal"
-                        type="reset"
-                        @click.prevent="resetForm"
-                      >
-                        Reset
+                      <VBtn @click.prevent="submitForm">
+                        Save
                       </VBtn>
                     </VCol>
                   </VRow>
@@ -339,7 +332,7 @@ const editEnabled = () => {
             </VCol>
           </VRow> 
         </div>  
-      </VCardItem>  
+      </VCardText>  
       <div class="d-flex justify-end mt-4">
         <VIcon 
           color="primary"
