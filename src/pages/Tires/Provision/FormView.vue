@@ -56,6 +56,11 @@ const submitForm = () => {
     console.error("Error dispatching createtireprovision action:", err)
   }
 }
+
+const items = [
+  { value: true, text: 'Yes' },
+  { value: false, text: 'No' },
+]
 </script>
 
 <template>
@@ -95,13 +100,6 @@ const submitForm = () => {
             <!-- 👉 Form -->
             <VForm @submit.prevent="submitForm">
               <VRow>
-                <VCol md="12">
-                  <VSwitch
-                    v-model="tire.NewTyerActive"
-                    label="Active"
-                    color="primary"
-                  />
-                </VCol>
                 <VCol
                   md="6"
                   cols="12"
@@ -166,6 +164,16 @@ const submitForm = () => {
                     v-model="tire.NewTyerSerialNo"
                     label="Serial Number"
                     required
+                  />
+                </VCol>
+                <VCol>
+                  <VSelect
+                    v-model="tire.NewTyerActive"
+                    :items="items"
+                    item-value="value"
+                    item-title="text"
+                    label="Active"
+                    color="primary"
                   />
                 </VCol>
                 <VCol
