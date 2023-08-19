@@ -98,6 +98,52 @@ const router = createRouter({
           component: () => import('../pages/Trailers/TrailerEditView.vue'),
         },
         {
+          name: "trailer-bolo",
+          path: 'trailer-bolo',
+          component: () => import('../pages/Trailers/Bolo/BoloView.vue'),
+        },
+
+        {
+          name: 'edit-trailer-bolo',
+          path: 'trailer-bolo/:id',
+          component: () => import('../pages/Trailers/Bolo/BoloEdit.vue'),
+        },
+        {
+          name: 'register-trailer-bolo',
+          path: 'register-trailer-bolo',
+          component: () => import('../pages/Trailers/Bolo/BoloForm.vue'),
+        },
+        {
+          name: "trailer-comesa",
+          path: "trailer-comesa",
+          component: () => import('../pages/Trailers/COMESA/COMESAView.vue'),
+        },
+        {
+          name: "edit-trailer-comesa",
+          path: "trailer-comesa/:id",
+          component: () => import('../pages/Trailers/COMESA/COMESAEdit.vue'),
+        },
+        {
+          name: 'register-trailer-comesa',
+          path: 'register-trailer-comesa',
+          component: () => import('../pages/Trailers/COMESA/COMESAForm.vue'),
+        },
+        {
+          name: "trailer-third-party",
+          path: "trailer-third-party",
+          component: () => import('../pages/Trailers/Third Party/ThirdParty.vue'),
+        },
+        {
+          name: "edit-third-party",
+          path: "trailer-third-party/:id",
+          component: () => import('../pages/Trailers/Third Party/ThirdPartyEdit.vue'),
+        },
+        {
+          name: "register-third-party",
+          path: "register-trailer-third-party",
+          component: () => import('../pages/Trailers/Third Party/ThirdPartyForm.vue'),
+        },
+        {
           name: 'trip-information',
           path: 'trip-information',
           component: () => import('../pages/Trips/TripInformationView.vue'),
@@ -174,6 +220,68 @@ const router = createRouter({
           component: () => import('../pages/Fleet/FleetEditView.vue'),
         },
         {
+          name: "fleet-bolo",
+          path: "fleet-bolo",
+          component: () => import('../pages/Fleet/Bolo/BoloView.vue'),
+        },
+        {
+          name: 'edit-fleet-bolo',
+          path: 'fleet-bolo/:id',
+          component: () => import('../pages/Fleet/Bolo/BoloEdit.vue'),
+        },
+        {
+          name: 'register-fleet-bolo',
+          path: 'register-fleet-bolo',
+          component: () => import('../pages/Fleet/Bolo/BoloForm.vue'),
+        },
+        {
+          name: "fleet-comesa",
+          path: "fleet-comesa",
+          component: () => import('../pages/Fleet/COMESA/COMESAView.vue'),
+        },
+        {
+          name: "edit-fleet-comesa",
+          path: "fleet-comesa/:id",
+          component: () => import('../pages/Fleet/COMESA/COMESAEdit.vue'),
+        },
+
+        {
+          name: 'register-fleet-comesa',
+          path: 'register-fleet-comesa',
+          component: () => import('../pages/Fleet/COMESA/COMESAForm.vue'),
+        },
+        {
+          name: "fleet-insurance",
+          path: "fleet-insurance",
+          component: () => import('../pages/Fleet/Insurance/InsuranceView.vue'),
+        },
+        {
+          name: "edit-fleet-insurance",
+          path: "fleet-insurance/:id",
+          component: () => import('../pages/Fleet/Insurance/InsuranceEdit.vue'),
+        },
+        {
+          name: "register-fleet-insurance",
+          path: "register-fleet-insurance",
+          component: () => import('../pages/Fleet/Insurance/InsuranceForm.vue'),
+        },
+        {
+          name: "register-fleet-third-party",
+          path: "register-fleet-third-party",
+          component: () => import('../pages/Fleet/Third Party/ThirdPartyForm.vue'),
+        },
+        {
+          name: "fleet-third-party",
+          path: "fleet-third-party",
+          component: () => import('../pages/Fleet/Third Party/ThirdParty.vue'),
+        },
+        {
+          name: "edit-fleet-third-party",
+          path: "fleet-third-party/:id",  
+          component: () => import('../pages/Fleet/Third Party/ThirdPartyEdit.vue'),
+
+        },
+        {
           name: 'comodities',
           path: 'comodities',
           component: () => import('../pages/Comodities/ComoditiesView.vue'),
@@ -187,6 +295,25 @@ const router = createRouter({
           name: 'register-comodity',
           path: 'register-comodity',
           component: () => import('../pages/Comodities/ComoditiesFormView.vue'),
+        },
+        {
+          name: 'register-shipment',
+          path: 'register-shipment',
+        },
+        {
+          name: "trailer-insurance",
+          path: "trailer-insurance",
+          component: () =>import('../pages/Trailers/Insurance/InsuranceView.vue'),
+        },
+        {
+          name: "edit-trailer-insurance",
+          path: "trailer-insurance/:id",
+          component: () =>import('../pages/Trailers/Insurance/InsuranceEdit.vue'),
+        },
+        {
+          name: "register-trailer-insurance",
+          path: "register-trailer-insurance",
+          component: () =>import('../pages/Trailers/Insurance/InsuranceForm.vue'),
         },
       ],
     },

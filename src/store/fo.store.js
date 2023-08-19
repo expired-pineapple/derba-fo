@@ -415,7 +415,7 @@ const FOModule = {
     },
     async updateCommodity({ commit }, { id, commodity }){
       try {
-        const response = await axiosIns.put(`/bbmtrl/${id}/`, commodity)
+        const response = await axiosIns.put(`/bbmtrl/${id}`, commodity)
         const updatedCommodity = response.data
         
         commit("setCommodity", updatedCommodity)
@@ -429,7 +429,7 @@ const FOModule = {
     async deleteCommodity({ commit }, id){
       commit("setLoading", true)
       try {
-        await axiosIns.delete(`/bbmtrl/${id}/`)
+        await axiosIns.delete(`/bbmtrl/${id}`)
         commit("clearCommodity")
         commit("setLoading", false)
       } catch (error) {
@@ -454,7 +454,7 @@ const FOModule = {
 
     async fetchMtrcat({ commit }, id ){
       try{
-        const response = await axiosIns.get(`/mtrcat/${id}/`)
+        const response = await axiosIns.get(`/mtrcat/${id}`)
 
         const mtrcat = response.data
 
@@ -482,7 +482,7 @@ const FOModule = {
     async updateMtrcat({ commit }, { id, mtrcat }){
       commit(setLoading, true)
       try {
-        const response = await axiosIns.put(`/mtrcat/${id}/`, mtrcat)
+        const response = await axiosIns.put(`/mtrcat/${id}`, mtrcat)
         const updatedMtrcat = response.data
         
         commit("setMtrcat", updatedMtrcat)
