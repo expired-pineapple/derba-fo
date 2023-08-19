@@ -107,6 +107,41 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const searchV = ref('')
+const searchTruck = ref('')
+
+const search = () => {
+  console.log('Searching...')
+
+  const search = searchV.value
+
+  const filtered = fleets.value.filter(item => {
+    return item.fltPlateNo.toLowerCase().includes(search.toLowerCase())
+  })
+
+  if(!search){
+    return fleets.value = store.getters.fleets
+  }
+  fleets.value = filtered
+  
+}
+
+const searchT = () => {
+  console.log('Searching...')
+
+  const search = searchTruck.value
+
+  const filtered = trucks.value.filter(item => {
+    return item.FltId.fltFleetNo.toLowerCase().includes(search.toLowerCase())
+  })
+
+  if(!search){
+    return trucks.value = store.getters.trucks
+  }
+  trucks.value = filtered
+  
+}
 </script>
 
 <template>
@@ -293,7 +328,26 @@ const editEnabled = () => {
                         item-title="FltId.fltFleetNo"
                         label="Truck"
                         required
-                      />
+                      >
+                        <template #prepend-item>
+                          <VListItem>
+                            <VListItemContent>
+                              <VTextField
+                                v-model="searchTruck"
+                                placeholder="Search"
+                                class="mx-4"
+                                outlined
+                                hide-details
+                                single-line
+                                clearable
+                                prepend-inner-icon="mdi-magnify"
+                                @input="searchT"
+                              />
+                            </VListItemContent>
+                          </VListItem>
+                          <VDivider />
+                        </template>
+                      </VSelect>
                     </VCol>
                     <VCol
                       md="6"
@@ -307,8 +361,27 @@ const editEnabled = () => {
                         label="Fleet"
                         :loading="loading"
                         required
-                        persistent-hint="Fleet plate number"
-                      />
+                        placeholder="Fleet plate number"
+                      >
+                        <template #prepend-item>
+                          <VListItem>
+                            <VListItemContent>
+                              <VTextField
+                                v-model="searchV"
+                                placeholder="Search"
+                                class="mx-4"
+                                outlined
+                                hide-details
+                                single-line
+                                clearable
+                                prepend-inner-icon="mdi-magnify"
+                                @input="search"
+                              />
+                            </VListItemContent>
+                          </VListItem>
+                          <VDivider />
+                        </template>
+                      </VSelect>
                     </VCol>
                     <VCol
                       cols="12"
