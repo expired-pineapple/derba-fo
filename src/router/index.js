@@ -315,6 +315,37 @@ const router = createRouter({
           path: "register-trailer-insurance",
           component: () =>import('../pages/Trailers/Insurance/InsuranceForm.vue'),
         },
+        {
+          name: "tire-provision",
+          path: "/tire-provision",
+          component: () => import('../pages/Tires/Provision/ListView.vue'),
+        },
+        {
+          name: "edit-tire-provision",
+          path: "/tire-provision/:id",
+          component: () => import('../pages/Tires/Provision/EditView.vue'),
+        },
+        {
+          name: "register-tire-provision",
+          path: "/tire-provision/register",
+          component: () => import('../pages/Tires/Provision/FormView.vue'),
+        },
+
+        {
+          name: "tire-return",
+          path: "/tire-return",
+          component: () => import('../pages/Tires/Return/ListView.vue'),
+        },
+        {
+          name: "edit-tire-return",
+          path: "/tire-return/:id",
+          component: () => import('../pages/Tires/Return/EditView.vue'),
+        },
+        {
+          name: "register-tire-return",
+          path: "/tire-return/register",
+          component: () => import('../pages/Tires/Return/FormView.vue'),
+        },
       ],
     },
     {
