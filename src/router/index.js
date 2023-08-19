@@ -327,7 +327,7 @@ const router = createRouter({
         },
         {
           name: "register-tire-provision",
-          path: "/tire-provision/register",
+          path: "/tire-provisions/register",
           component: () => import('../pages/Tires/Provision/FormView.vue'),
         },
 
