@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import router from "@/router"
-import { ref } from "vue"
+import { computed, ref } from "vue"
+import { useStore } from "vuex"
 
 const props = defineProps({
   header: {
@@ -38,14 +39,23 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  loading: {
+    type: Boolean,
+    required: false,
+  },
 })
 
 const searchField = ref("")
 const searchValue = ref("")
+
+const store = useStore()
+
+
+const loading = ref(store.getters.loading)
 </script>
 
 <template>
-  <VCard>
+  <VCard :loading="loading">
     <VCardTitle v-if="props.header">
       {{ props.header }}
     </VCardTitle>
@@ -137,10 +147,14 @@ const searchValue = ref("")
       :rows-per-page="props.rows"
       :headers="props.tableHeader.headers"
       :items="props.tableHeader.items"
+      :loading="props.loading"
       :search-field="searchField"
       :search-value="searchValue"
       @click-row="props.clickedRow"
     >
+      <template #loading>
+        <p>Loading Data</p>
+      </template>
       <template #item-operation="item"> 
         <div class="cursor-pointer">
           <VIcon
@@ -188,7 +202,7 @@ const searchValue = ref("")
   --easy-table-footer-background-color: background-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
   --easy-table-footer-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
   --easy-table-scrollbar-track-color: background-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
-  --easy-table-loading-mask-background-color: #0f8e3d;
+  --easy-table-loading-mask-background-color: #ffff;
   --easy-table-body-row-hover-background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
 }
 </style>

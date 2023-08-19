@@ -11,19 +11,41 @@ const vuetifyTheme = useTheme()
 
 const drivers = [
   ['Drivers List', 'mdi-account-tie-outline', '/drivers'],
+  ['Driver Emergency Contact', 'mdi-account-alert-outline', '/emergency-contact'],
+  ['Driver Licence', "mdi-license", '/licence' ],
+  ['Driver Djibouti Pass', "mdi-card-account-details-outline", "/driver-djibouti-pass"],
+  ['Driver Passport', 'mdi-passport', '/driver-passport'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
+  ['Assigned Trucks', 'mdi-truck-outline', '/trucks'],
   ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
-const Trucks = [
-  ['Truck', 'mdi-truck-outline', '/trucks'],
-  ['Maintenance', 'mdi-wrench-cog-outline', '/maintenance'],
+
+const TrailerChildren = [
+  ['Trailers', 'mdi-truck-trailer', '/trailers'],
+  ['Bolo', 'mdi-truck-trailer', '/trailer-bolo'],
+  ['COMESA ', 'mdi-truck-trailer', '/trailer-comesa'],
+  ['Insurance', 'mdi-truck-trailer', '/trailer-insurance'],
+  ['Third Party', 'mdi-truck-trailer', '/trailer-third-party'],
+]
+
+const FleetChildren = [
+  ['Fleet', 'mdi-truck-outline', '/fleet'],
+  ['Fleet Bolo', 'mdi-truck-outline', '/fleet-bolo'],
+  ['Fleet COMESA ', 'mdi-truck-outline', '/fleet-comesa'],
+  ['Fleet Insurance', 'mdi-truck-outline', '/fleet-insurance'],
+  ['Fleet Third Party', 'mdi-truck-outline', '/fleet-third-party'],
+]
+
+const TrucksConfig = [
+  ['Truck List', 'mdi-truck-outline', '/trucks'],
+  ['Insurance Claim', 'mdi-shield-car', '/insurance'],
+  ['Maintainence Request', 'mdi-wrench-cog-outline', '/maintainance'],
 ]
 
 const   Dispatch = [
-  ['Shipments', 'mdi-truck-delivery-outline', '/shipment'],
-  ['Routes', 'mdi-map-marker-path', '/dispatch/list'],
-  ['Frieght Order', 'mdi-file-document-multiple-outline', '/driver/leave-logs'],
+  ['Frieght Order', 'mdi-truck-delivery-outline', '/driver/leave-logs'],
+  ['Routes', 'mdi-map-marker-path', '/trip-information'],
 ]
 
 const Accounting = [
@@ -33,15 +55,26 @@ const Accounting = [
 
 const Customers = [
   ['Customers', 'mdi-account-cash-outline', '/customer'],
-  ['Customer Contacts', 'mdi-card-account-mail-outline', '/customers/contact/list'],
+  ['Customer Contacts', 'mdi-card-account-mail-outline', '/customer-contact'],
 ]
 
 const Settings = [
-  ['Fuel', 'mdi-fuel', '/fuel'],
+  ['Comodities', 'mdi-cash', '/comodities' ],
   ['Infraction Type', 'mdi-account-remove-outline', '/infration-type'],
+  ['Routes', 'mdi-map-marker-path', '/trip-information'],
   ['Maintenance Type', 'mdi-wrench-cog-outline', '/maintenance-type'],
-  ['Insurance', 'mdi-shield-car'],
+  ['Truck Status', 'mdi-car-info', '/truck-status'],
+]
 
+const Tire = [
+  ['Tire Provision', 'mdi-tire', '/tire-provision'],
+  ['Tire Return', 'mdi-tire', '/tire-return'],
+]
+
+const Reports = [
+  ['FO Report', 'mdi-truck-delivery-outline', '/fo-report'],
+  ['Fuel Report', 'mdi-fuel', '/fuel-report'],
+  ['Truck Status Report', 'mdi-car-info', '/truck-status-report'],
 ]
 </script>
 
@@ -64,22 +97,23 @@ const Settings = [
 
         <NavbarThemeSwitcher class="me-2" />
 
-        <UserProfile />
+        <UserProfile style="color: white;" />
       </div>
     </template>
 
     <template #vertical-nav-content>
-      <VList>
+      <VList
+        v-model="verticalNavActive"
+        style="width: 100%;"
+        dense
+        nav
+        color="primary"
+        class="py-0"
+      >
         <VListItem
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
           to="/dashboard"
-          color="primary"
-        />
-        <VListItem
-          prepend-icon="mdi-account-cog-outline"
-          title="Account Settings"
-          to="/account-settings"
           color="primary"
         />
         <VListGroup value="Drivers">
@@ -107,15 +141,76 @@ const Settings = [
               title="Vehicles"
             />
           </template>
+          <VListGroup value="FleetChildren">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-truck-outline"
+                title="Fleet"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in FleetChildren"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
+          <VListGroup value="TrailerChildren">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-truck-trailer"
+                title="Trailers"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in TrailerChildren"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
+        </VListGroup>
+        <VListGroup value="TrucksConfig">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-truck-outline"
+              title="Trucks"
+            />
+          </template>
           <VListItem
-            v-for="([title, icon,to], i) in Trucks"
+            v-for="([title, icon,to], i) in TrucksConfig"
             :key="i"
             :title="title"
             :to="to"
             :prepend-icon="icon"
             :value="title"
           />
+          <VListGroup value="Tire">
+            <template #activator="{ props }">
+              <VListItem
+                v-bind="props"
+                prepend-icon="mdi-tire"
+                title="Tire"
+              />
+            </template>
+            <VListItem
+              v-for="([title, icon,to], i) in Tire"
+              :key="i"
+              :title="title"
+              :to="to"
+              :prepend-icon="icon"
+              :value="title"
+            />
+          </VListGroup>
         </VListGroup>
+
         <VListGroup value="Dispatch">
           <template #activator="{ props }">
             <VListItem
@@ -160,6 +255,23 @@ const Settings = [
           </template>
           <VListItem
             v-for="([title, icon,to], i) in Customers"
+            :key="i"
+            :title="title"
+            :to="to"
+            :prepend-icon="icon"
+            :value="title"
+          />
+        </VListGroup>
+        <VListGroup value="Reports">
+          <template #activator="{ props }">
+            <VListItem
+              v-bind="props"
+              prepend-icon="mdi-file-chart-outline"
+              title="Reports"
+            />
+          </template>
+          <VListItem
+            v-for="([title, icon,to], i) in Reports"
             :key="i"
             :title="title"
             :to="to"

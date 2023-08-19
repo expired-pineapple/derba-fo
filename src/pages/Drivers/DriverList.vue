@@ -3,14 +3,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue"
-
 import router from "@/router"
+import { ref, onMounted, computed } from "vue"
+import { mapActions, useStore } from 'vuex'
+
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 
 const searchField = ref("")
 const searchValue = ref("")
-  
+const loading = ref(true)
+
 const headers = [
   { text: "Driver DMC ID", value: "driver_dmc_id", sortable: true },
   { text: "Full Name", value: "driver_name", sortable: true },
@@ -21,61 +23,22 @@ const headers = [
   { text: "Employment Status", value: "employment_status",  sortable: true  },
 ]
 
-const items = [
-  {
-    "id": "1",
-    "driver_name": "Abebe Kebede",
-    "phone": "",
-    "email": "abebe.kebede@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D1234",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "id": "2",
-    "driver_name": "John Doe",
-    "phone": "555-5678",
-    "email": "john.doe@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D5678",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "id": "3",
-    "driver_name": "Chaltu Kebede",
-    "phone": "555-4321",
-    "email": "chaltu.kebede@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D9012",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": false,
-    "employment_status": "Part-time",
-    "note_on_driver": null,
-  },
-  {
-    "id": "4",
-    "driver_name": "Yohannes Alemu",
-    "phone": "555-8765",
-    "email": "y_alemu@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D3456",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": "Requires additional training on hazardous materials",
-  },
+const { fetchDrivers } = mapActions('driver', ['fetchDrivers'])
 
-]
+const store = useStore()
+
+onMounted(async () => {
+  try {
+    await store.dispatch("fetchDrivers")
+  } catch (err) {
+    console.error('Error dispatching fetchDrivers action:', err)
+  }
+  finally{
+    loading.value = !loading.value  
+  }
+})
+
+const items = computed(() => store.getters.drivers)
 
 const clickedRow = ref({})
 
@@ -98,6 +61,7 @@ const props = {
     searchValue,
   },
   clickedRow: editDriver,
+  loading: loading,
 }
 </script>
 

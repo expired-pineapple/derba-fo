@@ -1,16 +1,19 @@
 <script lang="ts" setup>
 import { ref } from "vue"
 
-const drvPassport = {
-  drvPassportNo: "123456789",
-  drvPassportIssuanceDate: "2023-12-11",
-  drvPassportExpireDate: "2025-12-11",
-  drvPassportActiveStatus: false,
-}
+const drvPassport = defineProps({
+  drvPassport: {
+    type: Array,
+    required: true,
+  },
+})
 
-const drvPassportLocal = ref(structuredClone(drvPassport))
+
+const drvPassportLocal = ref(drvPassport.drvPassport)
 
 const editPassport = ref(false)
+
+console.log(drvPassport)
 
 const submitForm = () => {
   console.log(drvPassportLocal.value)
@@ -33,13 +36,16 @@ const submitForm = () => {
   </div>
   <VCardText>
     <VForm :disabled="!editPassport">
-      <VRow>
+      <VRow
+        v-for="drvpass in drvPassportLocal"
+        :key="drvpass"
+      >
         <VCol
           md="6"
           cols="12"
         >
           <VTextField
-            v-model="drvPassportLocal.drvPassportNo"
+            v-model="drvpass.drvPassportNo"
             label="Passport Number"
             placeholder="A12345"
             :disabled="!editPassport"
@@ -50,7 +56,7 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="drvPassportLocal.drvPassportIssuanceDate"
+            v-model="drvpass.drvPassportIssuanceDate"
             label="Passport Issue Date"
             placeholder=""
             type="date"
@@ -61,7 +67,7 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="drvPassportLocal.drvPassportExpireDate"
+            v-model="drvpass.drvPassportExpireDate"
             label="Passport Expiry Date"
             type="date"
           />
@@ -71,7 +77,7 @@ const submitForm = () => {
           cols="12"
         >
           <VSwitch
-            v-model="drvPassportLocal.drvPassportActiveStatus"
+            v-model="drvpass.drvPassportActiveStatus"
             label="Passport Active Status"
           />
         </VCol>

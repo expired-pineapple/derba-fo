@@ -1,20 +1,33 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { computed, onMounted, ref } from "vue"
+import { useStore } from 'vuex'
 
-const licence = {
-  "drvLicenceNumber": "123456789",
-  "drvLicenceAuthority": "Ethiopian Transport Authority",
-  "drvLicenceIssueDate": "2023-12-11",
-  "drvLicenceExpiryDate": "2025-12-11",
-  "drvLicenceActiveStatus": true,
-}
+import { useRoute } from 'vue-router'
 
-const licence_local = ref(JSON.parse(JSON.stringify(licence)))
+
+const store = useStore()
+const route = useRoute()
+
+const id = route.params.id
+
+
+
+onMounted(async () => {
+  try {
+    await store.dispatch("fetchDriverLicence", id)
+  
+  } catch (err) {
+    console.error('Error dispatching fetchEmergencyContact action:', err)
+  }
+})
+
+
+const licence = computed(() => store.getters.driverLicence)
 
 const editLicence = ref(false)
 
 const submitForm = () => {
-  console.log(licence_local.value)
+  console.log("sub")
 }
 </script>
 
@@ -34,7 +47,10 @@ const submitForm = () => {
   </div>
   <VCardText>
     <VForm :disabled="!editLicence">
-      <VRow>
+      <VRow
+        v-for="licence_local in licence"
+        :key="licence_local"
+      >
         <VCol
           md="6"
           cols="12"

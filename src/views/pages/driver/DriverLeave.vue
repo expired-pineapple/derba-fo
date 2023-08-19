@@ -1,19 +1,37 @@
 <script lang="ts" setup>
-import { ref } from "vue"
+import { ref, onMounted, computed } from "vue"
 
-const driverLeave = {
-  drvLeaveStartDate: "2021-12-11",
-  drvLeaveEndDate: "2021-12-11",
-  drvLeaveReason: "Vacation",
-  drvLeaveActiveStatus: true,
-}
+import { useStore } from 'vuex'
 
-const driverLeaveLocal = ref(structuredClone(driverLeave))
+import { useRoute } from 'vue-router'
+
+const store = useStore()
+const route = useRoute()
+
+const id = route.params.id
+
+const loading = ref(false)
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    await store.dispatch("fetchDriverLeaveLog", id)
+  
+  } catch (err) {
+    console.error('Error dispatching fetchEmergencyContact action:', err)
+  }
+  finally{
+    loading.value = !loading.value  
+  }
+})
+
+
+const driverLeave = computed(() => store.getters.driverLeaveLog)
 
 const editdriverLeave = ref(false)
 
 const submitForm = () => {
-  console.log(driverLeaveLocal.value)
+  console.log("sub")
 }
 </script>
 
@@ -37,7 +55,10 @@ const submitForm = () => {
       class=""
       :disabled="!editdriverLeave"
     >
-      <VRow>
+      <VRow
+        v-for="driverLeaveLocal in driverLeave"
+        :key="driverLeaveLocal"
+      >
         <VCol
           md="6"
           cols="12"
@@ -63,17 +84,38 @@ const submitForm = () => {
           cols="12"
         >
           <VTextField
-            v-model="driverLeaveLocal.drvLeaveReason"
-            label="Reason for Leave"
+            v-model="driverLeaveLocal.LastworkDate"
+            label="Last Work Date"
+            type="date"
           />
         </VCol>
         <VCol
           md="6"
           cols="12"
         >
-          <VSwitch
-            v-model="driverLeaveLocal.drvLeaveActiveStatus"
-            label="Leave Active Status"
+          <VTextField
+            v-model="driverLeaveLocal.FirstWorkDate"
+            label="First Work Date"
+            type="date"
+          />
+        </VCol>
+        <VCol
+          md="6"
+          cols="12"
+        >
+          <VTextField
+            v-model="driverLeaveLocal.leavefilledDate"
+            label="Leave Filled Date"
+            type="date"
+          />
+        </VCol>
+        <VCol
+          md="6"
+          cols="12"
+        >
+          <VTextField
+            v-model="driverLeaveLocal.leavedays"
+            label="Leave Days"
           />
         </VCol>
         <!-- 👉 Form Actions -->

@@ -1,0 +1,400 @@
+{
+    "driver": [
+        {
+            "id": "1",
+            "driver_name": "Abebe Kebede",
+            "phone": "",
+            "email": "abebe.kebede@example.com",
+            "permanent_residence": "Addis Ababa, Ethiopia",
+            "driver_dmc_id": "D1234",
+            "department": "Logistics",
+            "Job_title": "Delivery Driver",
+            "is_active": true,
+            "employment_status": "Full-time",
+            "note_on_driver": null
+        },
+        {
+            "id": "2",
+            "driver_name": "John Doe",
+            "phone": "555-5678",
+            "email": "john.doe@example.com",
+            "permanent_residence": "Addis Ababa, Ethiopia",
+            "driver_dmc_id": "D5678",
+            "department": "Transportation",
+            "Job_title": "Truck Driver",
+            "is_active": true,
+            "employment_status": "Full-time",
+            "note_on_driver": null
+        },
+        {
+            "id": "3",
+            "driver_name": "Chaltu Kebede",
+            "phone": "555-4321",
+            "email": "chaltu.kebede@example.com",
+            "permanent_residence": "Addis Ababa, Ethiopia",
+            "driver_dmc_id": "D9012",
+            "department": "Logistics",
+            "Job_title": "Delivery Driver",
+            "is_active": false,
+            "employment_status": "Part-time",
+            "note_on_driver": null
+        },
+        {
+            "id": "4",
+            "driver_name": "Yohannes Alemu",
+            "phone": "555-8765",
+            "email": "y_alemu@example.com",
+            "permanent_residence": "Addis Ababa, Ethiopia",
+            "driver_dmc_id": "D3456",
+            "department": "Transportation",
+            "Job_title": "Truck Driver",
+            "is_active": true,
+            "employment_status": "Full-time",
+            "note_on_driver": "Requires additional training on hazardous materials"
+        }
+    ],
+    "DrvEmergecyContact": [
+        {
+            "id": "1",
+            "driverID": 1,
+            "drvContactName": "Mulugeta Kebede",
+            "drvContactPhone": "+251912345678",
+            "drvContactRelatinship": "Brother",
+            "drvContactAdress": "Addis Ababa, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "2",
+            "driverID": 2,
+            "drvContactName": "Abeba Tadesse",
+            "drvContactPhone": "+251911234567",
+            "drvContactRelatinship": "Sister",
+            "drvContactAdress": "Hawassa, Ethiopia",
+            "drvContactActiveStatus": false
+        },
+        {
+            "id": "3",
+            "driverID": 3,
+            "drvContactName": "Yohannes Berhanu",
+            "drvContactPhone": "+251910987654",
+            "drvContactRelatinship": "Uncle",
+            "drvContactAdress": "Bahir Dar, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "4",
+            "driverID": 4,
+            "drvContactName": "Sara Desta",
+            "drvContactPhone": "+251913456789",
+            "drvContactRelatinship": "Cousin",
+            "drvContactAdress": "Gondar, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "5",
+            "driverID": 5,
+            "drvContactName": "Tewodros Assefa",
+            "drvContactPhone": "+251919876543",
+            "drvContactRelatinship": "Father",
+            "drvContactAdress": "Dire Dawa, Ethiopia",
+            "drvContactActiveStatus": false
+        },
+        {
+            "id": "6",
+            "driverID": "6",
+            "drvContactName": "Meseret Alemu",
+            "drvContactPhone": "+251916543210",
+            "drvContactRelatinship": "Mother",
+            "drvContactAdress": "Jimma, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "7",
+            "driverID": 7,
+            "drvContactName": "Assefa Mekonnen",
+            "drvContactPhone": "+251912345678",
+            "drvContactRelatinship": "Brother-in-law",
+            "drvContactAdress": "Addis Ababa, Ethiopia",
+            "drvContactActiveStatus": false
+        },
+        {
+            "id": "8",
+            "driverID": 8,
+            "drvContactName": "Almaz Gebremedhin",
+            "drvContactPhone": "+251911234567",
+            "drvContactRelatinship": "Aunt",
+            "drvContactAdress": "Hawassa, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "9",
+            "driverID": 9,
+            "drvContactName": "Birhanu Teshome",
+            "drvContactPhone": "+251910987654",
+            "drvContactRelatinship": "Cousin",
+            "drvContactAdress": "Bahir Dar, Ethiopia",
+            "drvContactActiveStatus": true
+        },
+        {
+            "id": "10",
+            "driverID": 10,
+            "drvContactName": "Mintesinot Gebre",
+            "drvContactPhone": "+251913456789",
+            "drvContactRelatinship": "Friend",
+            "drvContactAdress": "Gondar, Ethiopia",
+            "drvContactActiveStatus": true
+        }
+    ],
+    "DrvLicence": [
+        {
+            "driverID": 1,
+            "drvLicenceNumber": "AB12345678",
+            "drvLicenceAuthority": "Federal Transport Authority",
+            "drvLicenceIssueDate": "2019-05-15",
+            "drvLicenceExpiryDate": "2024-05-14",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 2,
+            "drvLicenceNumber": "CD87654321",
+            "drvLicenceAuthority": "Addis Ababa City Administration",
+            "drvLicenceIssueDate": "2020-02-28",
+            "drvLicenceExpiryDate": "2025-02-27",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 3,
+            "drvLicenceNumber": "EF98765432",
+            "drvLicenceAuthority": "Oromia Transport Authority",
+            "drvLicenceIssueDate": "2018-11-10",
+            "drvLicenceExpiryDate": "2023-11-09",
+            "drvLicenceActiveStatus": false
+        },
+        {
+            "driverID": 4,
+            "drvLicenceNumber": "GH54321678",
+            "drvLicenceAuthority": "Amhara Transport Authority",
+            "drvLicenceIssueDate": "2017-07-22",
+            "drvLicenceExpiryDate": "2022-07-21",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 5,
+            "drvLicenceNumber": "IJ87651234",
+            "drvLicenceAuthority": "Southern Nations, Nationalities, and People's Region Transport Authority",
+            "drvLicenceIssueDate": "2021-09-05",
+            "drvLicenceExpiryDate": "2026-09-04",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 6,
+            "drvLicenceNumber": "KL43218765",
+            "drvLicenceAuthority": "Tigray Transport Authority",
+            "drvLicenceIssueDate": "2016-04-12",
+            "drvLicenceExpiryDate": "2021-04-11",
+            "drvLicenceActiveStatus": false
+        },
+        {
+            "driverID": 7,
+            "drvLicenceNumber": "MN56781234",
+            "drvLicenceAuthority": "Benishangul-Gumuz Transport Authority",
+            "drvLicenceIssueDate": "2022-08-18",
+            "drvLicenceExpiryDate": "2027-08-17",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 8,
+            "drvLicenceNumber": "OP32147865",
+            "drvLicenceAuthority": "Afar Transport Authority",
+            "drvLicenceIssueDate": "2019-01-03",
+            "drvLicenceExpiryDate": "2024-01-02",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 9,
+            "drvLicenceNumber": "QR87652341",
+            "drvLicenceAuthority": "Gambela Transport Authority",
+            "drvLicenceIssueDate": "2020-12-09",
+            "drvLicenceExpiryDate": "2025-12-08",
+            "drvLicenceActiveStatus": true
+        },
+        {
+            "driverID": 10,
+            "drvLicenceNumber": "ST21436587",
+            "drvLicenceAuthority": "Sidama Transport Authority",
+            "drvLicenceIssueDate": "2018-03-27",
+            "drvLicenceExpiryDate": "2023-03-26",
+            "drvLicenceActiveStatus": false
+        }
+    ],
+    "DrvLeave": [
+        {
+            "driverID": 1,
+            "drvLeaveType": "Annual Leave",
+            "AddressDuringLeave": "Addis Ababa, Ethiopia",
+            "drvLeaveStartDate": "2023-01-10",
+            "drvLeaveEndDate": "2023-01-20",
+            "LastworkDate": "2023-01-09",
+            "FirstWorkDate": "2023-01-21",
+            "leavefilledDate": "2022-12-15",
+            "leavedays": "10"
+        },
+        {
+            "driverID": 2,
+            "drvLeaveType": "Sick Leave",
+            "AddressDuringLeave": "Dire Dawa, Ethiopia",
+            "drvLeaveStartDate": "2023-03-05",
+            "drvLeaveEndDate": "2023-03-10",
+            "LastworkDate": "2023-03-04",
+            "FirstWorkDate": "2023-03-11",
+            "leavefilledDate": "2023-02-25",
+            "leavedays": "6"
+        },
+        {
+            "driverID": 3,
+            "drvLeaveType": "Maternity Leave",
+            "AddressDuringLeave": "Hawassa, Ethiopia",
+            "drvLeaveStartDate": "2023-06-15",
+            "drvLeaveEndDate": "2023-09-15",
+            "LastworkDate": "2023-06-14",
+            "FirstWorkDate": "2023-09-16",
+            "leavefilledDate": "2023-05-30",
+            "leavedays": "93"
+        },
+        {
+            "driverID": 4,
+            "drvLeaveType": "Study Leave",
+            "AddressDuringLeave": "Bahir Dar, Ethiopia",
+            "drvLeaveStartDate": "2023-04-01",
+            "drvLeaveEndDate": "2023-04-30",
+            "LastworkDate": "2023-03-31",
+            "FirstWorkDate": "2023-05-01",
+            "leavefilledDate": "2023-03-15",
+            "leavedays": "30"
+        },
+        {
+            "driverID": 5,
+            "drvLeaveType": "Bereavement Leave",
+            "AddressDuringLeave": "Jimma, Ethiopia",
+            "drvLeaveStartDate": "2023-07-20",
+            "drvLeaveEndDate": "2023-07-25",
+            "LastworkDate": "2023-07-19",
+            "FirstWorkDate": "2023-07-26",
+            "leavefilledDate": "2023-07-10",
+            "leavedays": "6"
+        },
+        {
+            "driverID": 6,
+            "drvLeaveType": "Paternity Leave",
+            "AddressDuringLeave": "Gondar, Ethiopia",
+            "drvLeaveStartDate": "2023-09-01",
+            "drvLeaveEndDate": "2023-09-05",
+            "LastworkDate": "2023-08-31",
+            "FirstWorkDate": "2023-09-06",
+            "leavefilledDate": "2023-08-20",
+            "leavedays": "5"
+        },
+        {
+            "driverID": 7,
+            "drvLeaveType": "Family Leave",
+            "AddressDuringLeave": "Addis Ababa, Ethiopia",
+            "drvLeaveStartDate": "2023-11-10",
+            "drvLeaveEndDate": "2023-11-15",
+            "LastworkDate": "2023-11-09",
+            "FirstWorkDate": "2023-11-16",
+            "leavefilledDate": "2023-10-30",
+            "leavedays": "6"
+        },
+        {
+            "driverID": 8,
+            "drvLeaveType": "Religious Leave",
+            "AddressDuringLeave": "Hawassa, Ethiopia",
+            "drvLeaveStartDate": "2023-12-25",
+            "drvLeaveEndDate": "2023-12-26",
+            "LastworkDate": "2023-12-24",
+            "FirstWorkDate": "2023-12-27",
+            "leavefilledDate": "2023-12-15",
+            "leavedays": "2"
+        },
+        {
+            "driverID": 9,
+            "drvLeaveType": "Unpaid Leave",
+            "AddressDuringLeave": "Dire Dawa, Ethiopia",
+            "drvLeaveStartDate": "2023-08-15",
+            "drvLeaveEndDate": "2023-08-20",
+            "LastworkDate": "2023-08-14",
+            "FirstWorkDate": "2023-08-21",
+            "leavefilledDate": "2023-08-05",
+            "leavedays": "6"
+        },
+        {
+            "driverID": 10,
+            "drvLeaveType": "Compensation Leave",
+            "AddressDuringLeave": "Bahir Dar, Ethiopia",
+            "drvLeaveStartDate": "2023-10-01",
+            "drvLeaveEndDate": "2023-10-05",
+            "LastworkDate": "2023-09-30",
+            "FirstWorkDate": "2023-10-06",
+            "leavefilledDate": "2023-09-20",
+            "leavedays": "5"
+        }
+    ],
+    "CmrCode": [
+        {
+            "CmrCode": "C0001",
+            "CmrName": "Ethiopian Construction Works Corporation",
+            "CmrTIN": "000111222333",
+            "CmrAddress": "Addis Ababa, Ethiopia",
+            "CmrPhone": "+251 11 123 4567",
+        },
+        {
+            "CmrCode": "C0002",
+            "CmrName": "Yotek Construction PLC",
+            "CmrTIN": "000222333444",
+            "CmrAddress": "Addis Ababa, Ethiopia",
+            "CmrPhone": "+251 11 123 4567",
+        },
+        {
+            "CmrCode": "C0004",
+            "CmrName": "Sunshine Construction PLC",
+            "CmrTIN": "000444555666",
+            "CmrAddress": "Mekelle, Ethiopia",
+            "CmrPhone": "+251 34 123 4567",
+        },
+        {
+            "CmrCode": "C0006",
+            "CmrName": "Ethiopian Roads Authority",
+            "CmrTIN": "000666777888",
+            "CmrAddress": "Addis Ababa, Ethiopia",
+            "CmrPhone": "+251 11 123 4567",
+        },
+        {
+            "CmrCode": "C0007",
+            "CmrName": "Addis Ababa Housing Development Project Office",
+            "CmrTIN": "000777888999",
+            "CmrAddress": "Addis Ababa, Ethiopia",
+            "CmrPhone": "+251 11 123 4567",
+        },
+        {
+            "CmrCode": "C0008",
+            "CmrName": "Dire Dawa Housing Development Project Office",
+            "CmrTIN": "000888999000",
+            "CmrAddress": "Dire Dawa, Ethiopia",
+            "CmrPhone": "+251 25 123 4567",
+        },
+        {
+            "CmrCode": "C0009",
+            "CmrName": "Oromia Housing Development Project Office",
+            "CmrTIN": "000999000111",
+            "CmrAddress": "Adama, Ethiopia",
+            "CmrPhone": "+251 22 123 4567",
+        },
+        {
+            "CmrCode": "C0010",
+            "CmrName": "Eastern Industry Zone Development PLC",
+            "CmrTIN": "001111222333",
+            "CmrAddress": "Dukem, Ethiopia",
+            "CmrPhone": "+251 11 123 4567",
+        }
+    ]
+}

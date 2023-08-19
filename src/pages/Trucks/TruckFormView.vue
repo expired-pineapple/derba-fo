@@ -1,36 +1,78 @@
 <script setup>
+import router from "@/router"
+import { ref, onMounted, computed } from "vue"
+import { useStore } from "vuex"
+
+
 const truckData = {
-  driver: "",
-  plate_number: "",
-  trailer_model: "",
-  trailer_type: "",
-  capacity: "",
-  is_active: "",
-  chasis_number: "",
-  condition: "",
-  remarks: "",
+  DrvId: "",
+  FltId: "",
+  TrlId: "",
+  trkActive: false,
 }
 
-const drivers = [
-  "John Doe",
-  "Abebe Kebede",
-  "Muluken Tadesse",
-  "Tewodros Kibrom",
-]
+const store = useStore()
 
 const truckDataLocal = ref(structuredClone(truckData))
 const successAlert = ref(false)
+const errorAlert = ref(false)
+
+const trailer = ref([])
+const fleet = ref([])
+const drivers = ref([])
+const driverLoading = ref(false)
+const trailerLoading = ref(false)
+const fleetLoading = ref(false)
+
+const { fetchDrivers } = mapActions("driverModule", ["fetchDrivers"])
+
+
+onMounted(async () => {
+  try {
+    driverLoading.value = true
+    store.dispatch("fetchDrivers")
+    drivers.value = store.getters.drivers
+    trailerLoading.value = true
+    store.dispatch("fetchTrailers")
+    trailer.value = store.getters.trailers
+    fleetLoading.value = true
+    console.log("Fetching trailer", trailer.value)
+    store.dispatch("fetchFleets")
+    fleet.value = store.getters.fleets
+  } catch (err) {
+    console.error("Error dispatching in truck form:", err)
+  } finally {
+    driverLoading.value = false
+    trailerLoading.value = false
+    fleetLoading.value = false
+  }
+
+})
 
 const resetForm = () => {
   truckDataLocal.value = structuredClone(truckData)
 }
 
-
 const submitForm = () => {
   // Submit form data to backend
-  console.log('Form submitted')
-  successAlert.value = true
-  resetForm()
+  console.log("Submitting form data:", truckDataLocal.value)
+  try {
+    store.dispatch("createTruck", truckDataLocal.value)
+
+    const error = computed(() => store.getters.vehicleError)
+
+    if (error.value) {
+      errorAlert.value = true
+      console.error("Error dispatching createTruck action:", error)
+    }else{
+      successAlert.value = true
+      store.dispatch("fetchTrucks")
+    }
+    resetForm()
+  } catch (err) {
+    errorAlert.value = true
+    console.error("Error dispatching createTruck action:", err)
+  }
 }
 </script>
 
@@ -47,6 +89,18 @@ const submitForm = () => {
           type="success"
           title="Success!"
           text="Truck details saved successfully"
+          timeout="5000"
+        />
+        <VAlert
+          v-model="errorAlert"
+          border="start"
+          variant="tonal"
+          closable
+          close-label="Close Alert"
+          type="error"
+          title="Error!"
+          text="Truck details not saved successfully"
+          timeout="5000"
         />
         <VCard title="Truck Details">
           <VDivider />
@@ -65,82 +119,43 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VSelect
-                    v-model="truckDataLocal.driver"
+                    v-model="truckDataLocal.DrvId"
                     :items="drivers"
+                    item-title="driver_name"
+                    item-value="id"
+                    :loading="driverLoading"
                     label="Driver"
                     placeholder="Select a driver"
                   />
                 </VCol>
-  
-                <!-- 👉 Plate Number -->
+                <!-- 👉 Fleet -->
                 <VCol
-                  cols="12"
                   md="6"
+                  cols="12"
                 >
-                  <VTextField
-                    v-model="truckDataLocal.plate_number"
-                    label="Plate Number"
+                  <VSelect
+                    v-model="truckDataLocal.FltId"
+                    :items="fleet"
+                    item-title="fltFleetNo"
+                    item-value="id"
+                    :loading="driverLoading"
+                    label="Fleet"
+                    placeholder="Select a fleet"
                   />
                 </VCol>
-  
-                <!-- 👉 Trailer Model -->
+                <!-- 👉 Trailer -->
                 <VCol
-                  cols="12"
                   md="6"
-                >
-                  <VTextField
-                    v-model="truckDataLocal.trailer_model"
-                    label="Trailer Model"
-                  />
-                </VCol>
-                <!-- 👉 Trailer Type -->
-                <VCol
                   cols="12"
-                  md="6"
                 >
-                  <VTextField
-                    v-model="truckDataLocal.trailer_type"
-                    label="Trailer Type"
-                  />
-                </VCol>
-                <!-- 👉 Capacity -->
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <VTextField
-                    v-model="truckDataLocal.capacity"
-                    label="Capacity"
-                  />
-                </VCol>
-                <!-- 👉 Chasis Number -->
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <VTextField
-                    v-model="truckDataLocal.chasis_number"
-                    label="Chasis Number"
-                  />
-                </VCol>
-                <!-- 👉 Condition -->
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <VTextField
-                    v-model="truckDataLocal.condition"
-                    label="Condition"
-                  />
-                </VCol>
-                <!-- 👉 Remarks -->
-                <VCol
-                  cols="12"
-                  md="12"
-                >
-                  <VTextarea
-                    v-model="truckDataLocal.remarks"
-                    label="Remarks"
+                  <VSelect
+                    v-model="truckDataLocal.TrlId"
+                    :items="trailer"
+                    item-title="plate_number"
+                    item-value="id"
+                    :loading="trailerLoading"
+                    label="Trailer"
+                    placeholder="Select a trailer"
                   />
                 </VCol>
                 <!-- 👉 Is Active -->
@@ -149,7 +164,7 @@ const submitForm = () => {
                   md="6"
                 >
                   <VSwitch
-                    v-model="truckDataLocal.is_active"
+                    v-model="truckDataLocal.trkActive"
                     label="Is Active"
                   />
                 </VCol>
@@ -158,7 +173,9 @@ const submitForm = () => {
                   cols="12"
                   class="d-flex flex-wrap gap-4"
                 >
-                  <VBtn>Save</VBtn>
+                  <VBtn @click.prevent="submitForm">
+                    Save
+                  </VBtn>
 
                   <VBtn
                     color="secondary"

@@ -4,12 +4,15 @@ import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import validators from '@/validators'
+
 import { useTheme } from 'vuetify'
+import store from '@/store'
+import { computed } from 'vue'
 
 const form = ref({
-  email: '',
+  username: '',
   password: '',
-  remember: false,
 })
 
 const vuetifyTheme = useTheme()
@@ -19,6 +22,21 @@ const authThemeMask = computed(() => {
 })
 
 const isPasswordVisible = ref(false)
+
+
+
+const error = computed(() => store.getters.loginError)
+
+async function login() {
+  try {
+    await store.dispatch('login', form.value)
+  } catch (err) {
+    console.log(err)
+    error.value = err.message
+  }
+}
+
+const isRequired = validators.isEmpty
 </script>
 
 <template>
@@ -51,37 +69,52 @@ const isPasswordVisible = ref(false)
       <VCardText>
         <VForm @submit.prevent="() => {}">
           <VRow>
-            <!-- email -->
             <VCol cols="12">
-              <VTextField
-                v-model="form.email"
-                label="Username"
-              />
-            </VCol>
-
-            <!-- password -->
-            <VCol cols="12">
-              <VTextField
-                v-model="form.password"
-                label="Password"
-                :type="isPasswordVisible ? 'text' : 'password'"
-                :append-inner-icon="isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
-                @click:append-inner="isPasswordVisible = !isPasswordVisible"
-              />
-
-              <!-- remember me checkbox -->
-              <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4" />
-
-              <!-- login button -->
-              <VBtn
-                block
-                type="submit"
-                to="/"
+              <VAlert
+                v-if="error"
+                type="error"
+                dismissible
+                border="left"
+                elevation="2"
+                icon="mdi-alert-circle-outline"
+                class="mb-4"
               >
-                Login
-              </VBtn>
+                {{ error }}
+              </VAlert>
             </VCol>
-          </VRow>
+            <VRow>
+              <!-- username -->
+              <VCol cols="12">
+                <VTextField
+                  v-model="form.username"
+                  label="Username"
+                />
+              </VCol>
+
+              <!-- password -->
+              <VCol cols="12">
+                <VTextField
+                  v-model="form.password"
+                  label="Password"
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  :append-inner-icon="isPasswordVisible ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                />
+
+                <!-- remember me checkbox -->
+                <div class="d-flex align-center justify-space-between flex-wrap mt-1 mb-4" />
+
+                <!-- login button -->
+                <VBtn
+                  block
+                  type="submit"
+                  @click="login"
+                >
+                  Login
+                </VBtn>
+              </VCol>
+            </VRow>
+          </vrow>
         </VForm>
       </VCardText>
     </VCard>

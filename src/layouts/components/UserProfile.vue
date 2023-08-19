@@ -21,7 +21,7 @@
           <template #prepend>
             <VListItemAction start>
               <VAvatar
-                color="primary"
+                color="white"
                 variant="tonal"
               >
                 <VIcon>
@@ -51,7 +51,7 @@
 
           <VListItemTitle>Account Settings</VListItemTitle>
         </VListItem>
-        <VListItem to="/login">
+        <VListItem @click="logout">
           <template #prepend>
             <VIcon
               class="me-2"
@@ -67,3 +67,18 @@
     <!-- !SECTION -->
   </VAvatar>
 </template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+const store = useStore()
+const router = useRouter()
+
+const logout = () => {
+  console.log('logout')
+  store.dispatch('logout')
+  router.push('/login')
+}
+</script>

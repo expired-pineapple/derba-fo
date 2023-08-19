@@ -5,85 +5,43 @@
 <script lang="ts" setup>
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 import router from "@/router"
-import { ref } from "vue"
-
-
-const searchField = ref("")
-const searchValue = ref("")
+import { ref, onMounted } from "vue"
+import { useStore, mapActions } from "vuex"
   
 const headers = [
-  { text: "Customer Code", value: "CmrCode", sortable: true },  
-  { text: "Customer Name", value: "CmrName", sortable: true },
-  { text: "TIN Number", value: "CmrTIN", sortable: true },
-  { text: "Address", value: "CmrAddress", sortable: true },
-  { text: "Phone Number", value: "CmrPhone", sortable: true },
+  { text: "Customer Code", value: "cmrCode", sortable: true },  
+  { text: "Customer Name", value: "cmrName", sortable: true },
+  { text: "TIN Number", value: "cmrTIN", sortable: true },
+  { text: "Address", value: "cmrAddress", sortable: true },
+  { text: "Phone Number", value: "cmrPhone", sortable: true },
 ]
 
-const items =
-  [
-    {
-      "CmrCode": "C0001",
-      "CmrName": "Ethiopian Construction Works Corporation",
-      "CmrTIN": "000111222333",
-      "CmrAddress": "Addis Ababa, Ethiopia",
-      "CmrPhone": "+251 11 123 4567",
-    },
-    {
-      "CmrCode": "C0002",
-      "CmrName": "Yotek Construction PLC",
-      "CmrTIN": "000222333444",
-      "CmrAddress": "Addis Ababa, Ethiopia",
-      "CmrPhone": "+251 11 123 4567",
-    },
-    {
-      "CmrCode": "C0004",
-      "CmrName": "Sunshine Construction PLC",
-      "CmrTIN": "000444555666",
-      "CmrAddress": "Mekelle, Ethiopia",
-      "CmrPhone": "+251 34 123 4567",
-    },
-    {
-      "CmrCode": "C0006",
-      "CmrName": "Ethiopian Roads Authority",
-      "CmrTIN": "000666777888",
-      "CmrAddress": "Addis Ababa, Ethiopia",
-      "CmrPhone": "+251 11 123 4567",
-    },
-    {
-      "CmrCode": "C0007",
-      "CmrName": "Addis Ababa Housing Development Project Office",
-      "CmrTIN": "000777888999",
-      "CmrAddress": "Addis Ababa, Ethiopia",
-      "CmrPhone": "+251 11 123 4567",
-    },
-    {
-      "CmrCode": "C0008",
-      "CmrName": "Dire Dawa Housing Development Project Office",
-      "CmrTIN": "000888999000",
-      "CmrAddress": "Dire Dawa, Ethiopia",
-      "CmrPhone": "+251 25 123 4567",
-    },
-    {
-      "CmrCode": "C0009",
-      "CmrName": "Oromia Housing Development Project Office",
-      "CmrTIN": "000999000111",
-      "CmrAddress": "Adama, Ethiopia",
-      "CmrPhone": "+251 22 123 4567",
-    },
-    {
-      "CmrCode": "C0010",
-      "CmrName": "Eastern Industry Zone Development PLC",
-      "CmrTIN": "001111222333",
-      "CmrAddress": "Dukem, Ethiopia",
-      "CmrPhone": "+251 11 123 4567",
-    },
-  ]
+const store = useStore()
 
-const clickedRow = ref({})
+const loading = ref(true)
 
-const editDriver = clickedRow => {
+const { fetchCustomers } = mapActions('FOModule', ['fetchCustomers'])
+
+const items = ref([])
+
+onMounted(() => {
+  try {
+    store.dispatch('fetchCustomers')
+    items.value = store.getters.customers
+    console.log(store.getters.customers)
+  } catch (err) {
+    console.error('Error dispatching fetchCustomers action:', err)
+  } finally {
+    loading.value = false
+  }
+
+})
+
+
+
+const edit = clickedRow => {
   console.log(clickedRow)
-  router.push({ name: "driver-edit", params: { id: clickedRow.id } })
+  router.push({ name: 'edit-customer', params: { id: clickedRow.id } })
 }
 
 const props = {
@@ -96,10 +54,11 @@ const props = {
   tableHeader: {
     headers,
     items,
-    searchField,
-    searchValue,
   },
-  
+
+  clickedRow: edit,
+  loading: loading,
+
 }
 </script>
 
