@@ -68,7 +68,7 @@ const Settings = [
 
 const Tire = [
   ['Tire Provision', 'mdi-tire', '/tire-provision'],
-  ['Tire Return', 'mdi-tire', '/tire-provision'],
+  ['Tire Return', 'mdi-tire', '/tire-return'],
 ]
 
 const Reports = [
