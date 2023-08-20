@@ -314,6 +314,8 @@ const FOModule = {
       const response = await axiosIns.get(url)
       const routes = response.data
 
+      console.log(routes)
+
       if(id){
         commit("setRoute", routes)
       }else{
@@ -326,19 +328,22 @@ const FOModule = {
       try {
         const response = await axiosIns.post("/trip/", route)
         const newRoute = response.data
-    
+
+        console.log(newRoute)
         commit("setRoute", newRoute)
         commit("setLoading", false)
       } catch (error) {
+        console.log(error)
         commit("setError", error.message)
         commit("setLoading", false)
+
       }
     },
 
     async updateRoute({ commit }, { id, route }){
-      commit(setLoading, true)
+      commit("setLoading", true)
       try {
-        const response = await axiosIns.put(`/trip/${id}`, route)
+        const response = await axiosIns.put(`/trip/${id}/`, route)
         const updatedRoute = response.data
         
         commit("setRoute", updatedRoute)

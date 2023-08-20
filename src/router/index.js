@@ -149,6 +149,11 @@ const router = createRouter({
           component: () => import('../pages/Trips/TripInformationView.vue'),
         },
         {
+          name: 'edit-trip-information',
+          path: 'trip-information/:id',
+          component: () => import('../pages/Trips/EditView.vue'),
+        },
+        {
           name: 'trip-form',
           path: 'trip-form',
           component: () => import('../pages/Trips/TripFormView.vue'),
