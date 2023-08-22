@@ -44,7 +44,7 @@ const TrucksConfig = [
 ]
 
 const   Dispatch = [
-  ['Frieght Order', 'mdi-truck-delivery-outline', '/driver/leave-logs'],
+  ['Frieght Order', 'mdi-truck-delivery-outline', '/shipment'],
   ['Routes', 'mdi-map-marker-path', '/trip-information'],
 ]
 
