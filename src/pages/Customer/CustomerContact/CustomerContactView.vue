@@ -5,7 +5,7 @@
 <script lang="ts" setup>
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 import router from "@/router"
-import { ref, onMounted } from "vue"
+import { ref, onBeforeMount } from "vue"
 import { useStore, mapActions } from "vuex"
   
 const headers = [ 
@@ -16,17 +16,17 @@ const headers = [
 
 const store = useStore()
 
-const loading = ref(false)
+const loading = ref(true)
 
 const { fetchCustomers } = mapActions('FOModule', ['fetchCustomers'])
 
 const items = ref([])
 
-onMounted(() => {
+onBeforeMount(() => {
   try {
-    loading.value = true
     store.dispatch('fetchCustomerContacts')
     items.value = store.getters.customerContacts
+    console.log(items.value, "Here")
     console.log(store.getters.customerContacts)
   } catch (err) {
     console.error('Error dispatching fetchCustomers action:', err)
@@ -56,7 +56,7 @@ const props = {
   },
 
   clickedRow: edit,
-  loading: loading.value,
+  loading: loading,
 
 }
 </script>
@@ -80,3 +80,4 @@ const props = {
   outline: none;
 }
 </style>
+
