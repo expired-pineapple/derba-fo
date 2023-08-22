@@ -318,7 +318,7 @@ const vehicleModule = {
       commit("setLoading", true)
 
       try {
-        const response = await axiosIns.get("/trips")
+        const response = await axiosIns.get("/trip/")
 
         commit("setTrips", response.data)
         commit("setLoading", false)

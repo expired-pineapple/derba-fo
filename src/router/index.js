@@ -200,14 +200,39 @@ const router = createRouter({
 
         },
         {
-          name: 'register-advance',
-          path: 'register-advance',
-          component: () => import('../pages/Advance/AdvanceFormView.vue'),
+          name: 'edit-shipment',
+          path: 'shipment/:id',
+          component: () => import('../pages/FO/EditView.vue'),
         },
         {
           name: 'shipment',
           path: 'shipment',
           component: () => import('../pages/FO/FOView.vue'),
+        },
+        {   
+          name: 'register-fo',
+          path: 'register-fo',
+          component: () => import('../pages/FO/FormView.vue'),
+        },
+        {
+          name: 'register-fuel',
+          path: 'fuel/:id',
+          component: () => import('../pages/FO/Fuel/FormView.vue'),
+        },
+        {
+          name: 'register-perdiem',
+          path: 'perdiuem/:id',
+          component: () => import('../pages/FO/Perdieum/FormView.vue'),
+        },
+        {
+          name: 'register-settlement',
+          path: 'settlement/:id',
+          component: () => import('../pages/FO/Settlement/FormView.vue'),
+        },
+        {
+          name: 'register-advance',
+          path: 'advance/:id',
+          component: () => import('../pages/FO/Advance/FormView.vue'),
         },
         {
           name: "fleet",
