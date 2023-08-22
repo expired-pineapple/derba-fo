@@ -10,8 +10,6 @@ import { mapActions, useStore } from 'vuex'
 
 const loading = ref(true)
 
-const { fetchFleets } = mapActions('vehicleModule', ['fetchFleets'])
-
 const store = useStore()
 
 

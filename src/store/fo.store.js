@@ -17,6 +17,16 @@ const FOModule = {
     commodity: {},
     mtrcats: [],
     mtrcat: {},
+    fuel: {},
+    fuels: [],
+    fuelStations: [],
+    fuelStation: {},
+    advance: {},
+    advances: [],
+    settlement: {},
+    settlements: [],
+    perdiuem: {},
+    perdiuems: [],
   },
   mutations: {
     setLoading(state, foLoading){
@@ -61,6 +71,45 @@ const FOModule = {
     setMtrcat(state, mtrcat){
       state.mtrcat = mtrcat
     },
+    setFuel(state, fuel){
+      state.fuel = fuel
+    },
+    setFuels(state, fuels){
+      state.fuels = fuels
+    },
+    setFuelStation(state, fuelStation){
+      state.fuelStation = fuelStation
+    },
+    setFuelStations(state, fuelStations){
+      state.fuelStations = fuelStations
+    },
+    setPerdiuem(state, perdiuem){
+      state.perdiuem = perdiuem
+    },
+    setPerdiuems(state, perdiuems){
+      state.perdiuems = perdiuems
+    },
+    setAdvance(state, advance){
+      state.advance = advance
+    },
+    setAdvances(state, advances){
+      state.advances = advances
+    },
+    setSettlement(state, settlement){
+      state.settlement = settlement
+    },
+    setSettlements(state, settlement){
+      state.settlements = settlement
+    },
+    clearAdvance(state){
+      state.advance = {}
+    },
+    clearSettlement(state){
+      state.settlement = {}
+    },
+    clearPerdiuem(state){
+      state.perdiuem = {}
+    },
     clearFo(state){
       state.fo = {}
     },
@@ -82,20 +131,366 @@ const FOModule = {
     clearError(state){
       state.error = ""
     },
+    clearFuel(state){
+      state.fuel = {}
+    },
+    clearFuelStation(state){
+      state.fuelStation = {}
+    },
   },
   actions: {
-    async fetchFos({ commit }, id){
+    async fetchFuelStations({ commit }, id){
       commit("setLoading", true)
+
+      const url = id ? `/fuelStn/${id}` : "/fuelStn/"
       try {
-        const url = id ? `/fo/${id}` : "/fo/"
 
         const response = await axiosIns.get(url)
+        const fuelStations = response.data
+
+        if(id){
+          commit("setFuelStation", fuelStations)
+        }else{
+          commit("setFuelStations", fuelStations)
+        }
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createFuelStation({ commit }, fuelStation){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.post('/fuelStn/', fuelStation)
+        const fuelStn = response.data
+
+        commit("setFuelStation", fuelStn)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async updateFuelStation({ commit }, fuelStation){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearFuelStation")
+      try {
+
+        const response = await axiosIns.post(`/fuelStn/${fuelStation.id}`, fuelStation)
+        const fuelStn = response.data
+
+        commit("setFuelStation", fuelStn)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async deleteFuelStation({ commit }, id){
+      commit("setLoading", true)
+      commit("clearFuelStation")
+      commit("clearError")
+
+      try {
+        await axiosIns.delete(`/fuelStn/${id}`)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+
+    async fetchFuels({ commit }, id){
+      commit("setLoading", true)
+      
+      const url = id ? `/fuel/${id}` : "/fuel/"
+      try {
+
+        const response = await axiosIns.get(url)
+        const fuels = response.data
+        if(id){
+          commit("clearFuel")
+          commit("setFuel", fuels)
+        }else{
+          commit("setFuels", fuels)
+        }
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createFuel({ commit }, fuel){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.post('/fuel/', fuel)
+        const fuelData = response.data
+
+        commit("setFuel", fuelData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async updateFuel({ commit }, fuel){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearFuel")
+
+      try {
+
+        const response = await axiosIns.post(`/fuel/${fuel.id}`, fuel)
+        const fuelData = response.data
+
+        commit("setFuel", fuelData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async deleteFuel({ commit }, id){
+      commit("setLoading", true)
+      try {
+
+        await axiosIns.delete(`/fuel/${id}`)
+
+        commit("setFuel", fuel)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+
+    async fetchPerdiuems({ commit }, id){
+      commit("setLoading", true)
+      
+      const url = id ? `/perdiuem/${id}` : "/perdiuem/"
+      try {
+
+        const response = await axiosIns.get(url)
+        const perdiuems = response.data
+        if(id){
+          commit("clearPerdiuem")
+          commit("setPerdiuem", perdiuems)
+        }else{
+          commit("setPerdiuems", perdiuems)
+        }
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createPerdiuem({ commit }, perdiuem){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.post('/perdiuem/', perdiuem)
+        const perdiuemData = response.data
+
+        commit("setPerdiuem", perdiuemData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async updatePerdiuem({ commit }, perdiuem){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearPerdiuem")
+
+      try {
+
+        const response = await axiosIns.post(`/perdiuem/${perdiuem.id}`, perdiuem)
+        const perdiuemData = response.data
+
+        commit("setperdiuem", perdiuemData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async deletePerdiuem({ commit }, id){
+      commit("setLoading", true)
+      try {
+
+        await axiosIns.delete(`/perdiuem/${id}`)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async fetchAdvances({ commit }, id){
+      commit("setLoading", true)
+      
+      const url = id ? `/advance?FoId=${id}` : "/advance/"
+      try {
+
+        const response = await axiosIns.get(url)
+        const advances = response.data
+        if(id){
+          commit("clearAdvance")
+          commit("setAdvance", advances)
+        }else{
+          commit("setAdvances", advances)
+        }
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createAdvance({ commit }, advance){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.post('/advance/', advance)
+        const advanceData = response.data
+
+        commit("setAdvance", advanceData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async updateAdvance({ commit }, advance){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearadvance")
+
+      try {
+
+        const response = await axiosIns.post(`/advance/${advance.id}`, advance)
+        const advanceData = response.data
+
+        commit("setAdvance", advanceData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async deleteAdvance({ commit }, id){
+      commit("setLoading", true)
+      try {
+
+        await axiosIns.delete(`/advance/${id}`)
+
+        commit("setAdvance", advance)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async fetchSettlements({ commit }, id){
+      commit("setLoading", true)
+      
+      const url = id ? `/settlement/${id}` : "/settlement/"
+      try {
+
+        const response = await axiosIns.get(url)
+        const settlements = response.data
+        if(id){
+          commit("clearSettlement")
+          commit("setSettlement", settlements)
+        }else{
+          commit("setSettlements", settlements)
+        }
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async createSettlement({ commit }, settlement){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.post('/settlement/', settlement)
+        const settlementData = response.data
+
+        commit("setsettlement", settlementData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async updateSettlement({ commit }, settlement){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearSettlement")
+
+      try {
+
+        const response = await axiosIns.post(`/settlement/${settlement.id}`, settlement)
+        const settlementData = response.data
+
+        commit("setSettlement", settlementData)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+    async deleteSettlement({ commit }, id){
+      commit("setLoading", true)
+      try {
+
+        await axiosIns.delete(`/settlement/${id}`)
+
+        commit("setSettlement", settlement)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+
+    async fetchFos({ commit }){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.get("/fo/")
         const fo = response.data
 
         const FOPromise = fo.map(async fo => {
           const CustomerPromise = axiosIns.get(`/customer/${fo.CustomerID}`)
-          const TrpIdPromise = axiosIns.get(`/route/${fo.TrpId}`)
-          const MtrIdPromise = axiosIns.get(`/commodity/${fo.MtrId}`)
+          const TrpIdPromise = axiosIns.get(`/trip/${fo.TrpId}`)
+          const MtrIdPromise = axiosIns.get(`/bbmtrl/${fo.MtrId}`)
           const TrkIdPromise = axiosIns.get(`/truck/${fo.TrkId}`)
           const [customer, route, commodity, truck] = await Promise.all([CustomerPromise, TrpIdPromise, MtrIdPromise, TrkIdPromise])
 
@@ -104,23 +499,38 @@ const FOModule = {
           fo.MtrId = commodity.data
           fo.TrkId = truck.data
 
+          console.log(fo)
+
           return fo
         })
 
         const fos = await Promise.all(FOPromise)
-        if(id){
-          commit("setFo", fos)
-        }else{
-          commit("setFos", fos)
-        }
+
         commit("setFos", fos)
+      }
+      catch (error) {
+        commit("setLoading", false)
+        commit("setError", error.message)
+        console.log(error)
+      }
+    },
+
+    async fetchFo({ commit }, id){
+      commit("setLoading", true)
+      try {
+
+        const response = await axiosIns.get(`/fo/${id}/`)
+        const fo = response.data
+        
+        console.log(fo, "here")
+        commit("setFo", fo)
         commit("setLoading", false)
       } catch (error) {
         commit("setError", error.message)
         commit("setLoading", false)
+        console.log(error, "here")
       }
     },
-
     async createFo({ commit }, fo){
       commit("setLoading", true)
       try {
@@ -143,6 +553,7 @@ const FOModule = {
       } catch (error) {
         commit("setError", error.message)
         commit("setLoading", false)
+        console.log(error)
       }
     },
 
@@ -267,6 +678,7 @@ const FOModule = {
         commit("setCustomerContact", customerContacts)
       }else{
         commit("setCustomerContacts", customerContacts)
+        console.log(customerContacts, "CC")
       }
     },
     async createCustomerContact({ commit }, customerContact){
@@ -314,6 +726,8 @@ const FOModule = {
       const response = await axiosIns.get(url)
       const routes = response.data
 
+      console.log(routes)
+
       if(id){
         commit("setRoute", routes)
       }else{
@@ -326,19 +740,22 @@ const FOModule = {
       try {
         const response = await axiosIns.post("/trip/", route)
         const newRoute = response.data
-    
+
+        console.log(newRoute)
         commit("setRoute", newRoute)
         commit("setLoading", false)
       } catch (error) {
+        console.log(error)
         commit("setError", error.message)
         commit("setLoading", false)
+
       }
     },
 
     async updateRoute({ commit }, { id, route }){
-      commit(setLoading, true)
+      commit("setLoading", true)
       try {
-        const response = await axiosIns.put(`/trip/${id}`, route)
+        const response = await axiosIns.put(`/trip/${id}/`, route)
         const updatedRoute = response.data
         
         commit("setRoute", updatedRoute)
@@ -524,6 +941,16 @@ const FOModule = {
     fo: state => state.fo,
     mtrcats: state => state.mtrcats,
     mtrcat: state => state.mtrcat,
+    fuel: state => state.fuel,
+    fuels: state => state.fuels,
+    fuelStation: state => state.fuelStation,
+    fuelStations: state => state.fuelStations,
+    advance: state => state.advance,
+    advances: state => state.advances,
+    settlement: state => state.settlement,
+    settlements: state => state.settlements,
+    perdiuem: state => state.perdiuem,
+    perdiuems: state => state.perdiuems,
   },
 }
 

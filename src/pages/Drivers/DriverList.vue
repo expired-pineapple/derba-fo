@@ -23,8 +23,6 @@ const headers = [
   { text: "Employment Status", value: "employment_status",  sortable: true  },
 ]
 
-const { fetchDrivers } = mapActions('driver', ['fetchDrivers'])
-
 const store = useStore()
 
 onMounted(async () => {

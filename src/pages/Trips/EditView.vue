@@ -16,24 +16,21 @@ const loading = ref(true)
 const successAlert = ref(false)
 const errorAlert = ref(false)
 
-const tire = ref({})
-const tires = ref([])
-const trucks = ref([])
+const trip = ref({})
+const routes = ref([])
 
 
 const dispatch = async () => {
   try {
     loading.value = true
-    await store.dispatch("fetchTrucks")
-    await store.dispatch("fetchTireProvisions")
-    await store.dispatch("fetchTireProvision", id)
-    tires.value = store.getters.tireProvisions
-    trucks.value = store.getters.trucks
+    await store.dispatch("fetchRoutes")
+    await store.dispatch("fetchRoutes", id)
+    trip.value = store.getters.route
+    routes.value = store.getters.routes
 
-    tire.value = store.getters.tireProvision
-    console.log('tire:', tire.value)
+    console.log('trip:', trip.value)
   } catch (err) {
-    console.error('Error dispatching in tire form:', err)
+    console.error('Error dispatching in route form:', err)
   } finally {
     loading.value = false
   }
@@ -48,32 +45,32 @@ const search = () => {
 
   const search = searchValue.value
 
-  const filteredTires = tires.value.filter(item => {
-    return item.NewTyerIssuNo.toLowerCase().includes(search.toLowerCase()) || item.NewTyerBrand.toLowerCase().includes(search.toLowerCase())
+  const filteredRoutes = routes.value.filter(item => {
+    return item.trpOrigin.toLowerCase().includes(search.toLowerCase()) || item.trpDestination.toLowerCase().includes(search.toLowerCase())|| item.trpRouteName.toLowerCase().includes(search.toLowerCase())
   })
 
   if(!search){
-    return tires.value = store.getters.tires
+    return routes.value = store.getters.routes
   }
-  tires.value = filteredTires
+  routes.value = filteredRoutes
   
   
 }
 
-const editTire = async item => {
+const editRoute  = async item => {
   console.log('Editing:', item)
-  router.push({ name: "edit-tire-provision", params: { id: item.id } })
+  router.push({ name: "edit-routes", params: { id: item.id } })
   await dispatch()
 }
 
 const editSelected = item => {
-  editTire(item)
+  editRoute (item)
 }
 
 const submitForm = async () => {
   console.log('Submitting form...')
   try {
-    await store.dispatch('updateTireProvision', tire.value)
+    await store.dispatch('updateRoute', { id, route: trip.value })
     successAlert.value = true
     setTimeout(() => {
       successAlert.value = false
@@ -89,11 +86,11 @@ const submitForm = async () => {
   await dispatch()
 }
 
-const deleteTire = async item => {
+const deleteRoute = async item => {
   console.log('Deleting:', item)
-  await store.dispatch('deleteTireProvision', item.id)
+  await store.dispatch('deleteRoute', item.id)
   await dispatch()
-  router.push('/tire-provision')
+  router.push('/trip-information')
 }
 
 const disabled = ref(true)
@@ -114,7 +111,7 @@ const editEnabled = () => {
   <div class="d-flex">
     <VCard
       v-if="expanded"
-      width="350"
+      width="380"
       class="mr-4"
     >
       <VCardItem>
@@ -148,24 +145,24 @@ const editEnabled = () => {
         </div>
       </div>
       <div
-        v-if="tires.length > 0"
+        v-if="routes.length > 0"
         class="wrapper scrollable"
       >
         <div
-          v-for="(item, index) in tires"
+          v-for="(item, index) in routes"
           :key="index"
         >
           <div class="d-flex mt-4">
             <VIcon
-              icon="mdi-tire" 
+              icon="mdi-map-marker-path" 
               size="30"
-              class="me-2 ml-4"
+              class="me-2"
               color="primary"
             />  
             <div>
               <div class="d-flex">
                 <div class="info">
-                  <span class="font-weight-semibold me-8 mb-4">Tire: {{ item.NewTyerIssuNo }}</span>
+                  <span class="font-weight-semibold me-4 mb-4">Route : {{ item.trpRouteName }}</span>
                 </div>
                 <div class="icon">
                   <VBtn
@@ -194,7 +191,7 @@ const editEnabled = () => {
                 close-label="Close Alert"
                 type="success"
                 title="Success!"
-                text="Tire details saved successfully"
+                text="Route details saved successfully"
               />
               <VAlert
                 v-model="errorAlert"
@@ -204,7 +201,7 @@ const editEnabled = () => {
                 close-label="Close Alert"
                 type="error"
                 title="Error!"
-                text="Tire details not saved successfully"
+                text="Route details not saved successfully"
               />
               <!-- 👉 Form -->
               <VForm
@@ -253,7 +250,7 @@ const editEnabled = () => {
                           <VBtn
                             color="error"
                             variant="text"
-                            @click="deleteTire(tire)"
+                            @click="deleteRoute(trip)"
                           >
                             Yes
                           </VBtn>
@@ -264,113 +261,155 @@ const editEnabled = () => {
                   <div class="d-flex">
                     <VIcon
                       size="70"
-                      icon="mdi-tire"
+                      icon="mdi-map-marker-path"
                       class="me-6"  
                     />
                     <div>
                       <h3 class="font-weight-semibold mb-2">
-                        Tire Details
+                        Route Details
                       </h3>
                       <p class="mb-2">
-                        Please fill in the form below to edit selected tire details
+                        Please fill in the form below to edit selected route details
                       </p>
                     </div>
                   </div>
                 </VCardText>
-                <VForm @submit.prevent="submitForm">
+                <VForm>
                   <VRow>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSelect
-                        v-model="tire.TrkId"
-                        :items="trucks"
-                        item-value="id"
-                        label="Truck"
-                        item-title="FltId.fltFleetNo"
-                        required
-                      />
-                    </VCol>
+                    <!-- 👉 Origin -->
                     <VCol
                       md="6"
                       cols="12"
                     >
                       <VTextField
-                        v-model="tire.NewTyerIssuNo"
-                        label="Issue Number"
-                        required
+                        v-model="trip.trpOrigin"
+                        label="Origin"
                       />
                     </VCol>
+    
+                    <!-- 👉 Destination -->
                     <VCol
                       md="6"
                       cols="12"
                     >
                       <VTextField
-                        v-model="tire.NewTyerDate"
-                        label="Date"
-                        required
-                        type="date"
+                        v-model="trip.trpDestination"
+                        label="Destination"
                       />
                     </VCol>
+    
+                    <!-- 👉 Distance -->
                     <VCol
                       md="6"
                       cols="12"
                     >
                       <VTextField
-                        v-model="tire.NewTyerKM"
-                        label="KM"
-                        required
-                        type="number"
+                        v-model="trip.trpDistanceKm"
+                        label="Distance (Km)"
                       />
                     </VCol>
+    
+                    <!-- 👉 Route Name -->
                     <VCol
                       md="6"
                       cols="12"
                     >
                       <VTextField
-                        v-model="tire.NewTyerBrand"
-                        label="Brand"
-                        required
+                        v-model="trip.trpRouteName"
+                        label="Route Name"
                       />
                     </VCol>
+    
+                    <!-- 👉 Turnaround Time -->
                     <VCol
                       md="6"
                       cols="12"
                     >
                       <VTextField
-                        v-model="tire.NewTyerSerialNo"
-                        label="Brand"
-                        required
+                        v-model="trip.trpTurnaroundTime"
+                        label="Turnaround Time"
                       />
                     </VCol>
-                    <VCol>
-                      <VSelect
-                        v-model="tire.NewTyerActive"
-                        :items="items"
-                        item-value="value"
-                        item-title="text"
-                        label="Active"
-                      />
-                    </VCol>
+    
+                    <!-- 👉 Average Fuel -->
                     <VCol
-                      md="12"
+                      md="6"
                       cols="12"
                     >
-                      <VTextarea
-                        v-model="tire.NewTyerRemark"
-                        label="Remark"
-                        required
+                      <VTextField
+                        v-model="trip.trpAvrgFuel"
+                        label="Average Fuel"
                       />
-                    </VCol> 
+                    </VCol>
+    
+                    <!-- 👉 Days -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpDays"
+                        label="Days"
+                      />
+                    </VCol>
+    
+                    <!-- 👉 Left Fuel -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpLBltr"
+                        label="Left Fuel (Ltr)"
+                      />
+                    </VCol>
+    
+                    <!-- 👉 Right Fuel -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpRltr"
+                        label="Right Fuel (Ltr)"
+                      />
+                    </VCol>
+                    <!-- 👉 Spare Fuel -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpSltr"
+                        label="Spare Fuel (Ltr)"
+                      />
+                    </VCol>
+                    <!-- 👉 Total Fuel -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpTltr"
+                        label="Total Fuel (Ltr)"
+                      />
+                    </VCol>
+                    <!-- 👉 Used Fuel -->
+                    <VCol
+                      md="6"
+                      cols="12"
+                    >
+                      <VTextField
+                        v-model="trip.trpUltr"
+                        label="Used Fuel (Ltr)"
+                      />
+                    </VCol>
+    
                     <VCol
                       cols="12"
                       class="d-flex flex-wrap gap-4"
                     >
-                      <VBtn
-                        color="primary"
-                        @click="submitForm"
-                      >
+                      <VBtn @click.prevent="submitForm">
                         Save
                       </VBtn>
                     </VCol>

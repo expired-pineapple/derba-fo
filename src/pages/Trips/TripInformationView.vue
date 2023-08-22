@@ -4,13 +4,9 @@
 
 <script lang="ts" setup>
 import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
-
 import router from "@/router"
-import { ref } from "vue"
-
-
-const searchField = ref("")
-const searchValue = ref("")
+import { ref, onMounted } from "vue"
+import { useStore } from 'vuex'
 
   
 const headers = [
@@ -64,7 +60,28 @@ const headers = [
   },
 ]
 
-const items = []
+const store = useStore()
+
+const items = ref([])
+
+const loading = ref(true)
+
+const edit = clickedRow => {
+  console.log(clickedRow)
+  router.push(`/trip-information/${clickedRow.id}`)
+}
+
+onMounted(async () => {
+  try {
+    await store.dispatch("fetchRoutes")
+    items.value = store.getters.routes
+  } catch (err) {
+    console.error('Error dispatching fetchTrailers action:', err)
+  } finally {
+    loading.value = !loading.value
+  }
+})
+
 
 const props = {
   header: "Routes",
@@ -76,8 +93,7 @@ const props = {
   tableHeader: {
     headers,
     items,
-    searchField,
-    searchValue,
   },
+  clickedRow: edit,
 }
 </script>

@@ -1,4 +1,6 @@
 <script setup>
+import { useStore } from 'vuex'
+
 const BaTripData = {
   trpOrigin: '',
   trpDestination: '',
@@ -17,17 +19,37 @@ const BaTripData = {
 
 const BaTripDataLocal = ref(structuredClone(BaTripData))
 const successAlert = ref(false)
+const errorAlert = ref(false)
+
 
 const resetForm = () => {
   BaTripDataLocal.value = structuredClone(BaTripData)
 }
 
+const store = useStore()
 
 const submitForm = () => {
-  // Submit form data to backend
-  console.log('Form submitted')
-  successAlert.value = true
-  resetForm()
+  store.dispatch("createRoute", BaTripDataLocal.value)
+
+  console.log("Submitting form data:", BaTripDataLocal.value)
+
+  const error = computed(() => store.getters.foError)
+  if (error.value) {
+    console.error('Error dispatching createRoute action:', error.value)
+    errorAlert.value = true
+    setTimeout(() => {
+      errorAlert.value = false
+    }, 5000)
+  } else {
+    successAlert.value = true
+    setTimeout(() => {
+      successAlert.value = false
+    }, 5000)
+    resetForm()
+
+    store.dispatch("fetchRoutes")
+  }
+  
 }
 </script>
 
@@ -35,6 +57,36 @@ const submitForm = () => {
   <div>
     <VRow>
       <VCol>
+        <VAlert
+          border="start"
+          variant="tonal"
+          closable
+          close-label="Close Alert"
+          type="success"
+          title="Success!"
+        >
+          Route created successfully.
+        </VAlert>
+        <VAlert
+          v-model="errorAlert"
+          border="start"
+          variant="tonal"
+          closable
+          type="error"
+          close-label="Close Alert"
+        >
+          Error creating route.
+          <VCardText>
+            <ul>
+              <li
+                v-for="err in error"
+                :key="err"
+              >
+                {{ err }}
+              </li>
+            </ul>
+          </VCardText>
+        </VAlert>
         <VCard>
           <VCardTitle>
             <h3 class="text-h5 mb-4">
@@ -57,7 +109,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpOrigin"
+                    v-model="BaTripDataLocal.trpOrigin"
                     label="Origin"
                   />
                 </VCol>
@@ -68,7 +120,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpDestination"
+                    v-model="BaTripDataLocal.trpDestination"
                     label="Destination"
                   />
                 </VCol>
@@ -79,7 +131,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpDistanceKm"
+                    v-model="BaTripDataLocal.trpDistanceKm"
                     label="Distance (Km)"
                   />
                 </VCol>
@@ -90,7 +142,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpRouteName"
+                    v-model="BaTripDataLocal.trpRouteName"
                     label="Route Name"
                   />
                 </VCol>
@@ -101,7 +153,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpTurnaroundTime"
+                    v-model="BaTripDataLocal.trpTurnaroundTime"
                     label="Turnaround Time"
                   />
                 </VCol>
@@ -112,7 +164,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpAvrgFuel"
+                    v-model="BaTripDataLocal.trpAvrgFuel"
                     label="Average Fuel"
                   />
                 </VCol>
@@ -123,7 +175,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpDays"
+                    v-model="BaTripDataLocal.trpDays"
                     label="Days"
                   />
                 </VCol>
@@ -134,7 +186,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpLBltr"
+                    v-model="BaTripDataLocal.trpLBltr"
                     label="Left Fuel (Ltr)"
                   />
                 </VCol>
@@ -145,7 +197,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpRltr"
+                    v-model="BaTripDataLocal.trpRltr"
                     label="Right Fuel (Ltr)"
                   />
                 </VCol>
@@ -155,7 +207,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpSltr"
+                    v-model="BaTripDataLocal.trpSltr"
                     label="Spare Fuel (Ltr)"
                   />
                 </VCol>
@@ -165,7 +217,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpTltr"
+                    v-model="BaTripDataLocal.trpTltr"
                     label="Total Fuel (Ltr)"
                   />
                 </VCol>
@@ -175,7 +227,7 @@ const submitForm = () => {
                   cols="12"
                 >
                   <VTextField
-                    v-model="trpUltr"
+                    v-model="BaTripDataLocal.trpUltr"
                     label="Used Fuel (Ltr)"
                   />
                 </VCol>
