@@ -220,8 +220,24 @@ const FOModule = {
           commit("setFuel", fuels)
           console.log(fuels)
         }else{
-          commit("setFuels", fuels)
+          const FuelPromise = fuels.map(async fuel => {
+            const FOPromise = axiosIns.get(`/fo/${fuel.FoId}`)
+            const StationPromise = axiosIns.get(`/fuelStn/${fuel.fuelStationID}`)
+            const [fo, Station] = await Promise.all([FOPromise, StationPromise])
+
+            fuel.FoId = fo.data
+            fuel.fuelStationID = Station.data
+
+            return fuel
+          })
+
+          const updatedFuel = await Promise.all(FuelPromise)
+
+          console.log(updatedFuel)
+          commit("setFuels", updatedFuel)
         }
+         
+        
       }
       catch (error) {
         commit("setLoading", false)
@@ -356,7 +372,18 @@ const FOModule = {
           commit("clearAdvance")
           commit("setAdvance", advances)
         }else{
-          commit("setAdvances", advances)
+          const AdvancePromise = advances.map(async advance => {
+            const FOPromise = axiosIns.get(`/fo/${advance.FoId}`)
+            const [fo] = await Promise.all([FOPromise])
+
+            advance.FoId = fo.data
+
+            return advance
+          })
+
+          const updatedAdvance = await Promise.all(AdvancePromise)
+
+          commit("setAdvances", updatedAdvance)
         }
       }
       catch (error) {
@@ -412,22 +439,31 @@ const FOModule = {
         console.log(error)
       }
     },
-    async fetchSettlements({ commit }, id){
+    async fetchSettlements({ commit }, id) {
       commit("setLoading", true)
-      
+    
       const url = id ? `/settlement?FoId=${id}` : "/settlement/"
       try {
-
         const response = await axiosIns.get(url)
         const settlements = response.data
-        if(id){
+        if (id) {
           commit("clearSettlement")
           commit("setSettlement", settlements)
-        }else{
-          commit("setSettlements", settlements)
+        } else {
+          const settlementsPromise = settlements.map(async settlement => {
+            const FOPromise = axiosIns.get(`/fo/${settlement.FoId}`)
+            const [fo] = await Promise.all([FOPromise])
+    
+            settlement.FOId = fo.data
+    
+            return settlement
+          })
+    
+          const modifiedSettlements = await Promise.all(settlementsPromise)
+    
+          commit("setSettlements", modifiedSettlements)
         }
-      }
-      catch (error) {
+      } catch (error) {
         commit("setLoading", false)
         commit("setError", error.message)
         console.log(error)

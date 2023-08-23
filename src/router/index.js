@@ -174,6 +174,16 @@ const router = createRouter({
           component: () => import('../pages/Trucks/MaintenanceView.vue'),
         },
         {
+          name: 'advance-payment',
+          path: 'advance-payment',
+          component: () => import('../pages/FO/Accounting/Advance.vue'),
+        },
+        {
+          name: 'settlements',
+          path: 'settlements',
+          component: () => import('../pages/FO/Accounting/Settlement.vue'),
+        },
+        {
           name: 'customer',
           path: 'customer',
           component: () => import('../pages/Customer/CustomerView.vue'),
@@ -375,6 +385,16 @@ const router = createRouter({
           name: "register-tire-return",
           path: "/tire-return/register",
           component: () => import('../pages/Tires/Return/FormView.vue'),
+        },
+        {
+          name: 'fuel-report',
+          path: 'fuel-report',
+          component: () => import('../pages/Reports/FuelReport.vue'),
+        },
+        {
+          name: 'fo-report',
+          path: 'fo-report',
+          component: () => import('../pages/Reports/FOReport.vue'),
         },
       ],
     },
