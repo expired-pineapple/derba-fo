@@ -40,9 +40,6 @@ onBeforeMount(async () => {
   }
 })
 
-const clickedRow = item => {
-  router.push(`/shipment/${item.id}`)
-}
 
 const fuel = () => {
   if (itemsSelected.value.length === 0) {
@@ -52,6 +49,8 @@ const fuel = () => {
   } else if(itemsSelected.value[0].foFuelLock) {
     alert("Fuel already locked")
   } else {
+    store.dispatch("fetchFuels", itemsSelected.value[0].id)
+
     router.push(`/fuel/${itemsSelected.value[0].id}`)
   }
 }
@@ -88,7 +87,13 @@ const settlement = () => {
 
 const deleteItem = async() => {
   try{
-    await store.dispatch("deleteFO", itemsSelected.value)
+    let fo = null
+
+    for(fo in itemsSelected.value) {
+      await store.dispatch("deleteFo", itemsSelected.value[fo].id)
+    }
+    dialog.value = false
+    store.dispatch("fetchFos")
   } catch (err) {
     console.error("Error dispatching delete action:", err)
   } finally {
@@ -275,7 +280,6 @@ const dialog = ref(false)
       :loading="loading"
       :search-field="searchField"
       :search-value="searchValue"
-      @click-row="clickedRow"
     >
       <template #loading>
         <p>Loading Data</p>
