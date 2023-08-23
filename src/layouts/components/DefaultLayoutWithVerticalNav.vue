@@ -102,11 +102,11 @@ const Reports = [
     <template #vertical-nav-content>
       <VList
         v-model="verticalNavActive"
-        style="width: 100%;"
+        style="width: 100%; background: none;"
         dense
         nav
         color="primary"
-        class="py-0"
+        class="py-0 elevation-0"
       >
         <VListItem
           prepend-icon="mdi-view-dashboard-outline"

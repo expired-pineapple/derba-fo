@@ -82,7 +82,10 @@
           </p>
         </div>
       </div>
-      <VBtn block>
+      <VBtn
+        block
+        to="/trucks"
+      >
         Details
       </VBtn>
     </vcardtext>

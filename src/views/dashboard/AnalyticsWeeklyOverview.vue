@@ -53,7 +53,10 @@
       />
 
 
-      <VBtn block>
+      <VBtn
+        block
+        to="/shipment"
+      >
         Details
       </VBtn>
     </VCardText>

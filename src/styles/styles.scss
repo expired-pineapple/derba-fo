@@ -1,1 +1,15 @@
 // Write your overrides
+.customize-table {
+  --easy-table-header-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-header-background-color: rgba(var(--v-theme-on-table), var(--v-hover-opacity)) !important;
+  --easy-table-body-even-row-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-body-even-row-background-color: rgb(var(--v-theme-surface));
+  --easy-table-body-row-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-body-row-background-color: rgb(var(--v-theme-surface)) !important;
+  --easy-table-body-row-hover-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-footer-background-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
+  --easy-table-footer-font-color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+  --easy-table-scrollbar-track-color: rgba(var(--v-theme-on-background), var(--v-hover-opacity)) !important;
+  --easy-table-loading-mask-background-color: #ffff;
+  --easy-table-body-row-hover-background-color: rgba(var(--v-theme-on-surface), var(--v-hover-opacity));
+}
