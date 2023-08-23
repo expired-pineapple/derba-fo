@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -14,7 +14,7 @@ const data = {
 }
 
 const route = useRoute()
-const dataLocal = ref(structuredClone(data))
+const dataLocal = ref({})
 
 dataLocal.value.FoId = route.params.id
 
@@ -25,14 +25,26 @@ const loading = ref(true)
 const fos = ref([])
 const fo = ref({})
 const fuelStations = ref([])
+const edit = ref(false)
 
+const store = useStore()
 
 const dispatch = async () => {
   try {
     await store.dispatch("fetchFo", route.params.id)
     await store.dispatch("fetchFos")
     await store.dispatch("fetchFuelStations")
+    await store.dispatch("fetchFuels", route.params.id)
 
+    const fuel = store.getters.fuel
+    
+    if (fuel && fuel.length > 0) {
+      edit.value = true
+      dataLocal.value = { ...fuel[0] }
+    } else {
+      edit.value = false
+      dataLocal.value = { ...data }
+    }
     fuelStations.value = store.getters.fuelStations
     fo.value = store.getters.fo
     fos.value = store.getters.fos
@@ -53,22 +65,22 @@ onBeforeMount(async () => {
   }
 })
 
-
 const resetForm = () => {
-  dataLocal.value = structuredClone(data)
+  dataLocal.value = { ...data }
 }
 
-const store = useStore()
-
 const submitForm = () => {
-  dataLocal.FoId=route.params.id
-  store.dispatch("createFuel", dataLocal.value)
-
+  dataLocal.value.FoId = route.params.id
+  if (edit.value) {
+    store.dispatch("updateFuel", dataLocal.value)
+  } else {
+    store.dispatch("createFuel", dataLocal.value)
+  }
   console.log("Submitting form data:", dataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createFo action:', error.value)
+    console.error('Error dispatching createFuel action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -82,7 +94,6 @@ const submitForm = () => {
 
     store.dispatch("fetchFos")
   }
-  
 }
 </script>
 
@@ -216,17 +227,6 @@ const submitForm = () => {
                   <VTextField
                     v-model="dataLocal.fuelCashBirr"
                     label="Fuel Cash Birr"
-                    outlined
-                    required
-                  />
-                </VCol>
-                <VCol
-                  cols="12"
-                  md="6"
-                >
-                  <VTextField
-                    v-model="dataLocal.foOpenKm"
-                    label="Open Km"
                     outlined
                     required
                   />

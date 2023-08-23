@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -16,28 +16,39 @@ const data = {
 }
 
 const route = useRoute()
-const dataLocal = ref(structuredClone(data))
-
-dataLocal.value.FoId = route.params.id
+const dataLocal = ref({})
 
 const successAlert = ref(false)
 const errorAlert = ref(false)
 const loading = ref(true)
-
 const formLoading = ref(false)
 
 const fos = ref([])
 const fo = ref({})
+const perdieum = ref({})
+const edit = ref(false)
+
+const store = useStore()
 
 const dispatch = async () => {
   try {
     await store.dispatch("fetchFo", route.params.id)
     await store.dispatch("fetchFos")
-    await store.dispatch("fetchFos", route.params.id)
+    await store.dispatch("fetchPerdiuems", route.params.id)
     
-    fo.value=store.getters.fo
+    fo.value = store.getters.fo
     fos.value = store.getters.fos
     console.log('fos:', fos.value)
+
+    perdieum.value = store.getters.perdiuem
+    console.log('perdieum:', perdieum.value)
+    if (perdieum.value != null && perdieum.value.length > 0) {
+      dataLocal.value = { ...perdieum.value[0] }
+      edit.value = true
+    } else {
+      dataLocal.value.FoId = route.params.id
+      dataLocal.value = { ...data }
+    }
 
   } catch (err) {
     console.error('Error dispatching in fuel form:', err)
@@ -54,30 +65,30 @@ onBeforeMount(async () => {
   }
 })
 
-
 const taxableAmount = computed(() => {
   dataLocal.value.prdTaxblAmt = dataLocal.value.prdPmtPerDay * dataLocal.value.prdNoDays
   if (dataLocal.value.prdIsTaxable == "Yes") {
-    dataLocal.value.prdDeduct = dataLocal.value.prdTaxblAmt* 0.15
+    dataLocal.value.prdDeduct = dataLocal.value.prdTaxblAmt * 0.15
     dataLocal.value.prdNetPmt = dataLocal.value.prdTaxblAmt - dataLocal.value.prdDeduct
-  }
-  else{
+  } else {
     dataLocal.value.prdDeduct = 0
     dataLocal.value.prdNetPmt = dataLocal.value.prdTaxblAmt
   }
-  
+
   return dataLocal.value.prdTaxblAmt
 })
 
 const resetForm = () => {
-  dataLocal.value = structuredClone(data)
+  dataLocal.value = { ...data }
 }
 
-const store = useStore()
-
 const submitForm = () => {
-  dataLocal.FoId=route.params.id
-  store.dispatch("createPerdiuem", dataLocal.value)
+  dataLocal.value.FoId = route.params.id
+  if (edit.value) {
+    store.dispatch("updatePerdiuem", dataLocal.value)
+  } else {
+    store.dispatch("createPerdiuem", dataLocal.value)
+  }
 
   console.log("Submitting form data:", dataLocal.value)
 
@@ -97,7 +108,6 @@ const submitForm = () => {
 
     store.dispatch("fetchFos")
   }
-  
 }
 
 const items = [
