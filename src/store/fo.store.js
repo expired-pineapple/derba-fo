@@ -181,7 +181,7 @@ const FOModule = {
       commit("clearFuelStation")
       try {
 
-        const response = await axiosIns.post(`/fuelStn/${fuelStation.id}`, fuelStation)
+        const response = await axiosIns.put(`/fuelStn/${fuelStation.id}/`, fuelStation)
         const fuelStn = response.data
 
         commit("setFuelStation", fuelStn)
@@ -209,15 +209,16 @@ const FOModule = {
 
     async fetchFuels({ commit }, id){
       commit("setLoading", true)
+      commit("clearFuel")
       
-      const url = id ? `/fuel/${id}` : "/fuel/"
+      const url = id ? `/fuel?FoId=${id}` : "/fuel/"
       try {
 
         const response = await axiosIns.get(url)
         const fuels = response.data
         if(id){
-          commit("clearFuel")
           commit("setFuel", fuels)
+          console.log(fuels)
         }else{
           commit("setFuels", fuels)
         }
@@ -250,7 +251,7 @@ const FOModule = {
 
       try {
 
-        const response = await axiosIns.post(`/fuel/${fuel.id}`, fuel)
+        const response = await axiosIns.put(`/fuel/${fuel.id}/`, fuel)
         const fuelData = response.data
 
         commit("setFuel", fuelData)
@@ -279,7 +280,7 @@ const FOModule = {
     async fetchPerdiuems({ commit }, id){
       commit("setLoading", true)
       
-      const url = id ? `/perdiuem/${id}` : "/perdiuem/"
+      const url = id ? `/perdiuem?FoId=${id}` : "/perdiuem/"
       try {
 
         const response = await axiosIns.get(url)
@@ -319,10 +320,10 @@ const FOModule = {
 
       try {
 
-        const response = await axiosIns.post(`/perdiuem/${perdiuem.id}`, perdiuem)
+        const response = await axiosIns.put(`/perdiuem/${perdiuem.id}/`, perdiuem)
         const perdiuemData = response.data
 
-        commit("setperdiuem", perdiuemData)
+        commit("setPerdiuem", perdiuemData)
       }
       catch (error) {
         commit("setLoading", false)
@@ -382,11 +383,11 @@ const FOModule = {
     async updateAdvance({ commit }, advance){
       commit("setLoading", true)
       commit("clearError")
-      commit("clearadvance")
+      commit("clearAdvance")
 
       try {
 
-        const response = await axiosIns.post(`/advance/${advance.id}`, advance)
+        const response = await axiosIns.put(`/advance/${advance.id}/`, advance)
         const advanceData = response.data
 
         commit("setAdvance", advanceData)
@@ -414,7 +415,7 @@ const FOModule = {
     async fetchSettlements({ commit }, id){
       commit("setLoading", true)
       
-      const url = id ? `/settlement/${id}` : "/settlement/"
+      const url = id ? `/settlement?FoId=${id}` : "/settlement/"
       try {
 
         const response = await axiosIns.get(url)
@@ -439,7 +440,7 @@ const FOModule = {
         const response = await axiosIns.post('/settlement/', settlement)
         const settlementData = response.data
 
-        commit("setsettlement", settlementData)
+        commit("setSettlement", settlementData)
       }
       catch (error) {
         commit("setLoading", false)
@@ -454,7 +455,7 @@ const FOModule = {
 
       try {
 
-        const response = await axiosIns.post(`/settlement/${settlement.id}`, settlement)
+        const response = await axiosIns.put(`/settlement/${settlement.id}/`, settlement)
         const settlementData = response.data
 
         commit("setSettlement", settlementData)
