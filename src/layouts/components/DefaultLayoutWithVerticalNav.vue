@@ -17,7 +17,6 @@ const drivers = [
   ['Driver Passport', 'mdi-passport', '/driver-passport'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
   ['Assigned Trucks', 'mdi-truck-outline', '/trucks'],
-  ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
 
@@ -60,7 +59,6 @@ const Customers = [
 
 const Settings = [
   ['Comodities', 'mdi-cash', '/comodities' ],
-  ['Infraction Type', 'mdi-account-remove-outline', '/infration-type'],
   ['Routes', 'mdi-map-marker-path', '/trip-information'],
   ['Maintenance Type', 'mdi-wrench-cog-outline', '/maintenance-type'],
   ['Truck Status', 'mdi-car-info', '/truck-status'],
