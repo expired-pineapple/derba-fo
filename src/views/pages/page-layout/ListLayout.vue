@@ -51,19 +51,20 @@ const props = defineProps({
     type: String,
     required: false,
   },
+  operation: {
+    type: Object,
+    required: true,
+  },
 })
 
 const searchField = ref("")
 const searchValue = ref("")
 
 const store = useStore()
-
-
-const loading = ref(store.getters.loading)
 </script>
 
 <template>
-  <VCard :loading="loading">
+  <VCard>
     <VCardTitle v-if="props.header">
       {{ props.header }}
     </VCardTitle>
@@ -185,8 +186,9 @@ const loading = ref(store.getters.loading)
       <template #item-operation="item"> 
         <div class="cursor-pointer">
           <VIcon
-            icon="mdi-pencil" 
-            @click="editDriver(item)"
+            icon="mdi-delete-outline"
+            color="error"
+            @click="props.operation(item)"
           />
         </div>
       </template>
