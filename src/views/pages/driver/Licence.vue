@@ -17,17 +17,22 @@ onMounted(async () => {
     await store.dispatch("fetchDriverLicence", id)
   
   } catch (err) {
-    console.error('Error dispatching fetchEmergencyContact action:', err)
+    console.error('Error dispatching fetchDriverLicence action:', err)
   }
 })
 
 
 const licence = computed(() => store.getters.driverLicence)
+const licence_local = ref(licence.value[0])
 
 const editLicence = ref(false)
 
 const submitForm = () => {
-  console.log("sub")
+  try {
+    store.dispatch("updateDriverLicence", licence_local.value)
+  } catch (err) {
+    console.error('Error dispatching updateDriverLicence action:', err)
+  }
 }
 </script>
 
@@ -47,10 +52,7 @@ const submitForm = () => {
   </div>
   <VCardText>
     <VForm :disabled="!editLicence">
-      <VRow
-        v-for="licence_local in licence"
-        :key="licence_local"
-      >
+      <VRow>
         <VCol
           md="6"
           cols="12"
@@ -87,15 +89,6 @@ const submitForm = () => {
             v-model="licence_local.drvLicenceExpiryDate"
             label="Licence Expiry Date"
             type="date"
-          />
-        </VCol>
-        <VCol
-          md="6"
-          cols="12"
-        >
-          <VSwitch
-            v-model="licence_local.drvLicenceActiveStatus"
-            label="Passport Active Status"
           />
         </VCol>
         <!-- 👉 Form Actions -->

@@ -89,16 +89,6 @@ console.log(emergencyContact.value, "asdfg")
             :disabled="!editEmergencyContact"
           />
         </VCol>
-        <VCol
-          md="6"
-          cols="12"
-        >
-          <VSwitch
-            v-model="emergencyCont.drvContactActiveStatus"
-            label="Contact Active Status"
-            :disabled="!editEmergencyContact"
-          />
-        </VCol>
         <!-- 👉 Form Actions -->
         <VCol
           cols="12"

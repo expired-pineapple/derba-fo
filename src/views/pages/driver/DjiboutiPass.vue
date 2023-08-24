@@ -69,15 +69,6 @@ const submitForm = () => {
             type="date"
           />
         </VCol>
-        <VCol
-          md="6"
-          cols="12"
-        >
-          <VSwitch
-            v-model="djiboutPassLocal.drvDjiboutiPActiveStatus"
-            label="Djibouti Pass Active Status"
-          />
-        </VCol>
         <!-- 👉 Form Actions -->
         <VCol
           cols="12"
