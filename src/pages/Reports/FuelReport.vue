@@ -82,9 +82,10 @@ const generatePDF = doc => {
   doc.setFont('helvetica', 'normal')
 
   doc.autoTable({
-    headStyles: { fillColor: [15, 142, 61] },
+    headStyles: { fillColor: [15,  142, 61], minCellWidth: 12, lineWidth: 0.1, fontSize: 8, halign: 'center' },
     head: [['Shipment Code', 'Fuel Station', 'Fuel Cap No', 'Fuel Amount', 'Fuel Cash Birr', 'Fuel Payment Type', 'Fuel Cap Remark']],
     body: data,
+    bodyStyles: { minCellWidth: 12, lineWidth: 0.1, fontSize: 7, halign: 'center' },
     startY: 55, // Adjust the starting Y position as needed to make space for the logo and text
   })
 
