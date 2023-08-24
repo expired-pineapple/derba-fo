@@ -1,5 +1,6 @@
 /* eslint-disable regex/invalid */
 // eslint-disable-next-line regex/invalid
+import axiosIns from '@/plugins/axios'
 import router from '@/router'
 import axios from 'axios'
 
@@ -12,6 +13,7 @@ const auth = {
     isLogged: false,
     isLoading: false,
     loginError: null,
+    userLogs: null,
   },
   mutations: {
     setUser(state, user) {
@@ -32,53 +34,103 @@ const auth = {
     setLoginError(state, error) {
       state.loginError = error
     },
+    setUserLogs(state, logs) {
+      state.userLogs = logs
+    },
   },
   actions: {
-    login({ commit }, payload) {
+    async login({ commit }, payload) {
       commit('setIsLoading', true)
       try {
-        axios.post('http://localhost:8000/api/auth/jwt/create/', payload)
-          .then(response => {
-            console.log("response", response.data.refresh)
-            console.log("response", response.data.access)
-            localStorage.setItem('refreshToken', response.data.refresh)
-            localStorage.setItem('accessToken', response.data.access)
+        const response = await axios.post('http://localhost:8000/api/auth/jwt/create/', payload)
+    
+        localStorage.setItem('accessToken', response.data.access)
+        localStorage.setItem('refreshToken', response.data.refresh)
+        localStorage.setItem('isLoggedIn', true) // Corrected key name
+    
+        commit('setAccessToken', response.data.access)
+        commit('setRefreshToken', response.data.refresh)
+        commit('setLogged', false)
 
-            const refreshToken = localStorage.getItem('refreshToken')
-            const accessToken = localStorage.getItem('accessToken')
+        const userData = await axiosIns.get('/auth/users/me')
+        
+        commit('setUser', userData.data)
 
-            console.log("refreshToken", refreshToken)
-            console.log("accessToken", accessToken)
-            commit('setUser', response.data.user)
-            commit('setRefreshToken', response.data.refresh)
-            commit('setAccessToken', response.data.access)
-            commit('setLogged', true)
-            router.push('/dashboard')
-          },
-          )
-          .catch(error =>{
-            commit('setLoginError', error.response.data.detail)
-            console.log("error", error)
-            if(error.response.data.detail == undefined){
-              commit('setLoginError', 'Something went wrong, please try again later')
-            }
-          })
-      }
-      catch (error) {
+        router.push('/')
+        console.log("here")
+      } catch (error) {
         commit('setLoginError', error)
-      }
-      finally {
+        console.log(error)
+      } finally {
         commit('setIsLoading', false)
       }
     },
+    async fetchUser({ commit }) {
+      commit('setIsLoading', true)
+      try {
+        const response = await axiosIns.get('/auth/users/me')
+
+        commit("setUser", response.data)
+      }catch(error){
+        commit('setLoginError', error.response.data.detail || error)
+      }
+    },
+
     logout({ commit }) {
       localStorage.removeItem('refreshToken')
       localStorage.removeItem('accessToken')
+      localStorage.setItem('isLoggedIn', false)
       commit('setUser', null)
       commit('setRefreshToken', null)
       commit('setAccessToken', null)
       commit('setLogged', false)
     },
+    async signUp({ commit }, payload) {
+      commit('setIsLoading', true)
+      try {
+        const response = await axiosIns.post('/auth/users/', payload)
+
+        console.log("response", response)
+        commit('setUser', response.data)
+
+      }
+      catch (error) {
+        commit('setLoginError', error.response.data.detail || error)
+      }
+      finally {
+        commit('setIsLoading', false)
+      }
+    },
+    async fetchUserLogs({ commit }) {
+      commit('setIsLoading', true)
+      try {
+        const response = await axiosIns.get('/al')
+
+        const userLogPromise = response.data.map(async log => {
+          const userResponse = await axiosIns.get(`/auth/users/${log.user}/`)
+          const user = userResponse.data
+          const userFullName = `${user.first_name} ${user.last_name} - ${user.username}`
+
+          log.fullName = userFullName
+
+          return log
+        })
+
+        const users = await Promise.all(userLogPromise)
+
+
+        console.log("response", response)
+        commit('setUserLogs', users)
+
+      }
+      catch (error) {
+        commit('setLoginError', error.response.data.detail || error)
+      }
+      finally {
+        commit('setIsLoading', false)
+      }
+    },
+
   },
   getters: {
     user: state => state.user,
@@ -87,6 +139,7 @@ const auth = {
     isLogged: state => state.isLogged,
     isLoading: state => state.isLoading,
     loginError: state => state.loginError,
+    userLogs: state => state.userLogs,
   },
 
 }
