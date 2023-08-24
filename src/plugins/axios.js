@@ -15,8 +15,8 @@ const axiosIns = axios.create({
 let isRefreshing = false
 
 axiosIns.interceptors.response.use(
-  response => response,
-  error => {
+  async response => response,
+  async error => {
     try {
       if (error.response && error.response.status === 401 && !isRefreshing) {
         isRefreshing = true
@@ -31,26 +31,33 @@ axiosIns.interceptors.response.use(
           throw new Error('Refresh token expired or not available')
         }
 
-        axiosIns.post('auth/jwt/refresh/', { refresh: refreshToken })
-          .then(response => {
-            console.log('Access token refreshed!')
-            console.log('response', response)
-            localStorage.setItem('accessToken', response.data.access)
+        try {
+          const response = await axiosIns.post('auth/jwt/refresh/', { refresh: refreshToken })
 
-            // localStorage.setItem('refreshToken', response.data.refresh)
+          console.log('Access token refreshed!')
+          console.log('response', response)
+          localStorage.setItem('accessToken', response.data.access)
 
+          // Update the authorization header with the new access token
+          axiosIns.defaults.headers.common['Authorization'] = "JWT " + response.data.access
 
-            console.log("newAccessToken", response.data.access)
+          console.log("newAccessToken", response.data.access)
 
-            isRefreshing = false
-          })
-          .catch(refreshError => {
-            console.log('Failed to refresh access token:', refreshError)
+          isRefreshing = false
 
-            // Handle the error here, such as redirect to login page or show an error message
-            router.push('/login')
-            isRefreshing = false
-          })
+          // Retry the failed request
+          const originalRequest = error.config
+
+          originalRequest.headers['Authorization'] = "JWT " + response.data.access
+          
+          return axiosIns(originalRequest)
+        } catch (refreshError) {
+          console.log('Failed to refresh access token:', refreshError)
+
+          // Handle the error here, such as redirect to login page or show an error message
+          router.push('/login')
+          isRefreshing = false
+        }
       }
     } catch (e) {
       console.log('An error occurred:', e)
@@ -59,9 +66,16 @@ axiosIns.interceptors.response.use(
       router.push('/login')
     }
 
+    // Handle network errors and unexpected errors
+    if (!error.response) {
+      console.log('Network error occurred:', error)
+
+      // Handle the error here, such as redirect to error page or show an error message
+      router.push('/error')
+    }
+
     return Promise.reject(error)
   },
 )
 
 export default axiosIns
-  
