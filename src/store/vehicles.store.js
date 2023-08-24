@@ -36,6 +36,14 @@ const vehicleModule = {
     tireProvisions: [],
     tireReturn: {},
     tireReturns: [],
+    insurance: {},
+    insurances: [],
+    insuranceProvider: {},
+    insuranceProviders: [],
+    maintenance: {},
+    maintenances: [],
+    maintenanceProvider: {},
+    maintenanceProviders: [],
   },
   mutations: {
     // Mutation to set the loading state
@@ -182,6 +190,42 @@ const vehicleModule = {
     },
     setTireReturns(state, tireReturns){
       state.tireReturns = tireReturns
+    },
+    setInsurance(state, insurance){
+      state.insurance = insurance
+    },
+    setInsurances(state, insurances){
+      state.insurances = insurances
+    },
+    setInsuranceProvider(state, insuranceProvider){
+      state.insuranceProvider = insuranceProvider
+    },
+    setInsuranceProviders(state, insuranceProviders){
+      state.insuranceProviders = insuranceProviders
+    },
+    setMaintenance(state, maintenance){
+      state.maintenance = maintenance
+    },
+    setMaintenances(state, maintenances){
+      state.maintenances = maintenances
+    },
+    setMaintenanceProvider(state, maintenanceProvider){
+      state.maintenanceProvider = maintenanceProvider
+    },
+    setMaintenanceProviders(state, maintenanceProviders){
+      state.maintenanceProviders = maintenanceProviders
+    },
+    clearMaintenance(state){
+      state.maintenance = {}
+    },
+    clearMaintenanceProvider(state){
+      state.maintenanceProvider = {}
+    },
+    clearInsurance(state){
+      state.insurance = {}
+    },
+    clearInsuranceProvider(state){
+      state.insuranceProvider = {}
     },
 
     clearTireProvision(state){
@@ -1730,6 +1774,267 @@ const vehicleModule = {
         commit("setLoading", false)
       }
     },
+    
+    async fetchInsuranceProviders({ commit }, id){
+      const url = id ? `/insuranceProvider/${id}` : "/insuranceProvider/"
+
+      const response = await axiosIns.get(url)
+      const insuranceProviders = response.data
+
+      console.log(insuranceProviders)
+
+      if(id){
+        commit("setInsuranceProvider", insuranceProviders)
+      }else{
+        commit("setInsuranceProviders", insuranceProviders)
+      }
+    },
+    async createInsuranceProvider({ commit }, insuranceProvider){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/insuranceProvider/", insuranceProvider)
+        const newInsuranceProvider = response.data
+  
+        commit("setInsuranceProvider", newInsuranceProvider)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async updateInsuranceProvider({ commit }, { id, insuranceProvider }){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.put(`/insuranceProvider/${id}/`, insuranceProvider)
+        const updatedInsuranceProvider = response.data
+      
+        commit("setInsuranceProvider", updatedInsuranceProvider)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteInsuranceProvider({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/insuranceProvider/${id}`)
+        commit("clearInsuranceProvider")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async fetchInsurances({ commit }, id){
+      const url = id ? `/insurance/${id}` : "/insuranceClaim/"
+
+      const response = await axiosIns.get(url)
+      const insurances = response.data
+
+      console.log(insurances)
+
+      if(id){
+        commit("setInsurance", insurances)
+      }else{
+        commit("setInsurances", insurances)
+      }
+    },
+
+    async createInsurance({ commit }, insurance){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/insuranceClaim/", insurance)
+        const newInsurance = response.data
+  
+        commit("setInsurance", newInsurance)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateInsurance({ commit }, { id, insurance }){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.put(`/insuranceClaim/${id}/`, insurance)
+        const updatedInsurance = response.data
+      
+        commit("setInsurance", updatedInsurance)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async deleteInsurance({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/insurance/${id}`)
+        commit("clearInsurance")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async fetchMaintenanceProviders({ commit }, id){
+      const url = id ? `/maintenanceProvider/${id}` : "/maintenanceProvider/"
+
+      const response = await axiosIns.get(url)
+      const maintenanceProviders = response.data
+
+      console.log(maintenanceProviders)
+
+      if(id){
+        commit("setMaintenanceProvider", maintenanceProviders)
+      }else{
+        commit("setMaintenanceProviders", maintenanceProviders)
+      }
+    },
+    async createMaintenanceProvider({ commit }, maintenanceProvider){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/maintenanceProvider/", maintenanceProvider)
+        const newMaintenanceProvider = response.data
+  
+        commit("setMaintenanceProvider", newMaintenanceProvider)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async updateMaintenanceProvider({ commit }, { id, maintenanceProvider }){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.put(`/maintenanceProvider/${id}/`, maintenanceProvider)
+        const updatedMaintenanceProvider = response.data
+      
+        commit("setMaintenanceProvider", updatedMaintenanceProvider)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async deleteMaintenanceProvider({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/maintenanceProvider/${id}`)
+        commit("clearMaintenanceProvider")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async fetchMaintenances({ commit }, id) {
+      try {
+        const url = id ? `/maintenance/${id}` : "/maintenance/"
+    
+        const response = await axiosIns.get(url)
+        const maintenances = response.data
+    
+        console.log(maintenances)
+    
+        if (id) {
+          commit("setMaintenance", maintenances)
+        } else {
+          const updatedMaintenance = await Promise.all(
+            maintenances.map(async maintenance => {
+              const [truckResponse, maintenanceProviderResponse] = await Promise.all([
+                axiosIns.get(`/truck/${maintenance.TrkId}`),
+                axiosIns.get(`/maintenanceProvider/${maintenance.maintenanceProvider}`),
+              ])
+    
+              const truck = truckResponse.data
+
+              const [fleet] = await Promise.all([
+                axiosIns.get(`/fleet/${truck.FleetID}`),
+              ])
+    
+              const maintenanceProvider = maintenanceProviderResponse.data
+    
+              maintenance.TrkId = truck
+              maintenance.maintenanceProvider = maintenanceProvider
+              maintenance.TrkId.FleetID = fleet
+    
+              return maintenance
+            }),
+          )
+    
+          commit("setMaintenances", updatedMaintenance)
+        }
+      } catch (error) {
+        console.error("Error fetching maintenances:", error)
+        commit("setError", error.response || error)
+      }
+    },
+
+    async createMaintenance({ commit }, maintenance){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/maintenance/", maintenance)
+        const newMaintenance = response.data
+  
+        commit("setMaintenance", newMaintenance)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateMaintenance({ commit }, { id, maintenance }){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.put(`/maintenance/${id}/`, maintenance)
+        const updatedMaintenance = response.data
+      
+        commit("setMaintenance", updatedMaintenance)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteMaintenance({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/maintenance/${id}`)
+        commit("clearMaintenance")
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
   },
   getters: {
     vehicleLoading: state => state.isLoading,
@@ -1765,6 +2070,12 @@ const vehicleModule = {
     tireProvisions: state => state.tireProvisions,
     tireReturn: state => state.tireReturn,
     tireReturns: state => state.tireReturns,
+    insurance: state => state.insurance,
+    insurances: state => state.insurances,
+    insuranceProvider: state => state.insuranceProvider,
+    insuranceProviders: state => state.insuranceProviders,
+    maintenance: state => state.maintenance,
+    
   },
 }
 

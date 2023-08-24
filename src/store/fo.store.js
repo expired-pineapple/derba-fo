@@ -4,7 +4,7 @@ const FOModule = {
   namespaced: false,
   state: {
     foLoading: false,
-    error: "",
+    foError: "",
     fo: {},
     fos: [],
     customers: [],
@@ -32,8 +32,8 @@ const FOModule = {
     setLoading(state, foLoading){
       state.foLoading = foLoading
     },
-    setError(state, error){
-      state.error = error
+    setError(state, foError){
+      state.foError = foError
     },
     setFos(state, fos){
       state.fos = fos
@@ -129,7 +129,7 @@ const FOModule = {
       state.mtrcat = {}
     },
     clearError(state){
-      state.error = ""
+      state.foError = ""
     },
     clearFuel(state){
       state.fuel = {}
@@ -142,7 +142,7 @@ const FOModule = {
     async fetchFuelStations({ commit }, id){
       commit("setLoading", true)
 
-      const url = id ? `/fuelStn/${id}` : "/fuelStn/"
+      const url = id ? `/fuelstn/${id}` : "/fuelstn/"
       try {
 
         const response = await axiosIns.get(url)
@@ -156,7 +156,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -164,14 +164,14 @@ const FOModule = {
       commit("setLoading", true)
       try {
 
-        const response = await axiosIns.post('/fuelStn/', fuelStation)
+        const response = await axiosIns.post('/fuelstn/', fuelStation)
         const fuelStn = response.data
 
         commit("setFuelStation", fuelStn)
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -181,14 +181,14 @@ const FOModule = {
       commit("clearFuelStation")
       try {
 
-        const response = await axiosIns.put(`/fuelStn/${fuelStation.id}/`, fuelStation)
+        const response = await axiosIns.put(`/fuelstn/${fuelStation.id}/`, fuelStation)
         const fuelStn = response.data
 
         commit("setFuelStation", fuelStn)
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -198,11 +198,11 @@ const FOModule = {
       commit("clearError")
 
       try {
-        await axiosIns.delete(`/fuelStn/${id}`)
+        await axiosIns.delete(`/fuelstn/${id}`)
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -241,7 +241,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -256,7 +256,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -274,7 +274,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -288,7 +288,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -310,7 +310,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -325,7 +325,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -343,7 +343,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -356,7 +356,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -388,7 +388,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -403,7 +403,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -421,7 +421,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -435,7 +435,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -465,7 +465,7 @@ const FOModule = {
         }
       } catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -480,7 +480,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -498,7 +498,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -512,7 +512,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -547,7 +547,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -563,7 +563,7 @@ const FOModule = {
         commit("setFo", fo)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
         console.log(error, "here")
       }
@@ -588,7 +588,7 @@ const FOModule = {
         commit("setFo", newFo)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
         console.log(error)
       }
@@ -604,7 +604,7 @@ const FOModule = {
         commit("setLoading", false)
       }
       catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -616,7 +616,7 @@ const FOModule = {
         commit("clearFo")
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -639,8 +639,7 @@ const FOModule = {
         commit("setCustomer", newCustomer)
         commit("setLoading", false)
       } catch (error) {
-        console.log(error)
-        commit("setError", error.message)
+        commit("setError", error?.response || error)
         commit("setLoading", false)
       }
     },
@@ -655,7 +654,7 @@ const FOModule = {
         commit("setCustomer", customer)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -670,7 +669,7 @@ const FOModule = {
         commit('setCustomer', updatedCustomer)
         commit('setLoading', false)
       } catch (error) {
-        const errorMessage = `Error updating customer: ${error.message}`
+        const errorMessage = `Error updating customer: ${error.response}`
 
         commit('setError', errorMessage)
         commit('setLoading', false)
@@ -686,7 +685,7 @@ const FOModule = {
         commit('clearCustomer')
         commit('setLoading', false)
       } catch (error) {
-        const errorMessage = `Error deleting customer: ${error.message}`
+        const errorMessage = `Error deleting customer: ${error.response}`
 
         commit('setError', errorMessage)
         commit('setLoading', false)
@@ -701,7 +700,7 @@ const FOModule = {
       console.log(customerContacts)
 
       const customerContactsPromise = customerContacts.map(async customerContacts => {
-        const customerPromise = axiosIns.get(`/customer/${customerContacts.customerID}`)
+        const customerPromise = axiosIns.get(`/customer/${customerContacts.customer}`)
         const [customer] = await Promise.all([customerPromise])
 
         customerContacts.customerID = customer.data
@@ -719,6 +718,7 @@ const FOModule = {
       }
     },
     async createCustomerContact({ commit }, customerContact){
+      commit("clearError")
       commit("setLoading", true)
       try {
         const response = await axiosIns.post("/customercontact/", customerContact)
@@ -727,7 +727,7 @@ const FOModule = {
         commit("setCustomerContact", newCustomerContact)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -742,7 +742,7 @@ const FOModule = {
       }
       catch (error) {
         commit('clearError')
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -753,7 +753,7 @@ const FOModule = {
         commit("clearCustomerContact")
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -783,7 +783,7 @@ const FOModule = {
         commit("setLoading", false)
       } catch (error) {
         console.log(error)
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
 
       }
@@ -799,7 +799,7 @@ const FOModule = {
         commit("setLoading", false)
       }
       catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -810,7 +810,7 @@ const FOModule = {
         commit("clearRoute")
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -834,7 +834,7 @@ const FOModule = {
         commit("setCommodities", commodities)
 
       }catch(error){
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
 
@@ -848,7 +848,7 @@ const FOModule = {
         commit("setCommodity", commodity)
 
       }catch(error){
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
 
@@ -863,7 +863,7 @@ const FOModule = {
         commit("setCommodity", newCommodity)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -876,7 +876,7 @@ const FOModule = {
         commit("setLoading", false)
       }
       catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -887,7 +887,7 @@ const FOModule = {
         commit("clearCommodity")
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -900,7 +900,7 @@ const FOModule = {
         commit("setMtrcats", mtrcat)
 
       }catch(error){
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
@@ -915,12 +915,13 @@ const FOModule = {
         commit("setMtrcat", mtrcat)
 
       }catch(error){
-        commit("setError", error.message)
+        commit("setError", error.response)
         console.log(error)
       }
     },
     async createMtrcat({ commit }, mtrcat){
       commit("setLoading", true)
+      commit("clearError")
       try {
         const response = await axiosIns.post("/mtrcat/", mtrcat)
         const newMtrcat = response.data
@@ -928,7 +929,7 @@ const FOModule = {
         commit("setMtrcat", newMtrcat)
         commit("setLoading", false)
       } catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -943,7 +944,7 @@ const FOModule = {
         commit("setLoading", false)
       }
       catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -957,7 +958,7 @@ const FOModule = {
         commit("setLoading", false)
       }
       catch (error) {
-        commit("setError", error.message)
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -973,7 +974,7 @@ const FOModule = {
     commodities: state => state.commodities,
     commodity: state => state.commodity,
     foloading: state => state.foLoading,
-    foError: state => state.error,
+    foError: state => state.foError,
     fos: state => state.fos,
     fo: state => state.fo,
     mtrcats: state => state.mtrcats,
