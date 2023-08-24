@@ -105,6 +105,14 @@ const items = [
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -284,6 +292,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpOrigin"
                         label="Origin"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -306,6 +315,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpDistanceKm"
                         label="Distance (Km)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -317,6 +327,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpRouteName"
                         label="Route Name"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -328,6 +339,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpTurnaroundTime"
                         label="Turnaround Time"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -339,6 +351,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpAvrgFuel"
                         label="Average Fuel"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -350,6 +363,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpDays"
                         label="Days"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -361,6 +375,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpLBltr"
                         label="Left Fuel (Ltr)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     
@@ -372,6 +387,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpRltr"
                         label="Right Fuel (Ltr)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <!-- 👉 Spare Fuel -->
@@ -382,6 +398,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpSltr"
                         label="Spare Fuel (Ltr)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <!-- 👉 Total Fuel -->
@@ -392,6 +409,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpTltr"
                         label="Total Fuel (Ltr)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <!-- 👉 Used Fuel -->
@@ -402,6 +420,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="trip.trpUltr"
                         label="Used Fuel (Ltr)"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
     

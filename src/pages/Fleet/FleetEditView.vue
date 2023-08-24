@@ -101,6 +101,15 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -300,7 +309,7 @@ const editEnabled = () => {
                       v-model="fleet.fltFleetNo"
                       :loading="loading"
                       label="Fleet Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -313,7 +322,7 @@ const editEnabled = () => {
                       v-model="fleet.fltPlateNo"
                       :loading="loading"
                       label="Plate Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -326,7 +335,7 @@ const editEnabled = () => {
                       v-model="fleet.fltCapacity"
                       :loading="loading"
                       label="Capacity(tons)"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -339,7 +348,7 @@ const editEnabled = () => {
                       v-model="fleet.fltMake"
                       :loading="loading"
                       label="Make"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -352,7 +361,7 @@ const editEnabled = () => {
                       v-model="fleet.fltModel"
                       :loading="loading"
                       label="Model"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -365,7 +374,7 @@ const editEnabled = () => {
                       v-model="fleet.fltYear"
                       :loading="loading"
                       label="Year"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -377,7 +386,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltTrkEngineNo"
                       label="Truck Engine Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -389,7 +398,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltTrkChasNo"
                       label="Truck Chassis Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -401,7 +410,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltType"
                       label="Type"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -413,7 +422,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltAxleNo"
                       label="Axle Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -425,7 +434,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltEngineType"
                       label="Engine Type"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -437,7 +446,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltEnginePower"
                       label="Engine Power"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />

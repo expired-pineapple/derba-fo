@@ -113,6 +113,14 @@ const items = [
   { value: true, text: 'Yes' },
   { value: false, text: 'No' },
 ]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -297,7 +305,7 @@ const items = [
                       item-value="id"
                       label="Truck"
                       item-title="FltId.fltFleetNo"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -310,7 +318,7 @@ const items = [
                       label="Tire"
                       item-title="NewTyerBrand"
                       item-value="id"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -320,7 +328,7 @@ const items = [
                     <VTextField
                       v-model="tire.ReturningIssuNo"
                       label="Issue Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -330,7 +338,7 @@ const items = [
                     <VTextField
                       v-model="tire.RtrnTyerClosingDate"
                       label="Tyer Closing Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -341,7 +349,7 @@ const items = [
                     <VTextField
                       v-model="tire.RtrnTyerClosingKM"
                       label="KM"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="number"
                     />
                   </VCol>
@@ -361,7 +369,7 @@ const items = [
                     <VTextarea
                       v-model="tire.TyerClosingRemark"
                       label="Remark"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol> 
                   <VCol

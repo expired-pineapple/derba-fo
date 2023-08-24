@@ -45,11 +45,11 @@ onBeforeMount(async () => {
 
 const error = store.getters.vehicleError
 
-const submitForm = () => {
+const submitForm = async() => {
   // Submit form data to backend
   console.log("Submitting form data:", thirdPartyDataLocal.value)
   try {
-    store.dispatch("createFleetThirdParty", thirdPartyDataLocal.value)
+    await store.dispatch("createFleetThirdParty", thirdPartyDataLocal.value)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -62,6 +62,21 @@ const submitForm = () => {
     }
   } catch (err) {
     console.error("Error dispatching createfleetInsurance action:", err)
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -114,7 +129,7 @@ const submitForm = () => {
                       item-value="id"
                       item-title="FltId.fltFleetNo"
                       label="Truck"
-                      required
+                      :rules="[isEmptyValidator]"
                       :loading="loading"
                     />
                   </VCol>
@@ -128,8 +143,8 @@ const submitForm = () => {
                       item-value="id"
                       item-title="fltPlateNo"
                       label="Fleet"
-                      required
-                      persistent-hint="Fleet plate number"
+                      :rules="[isEmptyValidator]"
+                      placeholder="Fleet plate number"
                       :loading="loading"
                     />
                   </VCol>
@@ -140,7 +155,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="thirdPartyDataLocal.FltThirdInsNo"
                       label="Insurance Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -150,7 +165,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="thirdPartyDataLocal.FltThirdPolicyNo"
                       label="Policy Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -160,7 +175,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="thirdPartyDataLocal.FltThirdIssuanceDate"
                       label="Issuance Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -171,14 +186,18 @@ const submitForm = () => {
                     <VTextField
                       v-model="thirdPartyDataLocal.FltThirdExpireDate"
                       label="Expiry Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
                   <VCol cols="12">
-                    <VSwitch
+                    <VSelect
                       v-model="thirdPartyDataLocal.FltThirdActive"
-                      label="Active"
+                      :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                      item-value="value"
+                      item-title="text"
+                      label="Third Party Status"
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                 </VRow>

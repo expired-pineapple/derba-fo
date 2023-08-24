@@ -47,11 +47,11 @@ onBeforeMount(async () => {
 
 const error = store.getters.vehicleError
 
-const submitForm = () => {
+const submitForm = async() => {
   // Submit form data to backend
   console.log("Submitting form data:", COMESADataLocal.value)
   try {
-    store.dispatch("createFleetCOMESA", COMESADataLocal.value)
+    await store.dispatch("createFleetCOMESA", COMESADataLocal.value)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -64,6 +64,21 @@ const submitForm = () => {
     }
   } catch (err) {
     console.error("Error dispatching createFleetCOMESA action:", err)
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -116,7 +131,7 @@ const submitForm = () => {
                       item-value="id"
                       item-title="FltId.fltFleetNo"
                       label="Truck"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -129,8 +144,8 @@ const submitForm = () => {
                       item-value="id"
                       item-title="fltPlateNo"
                       label="Fleet"
-                      required
-                      persistent-hint="Fleet plate number"
+                      :rules="[isEmptyValidator]"
+                      placeholder="Fleet plate number"
                     />
                   </VCol>
                   <VCol
@@ -140,7 +155,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="COMESADataLocal.FltComesaNo"
                       label="COMESA Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -150,7 +165,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="COMESADataLocal.FltComesaYellowNo"
                       label="Yellow Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -162,6 +177,7 @@ const submitForm = () => {
                       label="Issuance Date"
                       required
                       type="date"
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -173,6 +189,7 @@ const submitForm = () => {
                       label="Expiry Date"
                       required
                       type="date"
+                      :rules="[isEmptyValidator, hasExpired]"
                     />
                   </VCol>
                   <VCol
@@ -182,13 +199,18 @@ const submitForm = () => {
                     <VTextField
                       v-model="COMESADataLocal.FltComesaCountry"
                       label="Country"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol cols="12">
-                    <VSwitch
+                    <VSelect
                       v-model="COMESADataLocal.FltComesaActive"
-                      label="Active"
+                      :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                      item-value="value"
+                      item-title="text"
+                      label="COMESA Status"
+                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                 </VRow>

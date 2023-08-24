@@ -12,6 +12,7 @@ const headers = [
   { text: "Customer Name", value: "customerID.cmrName", sortable: true },
   { text: "Contact Name", value: "cntName", sortable: true },
   { text: "Contact Phone", value: "cntPhone", sortable: true },
+  { text: "", value: "operation" },
 ]
 
 const store = useStore()
@@ -36,6 +37,16 @@ onBeforeMount(() => {
 
 })
 
+const deleteItem = async item => {
+  try {
+    await store.dispatch('deleteCustomerContact', item.id)
+    items.value = store.getters.customerContacts
+    await store.dispatch('fetchCustomerContacts')
+  } catch (err) {
+    console.error('Error dispatching deleteCustomerContact action:', err)
+  }
+}
+
 
 
 const edit = clickedRow => {
@@ -55,9 +66,8 @@ const props = {
     items,
   },
 
-  clickedRow: edit,
   loading: loading,
-
+  operation: deleteItem,
 }
 </script>
 

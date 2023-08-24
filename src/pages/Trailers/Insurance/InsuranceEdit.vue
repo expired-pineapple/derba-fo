@@ -115,6 +115,21 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
+}
 </script>
 
 <template>
@@ -306,7 +321,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="FltId.fltFleetNo"
                             label="Truck"
-                            required
+                            :rules="[isEmptyValidator]"
                             :loading="loading"
                           />
                         </VCol>
@@ -320,7 +335,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="plate_number"
                             label="Trailer"
-                            required
+                            :rules="[isEmptyValidator]"
                             persistent-hint="Trailer plate number"
                             :loading="loading"
                           />
@@ -332,7 +347,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.trlInsRegistrationNo"
                             label="Insurance Registration Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -342,7 +357,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.trlInsIssuanceDate"
                             label="Issuance Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -353,7 +368,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.trlInsValidationDate"
                             label="Valid Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -364,7 +379,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.trlInsPolicyNo"
                             label="Insurance Policy Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol cols="12">

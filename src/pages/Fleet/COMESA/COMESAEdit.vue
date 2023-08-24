@@ -142,6 +142,21 @@ const searchT = () => {
   trucks.value = filtered
   
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
+}
 </script>
 
 <template>
@@ -327,7 +342,7 @@ const searchT = () => {
                         item-value="id"
                         item-title="FltId.fltFleetNo"
                         label="Truck"
-                        required
+                        :rules="[isEmptyValidator]"
                       >
                         <template #prepend-item>
                           <VListItem>
@@ -360,7 +375,7 @@ const searchT = () => {
                         item-title="fltPlateNo"
                         label="Fleet"
                         :loading="loading"
-                        required
+                        :rules="[isEmptyValidator]"
                         placeholder="Fleet plate number"
                       >
                         <template #prepend-item>
@@ -390,7 +405,7 @@ const searchT = () => {
                       <VTextField
                         v-model="COMESA.FltComesaNo"
                         label="COMESA Number"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -400,7 +415,7 @@ const searchT = () => {
                       <VTextField
                         v-model="COMESA.FltComesaYellowNo"
                         label="Yellow Number"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -410,7 +425,7 @@ const searchT = () => {
                       <VTextField
                         v-model="COMESA.FltComesaIssuanceDate"
                         label="Issuance Date"
-                        required
+                        :rules="[isEmptyValidator]"
                         type="date"
                       />
                     </VCol>
@@ -421,7 +436,7 @@ const searchT = () => {
                       <VTextField
                         v-model="COMESA.FltComesaExpireDate"
                         label="Expiry Date"
-                        required
+                        :rules="[isEmptyValidator, hasExpired]"
                         type="date"
                       />
                     </VCol>
@@ -432,13 +447,18 @@ const searchT = () => {
                       <VTextField
                         v-model="COMESA.FltComesaCountry"
                         label="Country"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol cols="12">
-                      <VSwitch
+                      <VSelect
                         v-model="COMESA.FltComesaActive"
-                        label="Active"
+                        :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                        item-value="value"
+                        item-title="text"
+                        label="COMESA Status"
+                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                   </VRow>

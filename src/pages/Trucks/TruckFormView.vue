@@ -1,6 +1,6 @@
 <script setup>
 import router from "@/router"
-import { ref, onMounted, computed } from "vue"
+import { ref, onBeforeMount, computed } from "vue"
 import { useStore } from "vuex"
 
 
@@ -20,24 +20,20 @@ const errorAlert = ref(false)
 const trailer = ref([])
 const fleet = ref([])
 const drivers = ref([])
-const driverLoading = ref(false)
-const trailerLoading = ref(false)
-const fleetLoading = ref(false)
-
-const { fetchDrivers } = mapActions("driverModule", ["fetchDrivers"])
+const driverLoading = ref(true)
+const trailerLoading = ref(true)
+const fleetLoading = ref(true)
 
 
-onMounted(async () => {
+
+onBeforeMount(async () => {
   try {
-    driverLoading.value = true
-    store.dispatch("fetchDrivers")
+    await store.dispatch("fetchFleets")
+    await store.dispatch("fetchDrivers")
+    await store.dispatch("fetchTrailers")
     drivers.value = store.getters.drivers
-    trailerLoading.value = true
-    store.dispatch("fetchTrailers")
     trailer.value = store.getters.trailers
-    fleetLoading.value = true
     console.log("Fetching trailer", trailer.value)
-    store.dispatch("fetchFleets")
     fleet.value = store.getters.fleets
   } catch (err) {
     console.error("Error dispatching in truck form:", err)
@@ -53,11 +49,11 @@ const resetForm = () => {
   truckDataLocal.value = structuredClone(truckData)
 }
 
-const submitForm = () => {
+const submitForm = async() => {
   // Submit form data to backend
   console.log("Submitting form data:", truckDataLocal.value)
   try {
-    store.dispatch("createTruck", truckDataLocal.value)
+    await store.dispatch("createTruck", truckDataLocal.value)
 
     const error = computed(() => store.getters.vehicleError)
 
@@ -73,6 +69,40 @@ const submitForm = () => {
     errorAlert.value = true
     console.error("Error dispatching createTruck action:", err)
   }
+}
+
+const searchDriver = ref("")
+const searchFleet = ref("")
+const searchTrailer = ref("")
+
+const search = (searchValue, data, searchKey, target) => {
+  if (searchValue) {
+    target.value = data.filter(item => {
+      return item[searchKey].toLowerCase().includes(searchValue.toLowerCase())
+    })
+  } else {
+    target.value = data
+  }
+}
+
+const searchD = () => {
+  search(searchDriver.value, store.getters.drivers, "driver_name", drivers)
+}
+
+const searchF = () => {
+  search(searchFleet.value, store.getters.fleets, "fltFleetNo", fleet)
+}
+
+const searchT = () => {
+  search(searchTrailer.value, store.getters.trailers, "plate_number", trailer)
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -126,7 +156,27 @@ const submitForm = () => {
                     :loading="driverLoading"
                     label="Driver"
                     placeholder="Select a driver"
-                  />
+                    :rules="[isEmptyValidator]"
+                  >
+                    <template #prepend-item>
+                      <VListItem>
+                        <VListItemContent>
+                          <VTextField
+                            v-model="searchDriver"
+                            placeholder="Search"
+                            class="mx-4"
+                            outlined
+                            hide-details
+                            single-line
+                            clearable
+                            prepend-inner-icon="mdi-magnify"
+                            @input="searchD"
+                          />
+                        </VListItemContent>
+                      </VListItem>
+                      <VDivider />
+                    </template>
+                  </VSelect>
                 </VCol>
                 <!-- 👉 Fleet -->
                 <VCol
@@ -141,7 +191,27 @@ const submitForm = () => {
                     :loading="driverLoading"
                     label="Fleet"
                     placeholder="Select a fleet"
-                  />
+                    :rules="[isEmptyValidator]"
+                  >
+                    <template #prepend-item>
+                      <VListItem>
+                        <VListItemContent>
+                          <VTextField
+                            v-model="searchFleet"
+                            placeholder="Search"
+                            class="mx-4"
+                            outlined
+                            hide-details
+                            single-line
+                            clearable
+                            prepend-inner-icon="mdi-magnify"
+                            @input="searchF"
+                          />
+                        </VListItemContent>
+                      </VListItem>
+                      <VDivider />
+                    </template>
+                  </VSelect>
                 </VCol>
                 <!-- 👉 Trailer -->
                 <VCol
@@ -156,16 +226,41 @@ const submitForm = () => {
                     :loading="trailerLoading"
                     label="Trailer"
                     placeholder="Select a trailer"
-                  />
+                    :rules="[isEmptyValidator]"
+                  >
+                    <template #prepend-item>
+                      <VListItem>
+                        <VListItemContent>
+                          <VTextField
+                            v-model="searchTrailer"
+                            placeholder="Search"
+                            class="mx-4"
+                            outlined
+                            hide-details
+                            single-line
+                            clearable
+                            prepend-inner-icon="mdi-magnify"
+                            @input="searchT"
+                          />
+                        </VListItemContent>
+                      </VListItem>
+                      <VDivider />
+                    </template>
+                  </VSelect>
                 </VCol>
                 <!-- 👉 Is Active -->
                 <VCol
                   cols="12"
                   md="6"
                 >
-                  <VSwitch
+                  <VSelect
                     v-model="truckDataLocal.trkActive"
+                    :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                    item-title="text"
+                    item-value="value"
                     label="Is Active"
+                    placeholder="Select a status"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <!-- 👉 Form Actions -->

@@ -41,11 +41,10 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 
-const submitForm = () => {
-  // Submit form data to backend
+const submitForm = async() => {
   console.log("Submitting form data:", boloLocal.value)
   try {
-    store.dispatch("createFleetBolo", boloLocal)
+    await store.dispatch("createFleetBolo", boloLocal)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -58,6 +57,21 @@ const submitForm = () => {
     }
   } catch (err) {
     console.error("Error dispatching createbolo action:", err)
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -123,7 +137,8 @@ const submitForm = () => {
                     item-title="fltPlateNo"
                     label="Fleet"
                     required
-                    persistent-hint="Fleet plate number"
+                    placeholder="Fleet plate number"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -134,6 +149,7 @@ const submitForm = () => {
                     v-model="boloLocal.FltBolo_no"
                     label="Bolo Number"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -145,6 +161,7 @@ const submitForm = () => {
                     label="Bolo Issued Date"
                     required
                     type="date"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -156,16 +173,21 @@ const submitForm = () => {
                     label="Bolo Expiry Date"
                     required
                     type="date"
+                    :rules="[isEmptyValidator, hasExpired]"
                   />
                 </VCol>
                 <VCol
                   md="6"
                   cols="12"
                 >
-                  <VSwitch
+                  <VSelect
                     v-model="boloLocal.FltBoloActive"
-                    label="Bolo Active"
+                    :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                    item-value="value"
+                    item-title="text"
+                    label="Bolo Status"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 

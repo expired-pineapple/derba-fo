@@ -53,9 +53,8 @@ const props = {
   subheader: "This is a list of all Driver's Djibouti Passes in the system.",
   button: {
     text: "Add Driver's Djibouti Pass",
-    to: '/register-drivers',
+    to: '/register-driver-djibouti-pass',
   },
-  buttonVisible: false,
   tableHeader: {
     headers,
     items,

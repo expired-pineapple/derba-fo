@@ -100,6 +100,14 @@ const expanded = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -279,7 +287,7 @@ const editEnabled = () => {
                 <VSwitch
                   v-model="trailer.is_active"
                   label="Is Active"
-                  required
+                  :rules="[isEmptyValidator]"
                   outlined
                   dense
                 />
@@ -292,7 +300,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.fleet_number"
                     label="Fleet Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -304,7 +312,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.plate_number"
                     label="Plate Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -316,7 +324,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.trailer_model"
                     label="Trailer Model"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -328,7 +336,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.trailer_type"
                     label="Trailer Type"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -343,7 +351,7 @@ const editEnabled = () => {
                     item-title="driver_name"
                     item-value="id"
                     label="Driver"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -355,7 +363,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.capacity"
                     label="Capacity"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -367,7 +375,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.chasis_number"
                     label="Chasis Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -382,7 +390,7 @@ const editEnabled = () => {
                     item-title="condition"
                     item-value="id"
                     label="Condition"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -394,7 +402,7 @@ const editEnabled = () => {
                   <VTextarea
                     v-model="trailer.remarks"
                     label="Remarks"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />

@@ -59,6 +59,14 @@ const items = [
   { text: 'Yes', value: true },
   { text: 'No', value: false },
 ]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -111,7 +119,7 @@ const items = [
               item-title="NewTyerBrand"
               label="Tire"
               item-value="id"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />
@@ -126,7 +134,7 @@ const items = [
               item-title="FltId.fltFleetNo"
               label="Truck"
               item-value="id"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />
@@ -138,7 +146,7 @@ const items = [
             <VTextField
               v-model="tire.ReturningIssuNo"
               label="Issue Number"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />
@@ -151,7 +159,7 @@ const items = [
               v-model="tire.RtrnTyerClosingDate"
               label="Closing Date"
               type="date"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />
@@ -163,7 +171,7 @@ const items = [
             <VTextField
               v-model="tire.RtrnTyerClosingKM"
               label="Closing KM"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />
@@ -184,7 +192,7 @@ const items = [
             <VTextarea
               v-model="tire.TyerClosingRemark"
               label="Closing Remark"
-              required
+              :rules="[isEmptyValidator]"
               outlined
               dense
             />

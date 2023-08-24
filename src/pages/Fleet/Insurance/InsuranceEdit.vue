@@ -115,6 +115,14 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -306,7 +314,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="FltId.FltFleetNo"
                             label="Truck"
-                            required
+                            :rules="[isEmptyValidator]"
                             :loading="loading"
                           />
                         </VCol>
@@ -320,8 +328,8 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="plate_number"
                             label="Trailer"
-                            required
-                            persistent-hint="Trailer plate number"
+                            :rules="[isEmptyValidator]"
+                            placeholder="Trailer plate number"
                             :loading="loading"
                           />
                         </VCol>
@@ -332,7 +340,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsRegistrationNo"
                             label="Insurance Registration Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -342,7 +350,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsIssuanceDate"
                             label="Issuance Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -353,7 +361,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsValidationDate"
                             label="Valid Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -364,13 +372,17 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsPolicyNo"
                             label="Insurance Policy Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol cols="12">
-                          <VSwitch
+                          <VSelect
                             v-model="insurance.FltInscActive"
-                            label="Active"
+                            :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                            item-value="value"
+                            item-title="text"
+                            label="Insurance Status" 
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                       </VRow>

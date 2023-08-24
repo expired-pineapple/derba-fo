@@ -108,6 +108,14 @@ const items = [
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -289,7 +297,7 @@ const editEnabled = () => {
                         item-value="id"
                         label="Truck"
                         item-title="FltId.fltFleetNo"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -299,7 +307,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="tire.NewTyerIssuNo"
                         label="Issue Number"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -309,7 +317,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="tire.NewTyerDate"
                         label="Date"
-                        required
+                        :rules="[isEmptyValidator]"
                         type="date"
                       />
                     </VCol>
@@ -320,7 +328,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="tire.NewTyerKM"
                         label="KM"
-                        required
+                        :rules="[isEmptyValidator]"
                         type="number"
                       />
                     </VCol>
@@ -331,7 +339,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="tire.NewTyerBrand"
                         label="Brand"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -341,7 +349,7 @@ const editEnabled = () => {
                       <VTextField
                         v-model="tire.NewTyerSerialNo"
                         label="Brand"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol>
@@ -360,7 +368,6 @@ const editEnabled = () => {
                       <VTextarea
                         v-model="tire.NewTyerRemark"
                         label="Remark"
-                        required
                       />
                     </VCol> 
                     <VCol

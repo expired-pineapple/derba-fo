@@ -11,6 +11,7 @@ const errorAlert = ref(false)
 const router = useRouter()
 
 const data = ref({
+  "customer": "",
   "cntName": "",
   "cntPhone": "",
   "customerID": null,
@@ -43,20 +44,28 @@ const resetForm = () => {
 }
 
 
-const submitForm = () => {
-  store.dispatch("createCustomerContact", data.value)
 
-  const error = computed(() => store.getters.error)
+const submitForm =  async () => {
+  await store.dispatch("createCustomerContact", data.value)
+
+  const error = computed(() => store.getters.foError)
 
   if (error.value) {
-    console.error('Error dispatching createCustomerContact action:', error.value)
     errorAlert.value = true
   } else {
     store.dispatch('fetchCustomerContacts')
     successAlert.value = true
     resetForm()
-  }
+  } 
   
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required"
+  }
+
+  return true
 }
 </script>
 
@@ -99,12 +108,12 @@ const submitForm = () => {
                   md="6"
                 >
                   <VSelect
-                    v-model="data.customerID"
+                    v-model="data.customer"
                     :items="customers"
                     item-title="cmrName"
                     item-value="id"
                     label="Customer"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -114,7 +123,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="data.cntName"
                     label="Contact Name"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -124,7 +133,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="data.cntPhone"
                     label="Contact Phone"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
               </VRow>

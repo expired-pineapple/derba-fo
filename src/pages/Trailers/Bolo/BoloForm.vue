@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -40,14 +40,15 @@ onBeforeMount(async () => {
   }
 })
 
-const error = store.getters.vehicleError
-
-const submitForm = () => {
+const submitForm = async() => {
   // Submit form data to backend
   console.log("Submitting form data:", boloLocal.value)
   try {
-    store.dispatch("createTrailerBolo", boloLocal.value)
-    if(!error) {
+    await store.dispatch("createTrailerBolo", boloLocal.value)
+
+    const error = computed(() => store.getters.vehicleError)
+
+    if(!error.value) {
       successAlert.value = true
       resetForm()
       store.dispatch("fetchTrailerBoloes")
@@ -59,6 +60,21 @@ const submitForm = () => {
     }
   } catch (err) {
     console.error("Error dispatching createbolo action:", err)
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -110,7 +126,7 @@ const submitForm = () => {
                     item-value="id"
                     item-title="FltId.fltFleetNo"
                     label="Truck"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -123,8 +139,8 @@ const submitForm = () => {
                     item-value="id"
                     item-title="plate_number"
                     label="Trailer"
-                    required
-                    persistent-hint="Trailer plate number"
+                    :rules="[isEmptyValidator]"
+                    placeholder="Trailer plate number"
                   />
                 </VCol>
                 <VCol
@@ -134,7 +150,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="boloLocal.trlBolo_no"
                     label="Bolo Number"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -144,7 +160,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="boloLocal.trlBoloissuedate"
                     label="Bolo Issued Date"
-                    required
+                    :rules="[isEmptyValidator]"
                     type="date"
                   />
                 </VCol>
@@ -155,7 +171,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="boloLocal.trlBoloExpireDate"
                     label="Bolo Expiry Date"
-                    required
+                    :rules="[isEmptyValidator, hasExpired]"
                     type="date"
                   />
                 </VCol>
@@ -166,7 +182,7 @@ const submitForm = () => {
                   <VSwitch
                     v-model="boloLocal.trlBoloActive"
                     label="Bolo Active"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 

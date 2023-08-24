@@ -74,13 +74,14 @@ const editSelected = item => {
   edit(item)
 }
 
-const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
   console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerCOMESA', comesa.value)
     await dispatch()
+
+    const error = computed(() => store.getters.vehicleError)
     if(!error.value){
       successAlert.value = true
       setTimeout(() => {
@@ -114,6 +115,21 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
 }
 </script>
 
@@ -306,7 +322,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="FltId.fltFleetNo"
                             label="Truck"
-                            required
+                            :rules="[isEmptyValidator]"
                             :loading="loading"
                           />
                         </VCol>
@@ -320,7 +336,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="plate_number"
                             label="Trailer"
-                            required
+                            :rules="[isEmptyValidator]"
                             persistent-hint="Trailer plate number"
                             :loading="loading"
                           />
@@ -332,7 +348,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaNo"
                             label="COMESA Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -342,7 +358,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaYellowNo"
                             label="Yellow Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -352,7 +368,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaIssuanceDate"
                             label="Issuance Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -363,7 +379,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaValidDate"
                             label="Valid Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -374,7 +390,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaCountry"
                             label="Country"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol cols="12">

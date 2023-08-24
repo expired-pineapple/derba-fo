@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from "vue"
+import { ref, onBeforeMount, computed } from "vue"
 import { useStore } from 'vuex'
 import { useRoute } from "vue-router"
 import router from "@/router"
@@ -9,33 +9,28 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('Fleet ID:', id)
+console.log('ID:', id)
 
 const loading = ref(true)
-const expanded = ref(false)
+const expand = ref(true)
 
 const successAlert = ref(false)
 const errorAlert = ref(false)
 
 const data = ref({})
-const bolo = ref([])
-const trucks = ref([])
-const fleets =ref([])
+const fuelStations = ref([])
 
 const dispatch = async () => {
   try {
-    await store.dispatch("fetchFleetBoloes")
-    await store.dispatch("fetchFleetBolo", id)
-    await store.dispatch("fetchTrucks")
-    await store.dispatch("fetchFleets")
-    trucks.value = store.getters.trucks
-    fleets.value = store.getters.fleets
+    await store.dispatch("fetchFuelStations", id)
+    await store.dispatch("fetchFuelStations")
     
-    data.value = store.getters.fleetBoloes
-    bolo.value = store.getters.fleetBolo
-    console.log('Bolo:', bolo.value)
+    fuelStations.value = store.getters.fuelStations
+    console.log('fuelStation:', fuelStations.value)
+    data.value = store.getters.fuelStation
+    console.log('Commodity:', data.value)
   } catch (err) {
-    console.error('Error dispatching in truck form:', err)
+    console.error('Error dispatching in fuelStation form:', err)
   } finally {
     loading.value = false
   }
@@ -45,59 +40,60 @@ onBeforeMount(async () => {
   await dispatch()
 })
 
-const searchFleet = () => {
+const search = () => {
   console.log('Searching...')
 
   const search = searchValue.value
 
-  const filteredBoloes = data.value.filter(item => {
-    return item.FltBolo_no.toLowerCase().includes(search.toLowerCase())
+  const filteredfuelStations = fuelStations.value.filter(item => {
+    return item.stnName.toLowerCase().includes(search.toLowerCase())
   })
 
   if(!search){
-    return data.value = store.getters.fleetBoloes
+    return fuelStations.value = store.getters.fuelStations
   }
-  data.value = filteredBoloes
+  fuelStations.value = filteredfuelStations
   
   
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
-  router.push({ name: 'edit-fleet-bolo', params: { id: item.id } })
-  await store.dispatch('fetchFleetBolo', item.id)
-  bolo.value = store.getters.fleetBolo
-  console.log('Bolo:', bolo.value)
+  console.log('Editing:', item)
+  router.push({ name: 'edit-Fuel Station', params: { id: item.id } })
+  await store.dispatch('fetchCommodity', item.id)
+  data.value = store.getters.commodity
+  console.log('data:', data.value)
 }
 
 const editSelected = item => {
   edit(item)
 }
 
+
 const submitForm = async () => {
-  console.log('Submitting form...')
-  try {
-    await store.dispatch('updateFleetBolo', bolo)
+  console.log('Form submitted')
+  await store.dispatch('updatefuelStation', data.value)
+
+  const error = computed(() => store.getters.foError)
+
+  if (error.value) {
+    console.error('Error dispatching updatefuelStation action:', error.value)
+    errorAlert.value = true
+  } else {
     successAlert.value = true
+    await dispatch()
     setTimeout(() => {
       successAlert.value = false
     }, 3000)
-    await dispatch()
-  } catch (err) {
-    console.error('Error submitting form:', err)
-    errorAlert.value = true
-    setTimeout(() => {
-      errorAlert.value = false
-    }, 3000)
   }
-  await dispatch()
+
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
-  await store.dispatch('deleteFleetBolo', item.id)
+  console.log('Deleting:', item)
+  await store.dispatch('deleteFuelStation', item.id)
   await dispatch()
-  router.push('/fleet-bolo')
+  router.push('/category')
 }
 
 const disabled = ref(true)
@@ -114,21 +110,13 @@ const isEmptyValidator = value => {
   
   return true
 }
-
-const hasExpired = value =>{
-  const date = new Date(value)
-  if(date < new Date()){
-    return "Document has expired"
-  }
-}
 </script>
 
 <template>
-  <div class="d-flex">
+  <div class="d-flex gap-4">
     <VCard
-      v-if="expanded"
-      class="mr-4"
-      width="35%"
+      v-if="expand"
+      width="300"
     >
       <div class="searchable">
         <VCardText> 
@@ -139,7 +127,7 @@ const hasExpired = value =>{
               label="Search"
               variant="underlined"
               class="mb-4"
-              @input="searchFleet"
+              @input="search"
             />
           </div>
           <div
@@ -155,16 +143,16 @@ const hasExpired = value =>{
             </div>
           </div>
           <div
-            v-if="data.length > 0"
+            v-if="fuelStations.length > 0"
             class="wrapper scrollable"
           >
             <div
-              v-for="(item, index) in data"
+              v-for="(item, index) in fuelStations"
               :key="index"
             >
               <div class="d-flex mt-4">
                 <VIcon
-                  icon="mdi-truck-outline" 
+                  icon="mdi-fuel" 
                   size="30"
                   class="mr-2"
                   color="primary"
@@ -172,7 +160,7 @@ const hasExpired = value =>{
                 <div>
                   <div class="d-flex">
                     <div class="info">
-                      <span class="font-weight-semibold me-2 mb-4">Fleet: {{ item.FltBolo_no }}</span>
+                      <span class="font-weight-semibold me-2 mb-4">Fuel Station: {{ item.stnName }}</span>
                     </div>
                     <div class="icon">
                       <VBtn
@@ -192,20 +180,19 @@ const hasExpired = value =>{
             v-else
             class="else"
           >
-            <p>No Fleet Found</p>
+            <p>No Fuel Station Found</p>
           </div>
         </VCardText>
       </div>
     </VCard>
-
     <VCard
       class="d-flex gap-6"
-      width="100%"
+      width="650"
     >
-      <div class="">
-        <VCardText>
+      <VCardText>
+        <div class="">
           <VRow width="20%">
-            <VCol cols="12">
+            <VCol cols="20">
               <VAlert
                 v-model="successAlert"
                 border="start"
@@ -214,7 +201,7 @@ const hasExpired = value =>{
                 close-label="Close Alert"
                 type="success"
                 title="Success!"
-                text="Fleet details saved successfully"
+                text="Fuel Station details saved successfully"
               />
               <VAlert
                 v-model="errorAlert"
@@ -224,11 +211,10 @@ const hasExpired = value =>{
                 close-label="Close Alert"
                 type="error"
                 title="Error!"
-                text="Fleet details not saved successfully"
+                text="Fuel Station details not saved successfully"
               />
               <!-- 👉 Form -->
               <VForm
-                class="mt-10"
                 :disabled="disabled"
                 :loading="loading"
                 @submit.prevent="submitForm"
@@ -257,10 +243,10 @@ const hasExpired = value =>{
                       </template>
                       <VCard>
                         <VCardTitle class="headline">
-                          Delete Bolo
+                          Delete Fuel Station
                         </VCardTitle>
                         <VCardText>
-                          Are you sure you want to delete this bolo?
+                          Are you sure you want to delete this Fuel Station?
                         </VCardText>
                         <VCardActions>
                           <VSpacer />
@@ -274,7 +260,7 @@ const hasExpired = value =>{
                           <VBtn
                             color="error"
                             variant="text"
-                            @click="deleteItem(bolo)"
+                            @click="deleteItem(data)"
                           >
                             Yes
                           </VBtn>
@@ -285,107 +271,36 @@ const hasExpired = value =>{
                   <div class="d-flex">
                     <VIcon
                       size="70"
-                      icon="mdi-truck-outline"
+                      icon="mdi-fuel"
                       class="me-6"  
                     />
                     <div>
                       <h3 class="font-weight-semibold mb-2">
-                        Fleet Bolo Details
+                        Fuel Station Details
                       </h3>
                       <p class="mb-2">
-                        Please fill in the form below to edit selected fleet bolo
+                        Please fill in the form below to edit selected Fuel Station.
                       </p>
                     </div>
                   </div>
                 </VCardText>
-                <VCardText>
+                <VContainer>
                   <VRow>
                     <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSelect
-                        v-model="bolo.TrkId"
-                        :items="trucks"
-                        item-value="id"
-                        item-title="FltId.fltFleetNo"
-                        :loading="loading"
-                        label="Truck"
-                        required
-                        :rules="[isEmptyValidator]"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSelect
-                        v-model="bolo.FltId"
-                        :items="fleets"
-                        item-value="id"
-                        item-title="fltPlateNo"
-                        label="Fleet"
-                        required
-                        persistent-hint="Fleet plate number"
-                        :loading="loading"
-                        :rules="[isEmptyValidator]"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
+                      md="12"
                       cols="12"
                     >
                       <VTextField
-                        v-model="bolo.FltBolo_no"
-                        label="Bolo Number"
+                        v-model="data.stnName"
+                        label="Category Name"
                         required
                         :loading="loading"
                         :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
-                      md="6"
                       cols="12"
-                    >
-                      <VTextField
-                        v-model="bolo.FltBoloissuedate"
-                        label="Bolo Issued Date"
-                        required
-                        type="date"
-                        :loading="loading"
-                        :rules="[isEmptyValidator]"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VTextField
-                        v-model="bolo.FltBoloExpireDate"
-                        label="Bolo Expiry Date"
-                        required
-                        type="date"
-                        :loading="loading"
-                        :rules="[isEmptyValidator, hasExpired]"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSelect
-                        v-model="bolo.FltBoloActive"
-                        :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
-                        item-value="value"
-                        item-title="text"
-                        label="Bolo Status"
-                        required
-                        :rules="[isEmptyValidator]"
-                      />
-                    </VCol>
-  
-                    <VCol
-                      cols="12"
+                      md="10"
                       class="d-flex flex-wrap gap-4"
                     >
                       <VBtn @click.prevent="submitForm">
@@ -393,20 +308,19 @@ const hasExpired = value =>{
                       </VBtn>
                     </VCol>
                   </VRow>
-                </VCardText>
+                </VContainer> 
               </VForm>
             </VCol>
-          </VRow>
-        </VCardText> 
-      </div> 
-    
-      <div class="justify-end mt-4">
+          </VRow> 
+        </div>  
+      </VCardText>  
+      <div class="d-flex justify-end mt-4">
         <VIcon 
           color="primary"
-          :icon="expanded ? 'mdi-arrow-expand' :'mdi-arrow-collapse'"
-          @click="expanded=!expanded"
+          :icon="expand ? 'mdi-arrow-expand' :'mdi-arrow-collapse'"
+          @click="expand=!expand"
         />
-      </div>     
+      </div> 
     </VCard>
   </div>
 </template>

@@ -179,7 +179,7 @@ const submitForm = () => {
                     label="Fuel Station"
                     :items="fuelStations"
                     item-value="id"
-                    item-title="fuelStation"
+                    item-title="stnName"
                     :loading="loading"
                   />
                 </VCol>

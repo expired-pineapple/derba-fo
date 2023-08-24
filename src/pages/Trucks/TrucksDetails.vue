@@ -35,7 +35,7 @@ const dispatch = async () => {
     drivers.value = store.getters.drivers
     fleets.value = store.getters.fleets
     trucks.value = store.getters.trucks
-    truck.value = store.getters.detailTruck
+    truck.value = store.getters.detailTruck  
 
     console.log('Actions dispatched successfully!')
     console.log('Trailers:', trailers.value)
@@ -112,6 +112,14 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -208,8 +216,7 @@ const editEnabled = () => {
             close-label="Close Alert"
             type="error"
             title="Error!"
-            text="Truck details not saved successfully"
-            timeout="5000"
+            text="Truck details not saved successful"
           />
           <!-- 👉 Form -->
           <VForm
@@ -296,6 +303,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Driver"
                   placeholder="Select a driver"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Fleet -->
@@ -311,6 +319,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Fleet"
                   placeholder="Select a fleet"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Trailer -->
@@ -326,6 +335,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Trailer"
                   placeholder="Select a trailer"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Is Active -->
@@ -333,9 +343,12 @@ const editEnabled = () => {
                 cols="12"
                 md="6"
               >
-                <VSwitch
+                <VSelect
                   v-model="truck.trkActive"
                   label="Is Active"
+                  :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                  item-value="value"
+                  item-title="text"
                 />
               </VCol>
               <!-- 👉 Form Actions -->

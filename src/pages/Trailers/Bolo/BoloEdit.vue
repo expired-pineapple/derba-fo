@@ -115,6 +115,21 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
+}
 </script>
 
 <template>
@@ -305,7 +320,7 @@ const editEnabled = () => {
                           item-value="id"
                           item-title="FltId.fltFleetNo"
                           label="Truck"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                         />
                       </VCol>
@@ -319,7 +334,7 @@ const editEnabled = () => {
                           item-value="id"
                           item-title="plate_number"
                           label="Trailer"
-                          required
+                          :rules="[isEmptyValidator]"
                           persistent-hint="Trailer plate number"
                           :loading="loading"
                         />
@@ -331,7 +346,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBolo_no"
                           label="Bolo Number"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                         />
                       </VCol>
@@ -342,7 +357,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBoloissuedate"
                           label="Bolo Issued Date"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                           type="date"
                         />
@@ -354,7 +369,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBoloExpireDate"
                           label="Bolo Expiry Date"
-                          required
+                          :rules="[isEmptyValidator, hasExpired]"
                           :loading="loading"
                           type="date"
                         />
@@ -366,7 +381,7 @@ const editEnabled = () => {
                         <VSwitch
                           v-model="bolo.trlBoloActive"
                           label="Bolo Active"
-                          required
+                          :rules="[isEmptyValidator]"
                         />
                       </VCol>
       

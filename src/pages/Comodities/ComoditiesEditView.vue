@@ -105,6 +105,14 @@ const dialog = ref(false)
 const editEnabled = () => {
   disabled.value = false
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -290,6 +298,7 @@ const editEnabled = () => {
                         label="Comodity Name"
                         required
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -304,6 +313,7 @@ const editEnabled = () => {
                         item-title="mtrCatCol"
                         item-value="id"
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -315,6 +325,7 @@ const editEnabled = () => {
                         label="Comodity Packaging"
                         required
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
