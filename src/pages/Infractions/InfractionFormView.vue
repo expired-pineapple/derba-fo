@@ -1,10 +1,32 @@
 <script setup>
+import { computed, onBeforeMount } from 'vue'
+import { useStore } from 'vuex'
+
 const infractionData =   {
   "infractionType": "",
-  "driverName": "",
+  "drvId": "",
   "infractionDate": "",
-  "infractionNote": "",
+  "infractionLocation": "",
+  "infractionRemark": "",
 }
+
+const store = useStore()
+const infractionTypes = ref([])
+const drivers = ref([])
+const loading = ref(true)
+
+onBeforeMount(async() => {
+  try{
+    await store.dispatch("fetchInfractionTypes")
+    await store.dispatch("fetchDrivers")
+    infractionTypes.value = computed(() => store.getters.infractionTypes)
+    drivers.value = computed(() => store.getters.drivers)
+  } catch (err) {
+    console.error('Error dispatching fetchInfractionTypes action:', err)
+  } finally {
+    loading.value = false
+  }
+})
 
 const infractionDataLocal = ref(structuredClone(infractionData))
 const successAlert = ref(false)
@@ -13,12 +35,18 @@ const resetForm = () => {
   infractionDataLocal.value = structuredClone(infractionData)
 }
 
-const submitForm = () => {
-  successAlert.value = false // Set successAlert to false at the beginning
-  // Submit form data to backend
-  console.log('Form submitted')
-  successAlert.value = true
+const submitForm = async() => {
+  try{
+    await store.dispatch("createInfraction", infractionDataLocal.value)
+    successAlert.value = true
+    resetForm()
+  } catch (err) {
+    console.error('Error dispatching createInfraction action:', err)
+    errorAlert.value = true
+  }
 }
+
+const isRequired = value => !!value || 'This Field is Required.'
 </script>
 
 <template>
@@ -33,9 +61,9 @@ const submitForm = () => {
           close-label="Close Alert"
           type="success"
           title="Success!"
-          text="Driver details saved successfully"
+          text="Infractions saved successfully"
         />
-        <VCard title="Driver Details">
+        <VCard title="Infractions">
           <VDivider />
           <VCardText>
             <p>
@@ -54,6 +82,10 @@ const submitForm = () => {
                   <VSelect
                     v-model="infractionDataLocal.infractionType"
                     label="Infraction Type"
+                    :items="infractionTypes"
+                    item-title="infractionType"
+                    item-value="id"
+                    :rules="[isRequired]"
                   />
                 </VCol>
   
@@ -63,8 +95,12 @@ const submitForm = () => {
                   md="6"
                 >
                   <VSelect
-                    v-model="infractionDataLocal.driverName"
+                    v-model="infractionDataLocal.drvId"
                     label="Driver Name"
+                    :items="drivers"
+                    item-title="driver_name"
+                    item-value="id"
+                    :rules="[isRequired]"
                   />
                 </VCol>
   
@@ -78,10 +114,21 @@ const submitForm = () => {
                     label="Infraction Date"
                     placeholder="2021-07-01"
                     type="date"
+                    :rules="[isRequired]"
                   />
                 </VCol>
-                <VCol />
-  
+                <!-- 👉 Infraction Location -->
+                <VCol
+                  cols="12"
+                  md="6"
+                >
+                  <VTextField
+                    v-model="infractionDataLocal.infractionLocation"
+                    label="Infraction Location"
+                    placeholder="Bole Road"
+                    :rules="[isRequired]"
+                  />
+                </VCol>
                 <!-- 👉 Infraction Note -->
                 <VCol
                   cols="12"
@@ -91,6 +138,7 @@ const submitForm = () => {
                     v-model="infractionDataLocal.infractionNote"
                     label="Infraction Note"
                     placeholder="Exceeded the speed limit on Bole Road"
+                    :rules="[isRequired]"
                   />
                 </VCol>
                 <!-- 👉 Form Actions -->
