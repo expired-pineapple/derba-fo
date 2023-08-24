@@ -30,6 +30,7 @@ const error = computed(() => store.getters.loginError)
 async function login() {
   try {
     await store.dispatch('login', form.value)
+    await store.dispatch('fetchUser')
   } catch (err) {
     console.log(err)
     error.value = err.message
