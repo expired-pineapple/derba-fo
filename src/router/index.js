@@ -9,6 +9,16 @@ const router = createRouter({
       component: () => import('../layouts/default.vue'),
       children: [
         {
+          name: 'register-account',
+          path: 'register-account',
+          component: () => import('../pages/register-account.vue'),
+        },
+        {
+          name: 'user-logs',
+          path: 'user-logs',
+          component: () => import('../pages/UserLogsView.vue'),
+        },
+        {
           name: 'dashboard',
           path: 'dashboard',
           component: () => import('../pages/dashboard.vue'),
@@ -17,6 +27,36 @@ const router = createRouter({
           name: 'account-settings',
           path: 'account-settings',
           component: () => import('../pages/account-settings.vue'),
+        },
+        {
+          name: 'infraction',
+          path: 'infraction',
+          component: () => import('../pages/Infractions/InfractionView.vue'),
+        },
+        {
+          name: 'edit-infraction',
+          path: 'infraction/:id',
+          component: () => import('../pages/Infractions/InfractionView.vue'),
+        },
+        {
+          name: 'register-infraction',
+          path: 'infraction/:id',
+          component: () => import('../pages/Infractions/InfractionView.vue'),
+        },
+        {
+          name: 'infraction-type',
+          path: 'infraction-type',
+          component: () => import('../pages/Infractions/Type/ListView.vue'),
+        },
+        {
+          name: 'edit-infraction-type',
+          path: 'infraction-type/:id',
+          component: () => import('../pages/Infractions/InfractionView.vue'),
+        },
+        {
+          name: 'register-infraction-type',
+          path: 'register-infraction-type',
+          component: () => import('../pages/Infractions/Type/FormView.vue'),
         },
         {
           path: 'drivers',
@@ -46,7 +86,12 @@ const router = createRouter({
         {
           name: "driver-djibouti-pass",
           path: 'driver-djibouti-pass',
-          component: () => import('../pages/Drivers/DjibouiPassView.vue'),
+          component: () => import('../pages/Drivers/DjiboutiPassView.vue'),
+        },
+        {
+          name: 'register-driver-djibouti-pass',
+          path: 'register-driver-djibouti-pass',
+          component: () => import('../pages/Drivers/DjiboutiPassForm.vue'),
         },
         {
           name: "driver-passport",
@@ -332,6 +377,21 @@ const router = createRouter({
           component: () => import('../pages/Comodities/ComoditiesEditView.vue'),
         },
         {
+          name: 'register-category',
+          path: 'register-category',
+          component: () => import('../pages/Comodities/Category/FormView.vue'),
+        },
+        {
+          name: 'category',
+          path: 'category',
+          component: () => import('../pages/Comodities/Category/ComoditiesView.vue'),
+        },
+        {
+          name: 'edit-category',
+          path: 'category/:id',
+          component: () => import('../pages/Comodities/Category/EditView.vue'),
+        },
+        {
           name: 'register-comodity',
           path: 'register-comodity',
           component: () => import('../pages/Comodities/ComoditiesFormView.vue'),
@@ -396,17 +456,34 @@ const router = createRouter({
           path: 'fo-report',
           component: () => import('../pages/Reports/FOReport.vue'),
         },
+        {
+          name: "register-insurance-claim",
+          path: "register-insurance-claim",
+          component: () => import('../pages/InsuranceClaim/FormView.vue'),
+        },
+        {
+          name: "register-fuel-stations",
+          path: "register-fuel-stations",
+          component: () => import('../pages/FuelStation/FormView.vue'),
+        },
+        {
+          name: "fuel-station",
+          path: "fuel-station/:id",
+          component: () => import('../pages/FuelStation/EditView.vue'),
+        },
+        {
+          name: "fuel-stations",
+          path: "fuel-station",
+          component: () => import('../pages/FuelStation/ListView.vue'),
+        },
       ],
     },
     {
       path: '/',
       component: () => import('../layouts/blank.vue'),
-      children: [
+      children: [ 
         {
-          path: "register",
-          component: () => import('../pages/register.vue'),
-        },  
-        {
+          name: 'login',
           path: 'login',
           component: () => import('../pages/login.vue'),
         },
@@ -417,6 +494,21 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+const getIsLoggedIn = () => {
+  return localStorage.getItem('isLoggedIn') === 'true'
+}
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = getIsLoggedIn()
+
+  if (!isLoggedIn && to.name !== 'login') {
+    console.log("here")
+    next({ name: 'login' }) // Redirect to the login route
+  } else {
+    next() // Allow navigation to the requested route
+  }
 })
 
 export default router
