@@ -21,7 +21,7 @@
           <template #prepend>
             <VListItemAction start>
               <VAvatar
-                color="white"
+                color="primary"
                 variant="tonal"
               >
                 <VIcon>
@@ -32,7 +32,7 @@
           </template>
 
           <VListItemTitle class="font-weight-semibold">
-            John Doe
+            {{ userData.first_name }} {{ userData.last_name }}
           </VListItemTitle>
           <VListItemSubtitle>Admin</VListItemSubtitle>
         </VListItem>
@@ -76,8 +76,9 @@ import { useRouter } from 'vue-router'
 const store = useStore()
 const router = useRouter()
 
+const userData= store.getters.user
+
 const logout = () => {
-  console.log('logout')
   store.dispatch('logout')
   router.push('/login')
 }

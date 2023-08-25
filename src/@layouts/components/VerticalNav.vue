@@ -3,6 +3,8 @@ import logo from '../../assets/images/logo.png'
 
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { useDisplay } from 'vuetify'
+import { useStore } from 'vuex'
+
 
 const props = defineProps({
   tag: {
@@ -22,6 +24,10 @@ const props = defineProps({
     required: true,
   },
 })
+
+
+const store = useStore()
+const userData = store.getters.user
 
 const { mdAndDown } = useDisplay()
 const refNav = ref()
@@ -83,8 +89,11 @@ const handleNavScroll = evt => {
                 />
               </VAvatar>
             </div>
-            <span class="text-h6 font-weight-semibold text-primary">
-              John Doe  
+            <span
+              v-if="userData"
+              class="text-h6 font-weight-semibold text-primary"
+            >
+              {{ userData.first_name }}
             </span>
           </div>
         </RouterLink>
