@@ -1,7 +1,9 @@
 <template>
   <VCard title="Freight Order Report">
     <VCardText>
-      <VForm class="d-flex mb-4">
+      <VForm class="d-flex mb-4"
+      @submit.prevent="handleDownloadPDF"
+      >
         <VTextField
           v-model="initialDate"
           label="Initial Date"
@@ -10,6 +12,7 @@
           hide-details
           type="date"
           class="mr-2"
+          :rules="[required]"
         />
         <VTextField
           v-model="finalDate"
@@ -18,12 +21,13 @@
           variant="outlined"
           hide-details
           type="date"
+          :rules="[required]"
         />
         <VBtn
           variant="outline"
           color="primary"
           class="ml-2"
-          @click="handleDownloadPDF"
+          type="submit"
         >
           <VIcon>mdi-download</VIcon>
           Download Report
@@ -83,6 +87,8 @@ const loading = ref(true)
 const initialDate = ref(null)
 const finalDate = ref(null)
 
+const required = (v: Date) => !!v || 'This field is required'
+
 onBeforeMount(async () => {
   try {
     await store.dispatch("fetchFos")
@@ -95,6 +101,9 @@ onBeforeMount(async () => {
 })
 
 const handleDownloadPDF = () => {
+  if (!initialDate.value || !finalDate.value) {
+    return
+  }
   const doc = new jsPDF()
 
   // Add logo and text to the PDF
@@ -121,13 +130,14 @@ const handleDownloadPDF = () => {
 
 const generatePDF = doc => {
   // Filter data based on initialDate and finalDate
-  const filteredData = items.value.filter(item => {
+  const filteredData =  items.value.filter(item => {
     const itemDate = new Date(item.foDate)
     const initialDateValue = new Date(initialDate.value)
     const finalDateValue = new Date(finalDate.value)
 
     return itemDate >= initialDateValue && itemDate <= finalDateValue
   })
+
 
   if (filteredData.length === 0) {
     doc.setFontSize(12)
@@ -155,14 +165,15 @@ const generatePDF = doc => {
     return rObj
   })
 
-  doc.setFontSize(12)
+  doc.setFontSize(8)
   doc.setFont('helvetica', 'normal')
 
   doc.autoTable({
-    headStyles: { fillColor: [15,  142, 61], minCellWidth: 12, lineWidth: 0.1 },
-    head: [['Shipment Code', 'FO No', 'Customer', 'Material', 'Qty', 'Route', 'Date', 'Time', 'Return Date', 'Return Time']],
+    headStyles: { fillColor: [15,  142, 61], minCellWidth: 12, lineWidth: 0.1,fontSize: 8, halign: 'center' },
+    head: [['Shipment Code', 'FO', 'Customer', 'Material', 'Qty', 'Route', 'Date', 'Time', 'Return Date', 'Return Time']],
 
     body: jsonData,
+    bodyStyles:{ minCellWidth: 12, lineWidth: 0.1,fontSize: 7, halign: 'center' },
     startY: 55, 
   })
 
