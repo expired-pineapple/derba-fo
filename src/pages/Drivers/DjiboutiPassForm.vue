@@ -19,10 +19,8 @@ onBeforeMount(async () => {
   try{
     await store.dispatch('fetchDrivers')
     drivers.value = store.getters.drivers
-    console.log(drivers.value)
     loading.value = !loading.value
   }catch(err){
-    console.error('Error dispatching fetchDrivers action:', err)
   }
 })
 
@@ -48,17 +46,21 @@ const resetForm = () => {
 }
 
 
-const submitForm = () => {
-  store.dispatch("createDjiboutiPass", data.value)
+const submitForm = async() => {
+  await store.dispatch("createDjiboutiPass", data.value)
 
-  const error = computed(() => store.getters.createError)
+  const error = store.getters.createError
 
-  if (error.value) {
-    console.error('Error dispatching createDjiboutiPass action:', error.value)
-    errorAlert.value = true
-  } else {
+  if (!error) {
     successAlert.value = true
-    resetForm()
+    setTimeout(() => {
+      successAlert.value = false
+    }, 5000)
+  } else {
+    errorAlert.value = true
+    setTimeout(() => {
+      errorAlert.value = false
+    }, 5000)
   }
   
 }
@@ -71,6 +73,21 @@ const activeItems = [{
   text: 'Inactive',
   value: 'false',
 }]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
+}
 </script>
 
 <template>
@@ -114,7 +131,7 @@ const activeItems = [{
                   <VSelect
                     v-model="data.DrvId"
                     label="Drivers"
-                    required
+                    :rules="[isEmptyValidator]"
                     :items="drivers"
                     item-title="driver_name"
                     item-value="id"
@@ -127,7 +144,7 @@ const activeItems = [{
                   <VTextField
                     v-model="data.drvDjiboutiPassNo"
                     label="Djibouti Pass Number"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -138,7 +155,7 @@ const activeItems = [{
                     v-model="data.drvDjiboutiPIssuanceDate"
                     label="Djibouti Pass Issuance Date"
                     type="date"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -149,7 +166,7 @@ const activeItems = [{
                     v-model="data.drvDjiboutiPExpDate"
                     label="Djibouti Pass Expiry Date"
                     type="date"
-                    required
+                    :rules="[isEmptyValidator, hasExpired]"
                   />
                 </VCol>
                 <VCol
@@ -159,7 +176,7 @@ const activeItems = [{
                   <VSelect
                     v-model="data.drvDjiboutiPActiveStatus"
                     label="Djibouti Pass Active Status"
-                    required
+                    :rules="[isEmptyValidator]"
                     :items="activeItems"
                     item-title="text"
                     item-value="value"
