@@ -12,6 +12,7 @@ const headers = [
   { text: "Customer Name", value: "customerID.cmrName", sortable: true },
   { text: "Contact Name", value: "cntName", sortable: true },
   { text: "Contact Phone", value: "cntPhone", sortable: true },
+  { text: "", value: "operation" },
 ]
 
 const store = useStore()
@@ -26,20 +27,26 @@ onBeforeMount(() => {
   try {
     store.dispatch('fetchCustomerContacts')
     items.value = store.getters.customerContacts
-    console.log(items.value, "Here")
-    console.log(store.getters.customerContacts)
   } catch (err) {
-    console.error('Error dispatching fetchCustomers action:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
 
 })
 
+const deleteItem = async item => {
+  try {
+    await store.dispatch('deleteCustomerContact', item.id)
+    items.value = store.getters.customerContacts
+    await store.dispatch('fetchCustomerContacts')
+  } catch (err) {
+  }
+}
+
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: 'edit-customer', params: { id: clickedRow.id } })
 }
 
@@ -55,9 +62,8 @@ const props = {
     items,
   },
 
-  clickedRow: edit,
   loading: loading,
-
+  operation: deleteItem,
 }
 </script>
 

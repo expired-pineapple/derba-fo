@@ -48,7 +48,6 @@ const dispatch = async () => {
     fuelStations.value = store.getters.fuelStations
     fo.value = store.getters.fo
     fos.value = store.getters.fos
-    console.log('foooooo:', fo.value)
 
   } catch (err) {
     console.error('Error dispatching in fuel form:', err)
@@ -76,11 +75,9 @@ const submitForm = () => {
   } else {
     store.dispatch("createFuel", dataLocal.value)
   }
-  console.log("Submitting form data:", dataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createFuel action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -179,7 +176,7 @@ const submitForm = () => {
                     label="Fuel Station"
                     :items="fuelStations"
                     item-value="id"
-                    item-title="fuelStation"
+                    item-title="stnName"
                     :loading="loading"
                   />
                 </VCol>

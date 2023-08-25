@@ -15,7 +15,6 @@ const mtrCat = ref([])
 onBeforeMount(async () => {
   await store.dispatch('fetchMtrcats')
   mtrCat.value = store.getters.mtrcats
-  console.log(mtrCat.value)
 })
 
 const data = ref({
@@ -35,19 +34,26 @@ const resetForm = () => {
 }
 
 
-const submitForm = () => {
-  store.dispatch("createCommodity", data.value)
+const submitForm = async() => {
+  await store.dispatch("createCommodity", data.value)
 
   const error = computed(() => store.getters.foError)
 
   if (error.value) {
-    console.error('Error dispatching createComoditie action:', error.value)
     errorAlert.value = true
   } else {
     successAlert.value = true
     resetForm()
   }
   
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -59,7 +65,6 @@ const submitForm = () => {
         border="start"
         variant="tonal"
         closable
-        close-label="Close Alert"
         type="success"
         title="Success!"
         text="Comoditie Form saved successfully"
@@ -89,14 +94,14 @@ const submitForm = () => {
                   <VTextField
                     v-model="data.mtrName"
                     label="Comodity Name"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol>
                   <VSelect
                     v-model="data.mtrCat"
                     label="Comodity Category"
-                    required
+                    :rules="[isEmptyValidator]"
                     :items="mtrCat"
                     item-title="mtrCatCol"
                     item-value="id"
@@ -106,7 +111,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="data.mtrPackaging"
                     label="Comodity Packaging"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 

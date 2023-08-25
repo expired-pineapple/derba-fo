@@ -37,13 +37,9 @@ const dispatch = async () => {
     await store.dispatch("fetchCustomers")
     
     trucks.value = store.getters.trucks
-    console.log('trucks:', trucks.value)
     trips.value = store.getters.trips
-    console.log("trips:", trips.value)
     material.value = store.getters.commodities
-    console.log('commodities:', material.value)
     customer.value = store.getters.customers
-    console.log('customer:', customer.value)
   } catch (err) {
     console.error('Error dispatching in fo form:', err)
   } finally {
@@ -69,7 +65,6 @@ const store = useStore()
 const submitForm = () => {
   store.dispatch("createFo", dataLocal.value)
 
-  console.log("Submitting form data:", dataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {

@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -33,7 +32,6 @@ const dispatch = async () => {
     
     data.value = store.getters.fleetThirdParties
     insurance.value = store.getters.fleetThirdParty
-    console.log('insurance:', insurance.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +44,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredInsurances = data.value.filter(item => {
@@ -63,11 +59,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing:', item)
   router.push({ name: 'edit-fleet-third-party', params: { id: item.id } })
   await store.dispatch('fetchFleetThirdParty', item.id)
   insurance.value = store.getters.fleetThirdParty
-  console.log('Insurance:', insurance.value)
 }
 
 const editSelected = item => {
@@ -77,7 +71,6 @@ const editSelected = item => {
 const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleetThirdParty', insurance.value)
     await dispatch()
@@ -103,7 +96,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleetThirdParty', item.id)
   await dispatch()
   router.push('/fleet-third-party')

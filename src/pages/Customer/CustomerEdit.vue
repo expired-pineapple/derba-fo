@@ -116,8 +116,6 @@ const route = useRoute()
 
 const store = useStore()
 
-console.log('route.params.id:', route.params)
-
 const loading = ref(false)
 const { fetchCustomer } = mapActions('FOModule', ['fetchCustomer'])
 
@@ -130,14 +128,11 @@ onBeforeMount(async () => {
     await store.dispatch('fetchCustomer', route.params.id )
     customer.value = store.getters.customer
   } catch (err) {
-    console.error('Error dispatching fetchCustomer action:', err)
   } finally {
     loading.value = false
   }
 })
 
-
-console.log('customer:', customer.value)
 
 const customers = ref(store.getters.customers)
 
@@ -149,11 +144,9 @@ const updateCustomer = mapActions('FOModule', ['updateCustomer'])
 const submitForm = async () => {
   try {
     await store.dispatch('updateCustomer', { id: route.params.id, customer: customer.value })
-    console.log('customer:', customer.value)
     await store.dispatch('fetchCustomers')
     successAlert.value = true
   } catch (err) {
-    console.error('Error dispatching updateCustomer action:', err)
     errorAlert.value = true
   }
 }

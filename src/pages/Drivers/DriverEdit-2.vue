@@ -20,7 +20,6 @@ const { fetchDrivers } = mapActions('driverModule', ['fetchDrivers', 'fetchDrive
 const { fetchDriverAssignedTrucks } = mapActions('vehicleModule', ['fetchDriverAssignedTrucks'])
 
 const dispatch = async () =>{
-  console.log("Here disp")
   await store.dispatch("fetchDriver", route.params.id)
   await store.dispatch("fetchDriverPassport", route.params.id)
   await store.dispatch("fetchDriverLicence", route.params.id)
@@ -35,7 +34,6 @@ onBeforeMount(async () => {
     await store.dispatch("fetchDrivers")
     await dispatch()
   } catch (err) {
-    console.error('Error dispatching fetchDrivers action:', err)
   }
 })
 
@@ -48,7 +46,6 @@ const driverLeave  = computed(() => store.getters.driverLeaveLog)
 const truck = computed(() => store.getters.driverAssignedTrucks)
 const djiboutPass = computed(() => store.getters.djiboutiPass)
 
-console.log(truck.value, "driverAssignedTrucks")
 
 
 const emergencyProps = {
@@ -71,9 +68,6 @@ const djiboutPassProps = {
   djiboutPass,
 }
 
-
-console.log(items.value)
-console.log(model.value)
 
 const activeTab = ref(route.params.tab)
 

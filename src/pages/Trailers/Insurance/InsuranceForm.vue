@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import router from '@/router'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -35,20 +35,19 @@ onBeforeMount(async () => {
     trucks.value = store.getters.trucks
     trailers.value = store.getters.trailers
   } catch (err) {
-    console.error("Error dispatching fetch action:", err)
+    loading.value = false
   }finally{
     loading.value = false
   }
 })
 
-const error = store.getters.vehicleError
 
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", trailerInsuranceDataLocal.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createTrailerInsurance", trailerInsuranceDataLocal.value)
-    if(!error) {
+    await store.dispatch("createTrailerInsurance", trailerInsuranceDataLocal.value)
+
+    const error = computed(() => store.getters.vehicleError)
+    if(!error.value) {
       successAlert.value = true
       resetForm()
       store.dispatch("fetchTrailerInsurances")
@@ -59,7 +58,22 @@ const submitForm = () => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createtrailerInsurance action:", err)
+    errorAlert.value = true
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -112,7 +126,7 @@ const submitForm = () => {
                       item-value="id"
                       item-title="FltId.fltFleetNo"
                       label="Truck"
-                      required
+                      :rules="[isEmptyValidator]"
                       :loading="loading"
                     />
                   </VCol>
@@ -126,8 +140,8 @@ const submitForm = () => {
                       item-value="id"
                       item-title="plate_number"
                       label="Trailer"
-                      required
-                      persistent-hint="Trailer plate number"
+                      :rules="[isEmptyValidator]"
+                      placeholder="Trailer plate number"
                       :loading="loading"
                     />
                   </VCol>
@@ -138,7 +152,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="trailerInsuranceDataLocal.trlInsRegistrationNo"
                       label="Insurance Registration Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -148,7 +162,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="trailerInsuranceDataLocal.trlInsIssuanceDate"
                       label="Issuance Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -159,7 +173,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="trailerInsuranceDataLocal.trlInsValidationDate"
                       label="Valid Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -170,13 +184,17 @@ const submitForm = () => {
                     <VTextField
                       v-model="trailerInsuranceDataLocal.trlInsPolicyNo"
                       label="Insurance Policy Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol cols="12">
-                    <VSwitch
+                    <VSelect
                       v-model="trailerInsuranceDataLocal.trlInscActive"
-                      label="Active"
+                      label="Insurance Active"
+                      :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                      item-value="value"
+                      item-title="text"
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                 </VRow>

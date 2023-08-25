@@ -50,7 +50,6 @@ const dispatch = async () => {
     fos.value = store.getters.fos
     fo.value = store.getters.fo
     settlement.value = store.getters.settlement[0]
-    console.log('settlement:', settlement.value)
 
     if (settlement.value != null ) {
 
@@ -61,8 +60,6 @@ const dispatch = async () => {
       dataLocal.value = { ...data }
     }
 
-    console.log('fos:', fos.value)
-    console.log('advance:', advance.value)
   } catch (err) {
     console.error('Error dispatching in fuel form:', err)
   } finally {
@@ -92,11 +89,9 @@ const submitForm = () => {
   } else{
     store.dispatch("createSettlement", dataLocal.value)
   }
-  console.log("Submitting form data:", dataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createFo action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false

@@ -19,8 +19,6 @@ const loading = ref(false)
 const editEmergencyContact = ref(false)
 
 const emergencyContact = ref(emergencyProps.emergencyContact)
-
-console.log(emergencyContact.value, "asdfg")
 </script>
 
 
@@ -86,16 +84,6 @@ console.log(emergencyContact.value, "asdfg")
             v-model="emergencyCont.drvContactAdress"
             label="Contact Adress"
             placeholder="Addis Ababa, Ethiopia"
-            :disabled="!editEmergencyContact"
-          />
-        </VCol>
-        <VCol
-          md="6"
-          cols="12"
-        >
-          <VSwitch
-            v-model="emergencyCont.drvContactActiveStatus"
-            label="Contact Active Status"
             :disabled="!editEmergencyContact"
           />
         </VCol>

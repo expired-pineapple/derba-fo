@@ -15,7 +15,8 @@ const truckLocal = ref(structuredClone(truck))
 const editTruck = ref(false)
 
 const submitForm = () => {
-  console.log(truckLocal.value)
+  editTruck.value = false
+  truckLocal.value = structuredClone(truck)
 }
 </script>
 

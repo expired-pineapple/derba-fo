@@ -67,7 +67,6 @@ const items = ref([])
 const loading = ref(true)
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/trip-information/${clickedRow.id}`)
 }
 
@@ -76,7 +75,7 @@ onMounted(async () => {
     await store.dispatch("fetchRoutes")
     items.value = store.getters.routes
   } catch (err) {
-    console.error('Error dispatching fetchTrailers action:', err)
+    loading.value = !loading.value
   } finally {
     loading.value = !loading.value
   }

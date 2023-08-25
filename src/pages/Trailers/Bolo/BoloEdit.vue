@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -33,7 +32,6 @@ const dispatch = async () => {
     
     data.value = store.getters.trailerBoloes
     bolo.value = store.getters.trailerBolo
-    console.log('Bolo:', bolo.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +44,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredBoloes = data.value.filter(item => {
@@ -63,11 +59,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-trailer-bolo', params: { id: item.id } })
   await store.dispatch('fetchTrailerBolo', item.id)
   bolo.value = store.getters.trailerBolo
-  console.log('Bolo:', bolo.value)
 }
 
 const editSelected = item => {
@@ -77,7 +71,6 @@ const editSelected = item => {
 const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerBolo', bolo.value)
     await dispatch()
@@ -93,7 +86,6 @@ const submitForm = async () => {
       }, 3000)
     }
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -103,7 +95,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteTrailerBolo', item.id)
   await dispatch()
   router.push('/trailer-bolo')
@@ -114,6 +105,21 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
 }
 </script>
 
@@ -305,7 +311,7 @@ const editEnabled = () => {
                           item-value="id"
                           item-title="FltId.fltFleetNo"
                           label="Truck"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                         />
                       </VCol>
@@ -319,7 +325,7 @@ const editEnabled = () => {
                           item-value="id"
                           item-title="plate_number"
                           label="Trailer"
-                          required
+                          :rules="[isEmptyValidator]"
                           persistent-hint="Trailer plate number"
                           :loading="loading"
                         />
@@ -331,7 +337,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBolo_no"
                           label="Bolo Number"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                         />
                       </VCol>
@@ -342,7 +348,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBoloissuedate"
                           label="Bolo Issued Date"
-                          required
+                          :rules="[isEmptyValidator]"
                           :loading="loading"
                           type="date"
                         />
@@ -354,7 +360,7 @@ const editEnabled = () => {
                         <VTextField
                           v-model="bolo.trlBoloExpireDate"
                           label="Bolo Expiry Date"
-                          required
+                          :rules="[isEmptyValidator, hasExpired]"
                           :loading="loading"
                           type="date"
                         />
@@ -366,7 +372,7 @@ const editEnabled = () => {
                         <VSwitch
                           v-model="bolo.trlBoloActive"
                           label="Bolo Active"
-                          required
+                          :rules="[isEmptyValidator]"
                         />
                       </VCol>
       

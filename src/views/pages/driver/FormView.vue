@@ -55,7 +55,7 @@ const  submitForm = () => {
       }, 3000)
     }
   }catch(e){
-    console.log(e)
+    errorMessage.value = true
   }
   
 }

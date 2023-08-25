@@ -25,7 +25,6 @@ onMounted(async () => {
 
 const items = computed(() => store.getters.driverLeaveLogs)
 
-console.log(items.value)
 
 const headers = [
   { text: "Full Name", value: "driverID.driver_name", sortable: true },
@@ -45,7 +44,6 @@ const leaveForm = () => {
 const clickedRow = ref({})
 
 const editDriverLeave = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "driver-leave-edit", params: { id: clickedRow.id } })
 }
 

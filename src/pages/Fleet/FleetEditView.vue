@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const fleetId = route.params.id
 
-console.log('Fleet ID:', fleetId)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -28,7 +27,6 @@ const dispatch = async () => {
     
     fleets.value = store.getters.fleets
     fleet.value = store.getters.fleet
-    console.log('Fleet:', fleet.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -41,8 +39,6 @@ onBeforeMount(async () => {
 })
 
 const searchFleet = () => {
-  console.log('Searching fleet...')
-
   const search = searchValue.value
 
   const filteredFleets = fleets.value.filter(item => {
@@ -58,11 +54,9 @@ const searchFleet = () => {
 }
 
 const editFleet = async item => {
-  console.log('Editing fleet:', item)
   router.push({ name: 'edit-fleet', params: { id: item.id } })
   await store.dispatch('fetchFleet', item.id)
   fleet.value = store.getters.fleet
-  console.log('Fleet:', fleet.value)
 }
 
 const editSelected = item => {
@@ -70,7 +64,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleet', fleet.value)
     successAlert.value = true
@@ -89,7 +82,6 @@ const submitForm = async () => {
 }
 
 const deleteFleet = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleet', item.id)
   await dispatch()
   router.push('/fleet')
@@ -100,6 +92,15 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -300,7 +301,7 @@ const editEnabled = () => {
                       v-model="fleet.fltFleetNo"
                       :loading="loading"
                       label="Fleet Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -313,7 +314,7 @@ const editEnabled = () => {
                       v-model="fleet.fltPlateNo"
                       :loading="loading"
                       label="Plate Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -326,7 +327,7 @@ const editEnabled = () => {
                       v-model="fleet.fltCapacity"
                       :loading="loading"
                       label="Capacity(tons)"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -339,7 +340,7 @@ const editEnabled = () => {
                       v-model="fleet.fltMake"
                       :loading="loading"
                       label="Make"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -352,7 +353,7 @@ const editEnabled = () => {
                       v-model="fleet.fltModel"
                       :loading="loading"
                       label="Model"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -365,7 +366,7 @@ const editEnabled = () => {
                       v-model="fleet.fltYear"
                       :loading="loading"
                       label="Year"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -377,7 +378,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltTrkEngineNo"
                       label="Truck Engine Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -389,7 +390,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltTrkChasNo"
                       label="Truck Chassis Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -401,7 +402,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltType"
                       label="Type"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -413,7 +414,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltAxleNo"
                       label="Axle Number"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -425,7 +426,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltEngineType"
                       label="Engine Type"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />
@@ -437,7 +438,7 @@ const editEnabled = () => {
                     <VTextField
                       v-model="fleet.fltEnginePower"
                       label="Engine Power"
-                      required
+                      :rules="[isEmptyValidator]"
                       outlined
                       dense
                     />

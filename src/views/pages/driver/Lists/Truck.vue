@@ -23,9 +23,6 @@ const headers = [
 
 const items = ref(truckProps.truck)
 
-console.log(items.value, "items")
-
-
 
 
 const props = {

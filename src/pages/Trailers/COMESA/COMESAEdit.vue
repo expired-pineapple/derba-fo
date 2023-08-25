@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -33,7 +32,6 @@ const dispatch = async () => {
     
     data.value = store.getters.trailerCOMESAs
     comesa.value = store.getters.trailerCOMESA
-    console.log('comesa:', comesa.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +44,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredCOMESAs = data.value.filter(item => {
@@ -63,24 +59,22 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-trailer-comesa', params: { id: item.id } })
   await store.dispatch('fetchTrailerCOMESA', item.id)
   comesa.value = store.getters.trailerCOMESA
-  console.log('COMESA:', comesa.value)
 }
 
 const editSelected = item => {
   edit(item)
 }
 
-const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerCOMESA', comesa.value)
     await dispatch()
+
+    const error = computed(() => store.getters.vehicleError)
     if(!error.value){
       successAlert.value = true
       setTimeout(() => {
@@ -93,7 +87,6 @@ const submitForm = async () => {
       }, 3000)
     }
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -103,7 +96,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteTrailerBolo', item.id)
   await dispatch()
   router.push('/trailer-insurance')
@@ -114,6 +106,21 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
 }
 </script>
 
@@ -306,7 +313,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="FltId.fltFleetNo"
                             label="Truck"
-                            required
+                            :rules="[isEmptyValidator]"
                             :loading="loading"
                           />
                         </VCol>
@@ -320,7 +327,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="plate_number"
                             label="Trailer"
-                            required
+                            :rules="[isEmptyValidator]"
                             persistent-hint="Trailer plate number"
                             :loading="loading"
                           />
@@ -332,7 +339,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaNo"
                             label="COMESA Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -342,7 +349,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaYellowNo"
                             label="Yellow Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -352,7 +359,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaIssuanceDate"
                             label="Issuance Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -363,7 +370,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaValidDate"
                             label="Valid Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -374,7 +381,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="comesa.trlComesaCountry"
                             label="Country"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol cols="12">
