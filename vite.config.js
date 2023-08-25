@@ -46,6 +46,10 @@ export default defineConfig({
   },
   build: {
     chunkSizeWarningLimit: 5000,
+    rollupOptions: {
+      external: ["jspdf"],
+
+    },
   },
   optimizeDeps: {
     exclude: ['vuetify'],
