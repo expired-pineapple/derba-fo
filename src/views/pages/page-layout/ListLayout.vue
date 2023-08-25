@@ -43,19 +43,28 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
+  handleDownloadPDF: {
+    type: Object,
+    required: true,
+  },
+  placeholder: {
+    type: String,
+    required: false,
+  },
+  operation: {
+    type: Object,
+    required: true,
+  },
 })
 
 const searchField = ref("")
 const searchValue = ref("")
 
 const store = useStore()
-
-
-const loading = ref(store.getters.loading)
 </script>
 
 <template>
-  <VCard :loading="loading">
+  <VCard>
     <VCardTitle v-if="props.header">
       {{ props.header }}
     </VCardTitle>
@@ -64,7 +73,7 @@ const loading = ref(store.getters.loading)
       class="text-caption mx-4"
     >
       {{ props.subheader }}
-    </p>
+    </p>    
     <div 
       v-if="buttonVisible"
       class="d-flex"
@@ -131,7 +140,10 @@ const loading = ref(store.getters.loading)
         </VMenu>
       </div>
     </div>
-    <div v-else>
+    <div
+      v-else
+      class="d-flex justify-space-between"
+    >
       <VTextField
         v-model="searchValue"
         density="underlined"
@@ -140,7 +152,23 @@ const loading = ref(store.getters.loading)
         prepend-inner-icon="mdi-magnify"
         single-line
         hide-details
+        :placeholder="placeholder"
       />
+      <div
+        v-if="props.handleDownloadPDF"
+        class="download"
+      >
+        <VBtn
+          variant="outlined"
+          color="primary"
+          height="30"
+          class="ml-4 mt-3 mb-2 mr-4"
+          @click="props.handleDownloadPDF"
+        >
+          <VIcon>mdi-download</VIcon>
+          Download Report
+        </VBtn>
+      </div>
     </div>
     <EasyDataTable
       table-class-name="customize-table"
@@ -158,8 +186,9 @@ const loading = ref(store.getters.loading)
       <template #item-operation="item"> 
         <div class="cursor-pointer">
           <VIcon
-            icon="mdi-pencil" 
-            @click="editDriver(item)"
+            icon="mdi-delete-outline"
+            color="error"
+            @click="props.operation(item)"
           />
         </div>
       </template>

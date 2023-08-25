@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -33,9 +32,8 @@ const dispatch = async () => {
     
     data.value = store.getters.trailerThirdParties
     insurance.value = store.getters.trailerThirdParty
-    console.log('insurance:', insurance.value)
   } catch (err) {
-    console.error('Error dispatching in truck form:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
@@ -46,8 +44,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredInsurances = data.value.filter(item => {
@@ -63,11 +59,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing:', item)
   router.push({ name: 'edit-third-party', params: { id: item.id } })
   await store.dispatch('fetchTrailerThirdParty', item.id)
   insurance.value = store.getters.trailerThirdParty
-  console.log('Insurance:', insurance.value)
 }
 
 const editSelected = item => {
@@ -77,7 +71,6 @@ const editSelected = item => {
 const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerThirdParty', insurance.value)
     await dispatch()
@@ -93,7 +86,6 @@ const submitForm = async () => {
       }, 3000)
     }
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -103,7 +95,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteTrailerThirdParty', item.id)
   await dispatch()
   router.push('/trailer-third-party')

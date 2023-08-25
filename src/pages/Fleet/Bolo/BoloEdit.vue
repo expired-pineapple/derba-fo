@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('Fleet ID:', id)
-
 const loading = ref(true)
 const expanded = ref(false)
 
@@ -33,7 +31,6 @@ const dispatch = async () => {
     
     data.value = store.getters.fleetBoloes
     bolo.value = store.getters.fleetBolo
-    console.log('Bolo:', bolo.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +43,6 @@ onBeforeMount(async () => {
 })
 
 const searchFleet = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredBoloes = data.value.filter(item => {
@@ -63,11 +58,9 @@ const searchFleet = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-fleet-bolo', params: { id: item.id } })
   await store.dispatch('fetchFleetBolo', item.id)
   bolo.value = store.getters.fleetBolo
-  console.log('Bolo:', bolo.value)
 }
 
 const editSelected = item => {
@@ -75,7 +68,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleetBolo', bolo)
     successAlert.value = true
@@ -94,7 +86,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleetBolo', item.id)
   await dispatch()
   router.push('/fleet-bolo')
@@ -105,6 +96,21 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
 }
 </script>
 
@@ -297,6 +303,7 @@ const editEnabled = () => {
                         :loading="loading"
                         label="Truck"
                         required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -312,6 +319,7 @@ const editEnabled = () => {
                         required
                         persistent-hint="Fleet plate number"
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -323,6 +331,7 @@ const editEnabled = () => {
                         label="Bolo Number"
                         required
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -335,6 +344,7 @@ const editEnabled = () => {
                         required
                         type="date"
                         :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -347,17 +357,21 @@ const editEnabled = () => {
                         required
                         type="date"
                         :loading="loading"
+                        :rules="[isEmptyValidator, hasExpired]"
                       />
                     </VCol>
                     <VCol
                       md="6"
                       cols="12"
                     >
-                      <VSwitch
+                      <VSelect
                         v-model="bolo.FltBoloActive"
-                        label="Bolo Active"
+                        :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                        item-value="value"
+                        item-title="text"
+                        label="Bolo Status"
                         required
-                        :loading="loading"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   

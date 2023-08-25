@@ -43,11 +43,9 @@ onBeforeMount(async () => {
 
 const error = store.getters.vehicleError
 
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", trailerDataLocal.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createTrailer", trailerDataLocal.value)
+    await store.dispatch("createTrailer", trailerDataLocal.value)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -59,8 +57,26 @@ const submitForm = () => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createtrailer action:", err)
+    errorAlert.value = true
   }
+}
+
+const searchDriver = ref("")
+
+const searchD = () => {
+  drivers.value = searchDriver.value === ""
+    ? store.getters.drivers
+    : store.getters.drivers.filter(driver => {
+      return driver.driver_name.toLowerCase().includes(searchDriver.value.toLowerCase())
+    })
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -100,18 +116,6 @@ const submitForm = () => {
           <VCardText>
             <!-- 👉 Form -->
             <VForm class="mt-6">
-              <VRow
-                md="6"
-                cols="12"
-              >
-                <VSwitch
-                  v-model="trailerDataLocal.is_active"
-                  label="Is Active"
-                  required
-                  outlined
-                  dense
-                />
-              </VRow>
               <VRow>
                 <VCol
                   md="6"
@@ -120,7 +124,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="trailerDataLocal.fleet_number"
                     label="Fleet Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -132,7 +136,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="trailerDataLocal.plate_number"
                     label="Plate Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -143,8 +147,8 @@ const submitForm = () => {
                 >
                   <VTextField
                     v-model="trailerDataLocal.trailer_model"
-                    label="Fleet Number"
-                    required
+                    label="Trailer Model"
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -156,7 +160,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="trailerDataLocal.trailer_type"
                     label="Trailer Type"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -171,10 +175,29 @@ const submitForm = () => {
                     item-title="driver_name"
                     item-value="id"
                     label="Driver"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
-                  />
+                  >
+                    <template #prepend-item>
+                      <VListItem>
+                        <VListItemContent>
+                          <VTextField
+                            v-model="searchDriver"
+                            placeholder="Search"
+                            class="mx-4"
+                            outlined
+                            hide-details
+                            single-line
+                            clearable
+                            prepend-inner-icon="mdi-magnify"
+                            @input="searchD"
+                          />
+                        </VListItemContent>
+                      </VListItem>
+                      <VDivider />
+                    </template>
+                  </VSelect>
                 </VCol>
                 <VCol
                   md="6"
@@ -183,7 +206,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="trailerDataLocal.capacity"
                     label="Capacity"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -195,7 +218,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="trailerDataLocal.chasis_number"
                     label="Chasis Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -210,9 +233,22 @@ const submitForm = () => {
                     item-title="condition"
                     item-value="id"
                     label="Condition"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
+                  />
+                </VCol>
+                <VCol
+                  md="12"
+                  cols="12"
+                >
+                  <VSelect
+                    v-model="trailerDataLocal.is_active"
+                    :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                    item-title="text"
+                    item-value="value"
+                    label="Is Active"
+                    placeholder="Select a status"
                   />
                 </VCol>
                 <VCol
@@ -222,7 +258,6 @@ const submitForm = () => {
                   <VTextarea
                     v-model="trailerDataLocal.remarks"
                     label="Remarks"
-                    required
                     outlined
                     dense
                   />

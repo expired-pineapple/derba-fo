@@ -25,8 +25,6 @@ onBeforeMount(async () => {
 
 
 const items = ref(store.getters.fleetInsurances) 
-
-console.log(items.value) 
     
 const headers = [
   { text: "Plate Number", value: "FltId.fltPlateNo", sortable: true },
@@ -40,7 +38,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/fleet-insurance/${clickedRow.id}`)
 }
 

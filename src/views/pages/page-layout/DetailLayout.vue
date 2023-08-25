@@ -45,7 +45,6 @@ const generateSearchArray = () => {
       subtitle: item[props.subtitleField] ?? "",
     }))
   } else {
-    console.error("props.items is not an array")
   }
 }
 

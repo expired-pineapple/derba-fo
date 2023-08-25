@@ -1,6 +1,12 @@
 <script setup>
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import { useTheme } from 'vuetify'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+const store = useStore()
+const userData = computed(() => store.getters.user)
+
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
@@ -16,8 +22,8 @@ const drivers = [
   ['Driver Djibouti Pass', "mdi-card-account-details-outline", "/driver-djibouti-pass"],
   ['Driver Passport', 'mdi-passport', '/driver-passport'],
   ['Driver Leave Logs', 'mdi-account-minus-outline', '/driver-leave-logs'],
+  ['Infraction', 'mdi-account-alert-outline', '/infraction'],
   ['Assigned Trucks', 'mdi-truck-outline', '/trucks'],
-  ['Infractions', 'mdi-account-remove-outline', '/infractions'],
 ]
 
 
@@ -39,8 +45,6 @@ const FleetChildren = [
 
 const TrucksConfig = [
   ['Truck List', 'mdi-truck-outline', '/trucks'],
-  ['Insurance Claim', 'mdi-shield-car', '/insurance'],
-  ['Maintainence Request', 'mdi-wrench-cog-outline', '/maintainance'],
 ]
 
 const   Dispatch = [
@@ -60,10 +64,10 @@ const Customers = [
 
 const Settings = [
   ['Comodities', 'mdi-cash', '/comodities' ],
-  ['Infraction Type', 'mdi-account-remove-outline', '/infration-type'],
+  ['Comodity Categories', 'mdi-cash', '/category' ],
   ['Routes', 'mdi-map-marker-path', '/trip-information'],
-  ['Maintenance Type', 'mdi-wrench-cog-outline', '/maintenance-type'],
-  ['Truck Status', 'mdi-car-info', '/truck-status'],
+  ['Fuel Stations', 'mdi-fuel', '/fuel-station'],
+  ['User Logs', 'mdi-account-outline', '/user-logs'],
 ]
 
 const Tire = [
@@ -74,7 +78,6 @@ const Tire = [
 const Reports = [
   ['FO Report', 'mdi-truck-delivery-outline', '/fo-report'],
   ['Fuel Report', 'mdi-fuel', '/fuel-report'],
-  ['Truck Status Report', 'mdi-car-info', '/truck-status-report'],
 ]
 </script>
 
@@ -97,23 +100,29 @@ const Reports = [
 
         <NavbarThemeSwitcher class="me-2" />
 
-        <UserProfile style="color: white;" />
+        <UserProfile />
       </div>
     </template>
 
     <template #vertical-nav-content>
       <VList
         v-model="verticalNavActive"
-        style="width: 100%;"
+        style="width: 100%; background: none;"
         dense
         nav
         color="primary"
-        class="py-0"
+        class="py-0 elevation-0"
       >
         <VListItem
           prepend-icon="mdi-view-dashboard-outline"
           title="Dashboard"
           to="/dashboard"
+          color="primary"
+        />
+        <VListItem
+          prepend-icon="mdi-account-plus-outline"
+          title="Register Users"
+          to="/register-account"
           color="primary"
         />
         <VListGroup value="Drivers">
@@ -309,6 +318,8 @@ const Reports = [
     </template>
   </VerticalNavLayout>
 </template>
+
+
 
 <style lang="scss" scoped>
 .meta-key {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import router from '@/router'
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -37,20 +37,20 @@ onBeforeMount(async () => {
     trucks.value = store.getters.trucks
     trailers.value = store.getters.trailers
   } catch (err) {
-    console.error("Error dispatching fetch action:", err)
+    loading.value = false
   }finally{
     loading.value = false
   }
 })
 
-const error = store.getters.vehicleError
 
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", trailerThirdPartyDataLocal.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createTrailerThirdParty", trailerThirdPartyDataLocal.value)
-    if(!error) {
+    await store.dispatch("createTrailerThirdParty", trailerThirdPartyDataLocal.value)
+
+    const error = computed(() => store.getters.vehicleError)
+
+    if(!error.value) {
       successAlert.value = true
       resetForm()
       store.dispatch("fetchTrailerInsurances")
@@ -61,7 +61,7 @@ const submitForm = () => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createtrailerInsurance action:", err)
+    errorAlert.value = true
   }
 }
 </script>
@@ -129,7 +129,7 @@ const submitForm = () => {
                       item-title="plate_number"
                       label="Trailer"
                       required
-                      persistent-hint="Trailer plate number"
+                      placeholder="Trailer plate number"
                       :loading="loading"
                     />
                   </VCol>
@@ -173,16 +173,6 @@ const submitForm = () => {
                       label="Valid Date"
                       required
                       type="date"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    md="6"
-                  >
-                    <VTextField
-                      v-model="trailerThirdPartyDataLocal.trlInsPolicyNo"
-                      label="Insurance Policy Number"
-                      required
                     />
                   </VCol>
                   <VCol cols="12">

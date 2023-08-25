@@ -31,7 +31,8 @@ const driverLeave = computed(() => store.getters.driverLeaveLog)
 const editdriverLeave = ref(false)
 
 const submitForm = () => {
-  console.log("sub")
+  editdriverLeave.value = !editdriverLeave.value
+  store.dispatch("updateDriverLeaveLog", driverLeave.value)
 }
 </script>
 

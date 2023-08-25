@@ -32,7 +32,6 @@ const options = computed(() => {
   })
 })
 
-console.log(options.value, "op")
 
 const currentDriver = computed(() => {
   return drivers.value.find(driver => driver.id === items.value.driverID)
@@ -43,10 +42,9 @@ const errorAlert = ref(false)
 
 const loading = ref(computed(() => store.getters.loading))
 
-const submitForm = () =>{
-  console.log(items.value)
+const submitForm = async() =>{
   try{
-    store.dispatch("updateDriverLeaveLog", { leaveId: logID.value, leaveData: items.value })
+    await store.dispatch("updateDriverLeaveLog", { leaveId: logID.value, leaveData: items.value })
     
     const error = computed(() => store.getters.createError)
     if (error.value) {

@@ -36,6 +36,14 @@ const vehicleModule = {
     tireProvisions: [],
     tireReturn: {},
     tireReturns: [],
+    insurance: {},
+    insurances: [],
+    insuranceProvider: {},
+    insuranceProviders: [],
+    maintenance: {},
+    maintenances: [],
+    maintenanceProvider: {},
+    maintenanceProviders: [],
   },
   mutations: {
     // Mutation to set the loading state
@@ -183,6 +191,42 @@ const vehicleModule = {
     setTireReturns(state, tireReturns){
       state.tireReturns = tireReturns
     },
+    setInsurance(state, insurance){
+      state.insurance = insurance
+    },
+    setInsurances(state, insurances){
+      state.insurances = insurances
+    },
+    setInsuranceProvider(state, insuranceProvider){
+      state.insuranceProvider = insuranceProvider
+    },
+    setInsuranceProviders(state, insuranceProviders){
+      state.insuranceProviders = insuranceProviders
+    },
+    setMaintenance(state, maintenance){
+      state.maintenance = maintenance
+    },
+    setMaintenances(state, maintenances){
+      state.maintenances = maintenances
+    },
+    setMaintenanceProvider(state, maintenanceProvider){
+      state.maintenanceProvider = maintenanceProvider
+    },
+    setMaintenanceProviders(state, maintenanceProviders){
+      state.maintenanceProviders = maintenanceProviders
+    },
+    clearMaintenance(state){
+      state.maintenance = {}
+    },
+    clearMaintenanceProvider(state){
+      state.maintenanceProvider = {}
+    },
+    clearInsurance(state){
+      state.insurance = {}
+    },
+    clearInsuranceProvider(state){
+      state.insuranceProvider = {}
+    },
 
     clearTireProvision(state){
       state.tireProvision = {}
@@ -250,8 +294,6 @@ const vehicleModule = {
       try {
         const response = await axiosIns.get("/fleet")
 
-        console.log(response.data)
-
         commit("setFleets", response.data)
         commit("setLoading", false)
       }
@@ -287,7 +329,6 @@ const vehicleModule = {
       try {
         const response = await axiosIns.get("/trailers")
 
-        console.log(response.data)
 
         commit("setTrailers", response.data)
         commit("setLoading", false)
@@ -349,7 +390,6 @@ const vehicleModule = {
         const response = await axiosIns.get("/truck")
         const trucks = response.data
     
-        console.log(trucks, "trucks")
     
         const truckPromises = trucks.map(async truck => {
           const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
@@ -370,8 +410,7 @@ const vehicleModule = {
           const [conditionResponse] = await Promise.all([conditionPromise])
     
           truck.TrlId.condition = conditionResponse.data
-    
-          console.log(truck, "trucktruck")
+
     
           return truck
         })
@@ -379,7 +418,6 @@ const vehicleModule = {
         const updatedTrucks = await Promise.all(truckPromises)
     
         commit("setTrucks", updatedTrucks)
-        console.log(updatedTrucks, "updatedTrucks")
 
     
         commit("setLoading", false)
@@ -396,8 +434,7 @@ const vehicleModule = {
       try {
         const response = await axiosIns.get(`/truck/${id}`)
         const truck = response.data
-    
-        console.log(truck, "truck")
+
     
         const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
         const driverPromise = truck.DrvId ? axiosIns.get(`/drivers/${truck.DrvId}/`) : Promise.resolve(null)
@@ -418,13 +455,10 @@ const vehicleModule = {
 
         truck.TrlId.condition = conditionResponse.data
 
-        
-        console.log(truck, "updatedTruck")
        
         commit("setTruck", truck)    
         commit("setLoading", false)
       } catch (error) {
-        console.log(error)
         commit("setError", error.message)
         commit("setLoading", false)
       }
@@ -439,11 +473,10 @@ const vehicleModule = {
         const response = await axiosIns.get(`/truck/${id}`)
         const truck = response.data
 
-        console.log(truck, "truck")
 
         commit("setTruck", truck)
       } catch (error) {
-        console.log(error)
+
         commit("setError", error.message)
       }finally{
         commit("setLoading", false)
@@ -458,8 +491,6 @@ const vehicleModule = {
         const response = await axiosIns.get(`/truck/?DrvId=${driverId}`)
         
         const trucks = response.data
-    
-        console.log(trucks, "trucks")
     
         const truckPromises = trucks.map(async truck => {
           const fleetPromise = axiosIns.get(`/fleet/${truck.FltId}/`)
@@ -480,8 +511,6 @@ const vehicleModule = {
           const [conditionResponse] = await Promise.all([conditionPromise])
     
           truck.TrlId.condition = conditionResponse.data
-    
-          console.log(truck, "trucktruck")
     
           return truck
         })
@@ -546,6 +575,7 @@ const vehicleModule = {
     async updateTruck({ commit }, truck) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearTruck")
     
       try {
         const response = await axiosIns.put(`/truck/${truck.id}/`, truck)
@@ -586,7 +616,6 @@ const vehicleModule = {
 
         return response.data
       } catch (error) {
-        console.log(error, "here")
         commit("setError", error)
         commit("setLoading", false)
       }
@@ -595,6 +624,7 @@ const vehicleModule = {
     async updateTrailer({ commit }, trailer) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearTrailer")
     
       try {
         const response = await axiosIns.put(`/trailer/${trailer.id}/`, trailer)
@@ -643,6 +673,7 @@ const vehicleModule = {
     async updateFleet({ commit }, fleet) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearFleet")
     
       try {
         const response = await axiosIns.put(`/fleet/${fleet.id}/`, fleet)
@@ -692,6 +723,7 @@ const vehicleModule = {
     async updateTrip({ commit }, trip) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearTrip")
     
       try {
         const response = await axiosIns.put(`/trip/${trip.id}/`, trip)
@@ -708,6 +740,7 @@ const vehicleModule = {
     async deleteTrip({ commit }, id) {
       commit("setLoading", true)
       commit("clearError")
+
     
       try {
         const response = await axiosIns.delete(`/trip/${id}/`)
@@ -740,6 +773,7 @@ const vehicleModule = {
     async updateCondition({ commit }, condition) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearCondition")
     
       try {
         const response = await axiosIns.put(`/condition/${condition.id}/`, condition)
@@ -786,6 +820,7 @@ const vehicleModule = {
     async updateFleetBolo({ commit }, { id, fleetBolo }) {
       commit("setLoading", true)
       commit("clearError")
+      commit("clearFleetBolo")
     
       try {
         const response = await axiosIns.put(`/fltbolo/${id}/`, fleetBolo)
@@ -877,7 +912,6 @@ const vehicleModule = {
 
         const updatedFleetCOMESAs = await Promise.all(FleetCOMESAPromises)
 
-        console.log(updatedFleetCOMESAs)
 
         commit("setFleetCOMESAs", updatedFleetCOMESAs)
         commit("setLoading", false)
@@ -923,6 +957,7 @@ const vehicleModule = {
     async updateFleetCOMESA({ commit }, { id, FleetCOMESAData }) {
       commit("setLoading", true)
       commit("clearFleetCOMESA")
+      commit("clearError")
     
       try {
         await axiosIns.put(`/fltcomesa/${id}/`, FleetCOMESAData)
@@ -1020,17 +1055,14 @@ const vehicleModule = {
       commit("clearTrailerBolo")
     
       try {
-        console.log(trailerBolo)
 
         const response = await axiosIns.put(`/trlbolo/${trailerBolo.id}/`, trailerBolo)
     
         commit("setLoading", false)
         commit("setTrailerBolo", response.data)
-        console.log(response.data)
         
         return response.data
       } catch (error) {
-        console.log(error)
         commit("setError", error)
         commit("setLoading", false)
       }
@@ -1071,8 +1103,6 @@ const vehicleModule = {
         })
 
         const updatedTrailerCOMESAs = await Promise.all(trailerCOMESAPromises)
-
-        console.log(updatedTrailerCOMESAs, "updatedTrailerCOMESAs")
 
         commit("setTrailerCOMESAs", updatedTrailerCOMESAs)
         commit("setLoading", false)
@@ -1168,7 +1198,6 @@ const vehicleModule = {
 
         const updatedTrailerInsurances = await Promise.all(trailerInsurancePromises)
 
-        console.log(updatedTrailerInsurances, "updatedTrailerInsurances")
 
         commit("setTrailerInsurances", updatedTrailerInsurances)
         commit("setLoading", false)
@@ -1184,9 +1213,6 @@ const vehicleModule = {
 
       try {
         const response = await axiosIns.get(`/trlinsurance/${id}`)
-
-        console.log(response.data, "here")
-
 
         commit("setTrailerInsurance", response.data)
         commit("setLoading", false)
@@ -1251,8 +1277,6 @@ const vehicleModule = {
         const updatedTrailerThirdParty = await Promise.all(trailerThirdPartyPromises)
 
         commit("setTrailerThirdParties", updatedTrailerThirdParty)
-
-        console.log(updatedTrailerThirdParty, "updatedTrailerThirdParties")
 
         commit("setLoading", false)
       }
@@ -1345,8 +1369,6 @@ const vehicleModule = {
         })
 
         const updatedFleetThirdParty = await Promise.all(fleetThirdPartyPromises)
-
-        console.log(updatedFleetThirdParty, "updatedFleetThirdParty")
 
         commit("setFleetThirdParties", updatedFleetThirdParty)
         commit("setLoading", false)
@@ -1455,8 +1477,6 @@ const vehicleModule = {
 
         const updatedFleetInsurances = await Promise.all(fleetInsurancePromises)
 
-        console.log(updatedFleetInsurances, "FleetInsurances")
-
 
         commit("setFleetInsurances", updatedFleetInsurances)
         commit("setLoading", false)
@@ -1552,13 +1572,10 @@ const vehicleModule = {
 
         const updatedTireProvisions = await Promise.all(tireProvisionPromises)
 
-        console.log(updatedTireProvisions, "tireProvisions")
-
         commit("setTireProvisions", updatedTireProvisions)
 
       }catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1570,14 +1587,11 @@ const vehicleModule = {
       try {
         const response = await axiosIns.get(`/tireprovision/${id}`)
 
-        console.log(response.data, "here")
-
         commit("setTireProvision", response.data)
         commit("setLoading", false)
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1594,7 +1608,6 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1612,7 +1625,6 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1627,7 +1639,6 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1652,12 +1663,9 @@ const vehicleModule = {
 
         const updatedTireReturns = await Promise.all(tireReturnPromises)
 
-        console.log(updatedTireReturns, "tireReturns")
-
         commit("setTireReturns", updatedTireReturns)
       }catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1669,14 +1677,11 @@ const vehicleModule = {
       try {
         const response = await axiosIns.get(`/tirereturn/${id}`)
 
-        console.log(response.data, "here")
-
         commit("setTireReturn", response.data)
         commit("setLoading", false)
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1693,7 +1698,6 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1711,7 +1715,6 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
         commit("setLoading", false)
       }
     },
@@ -1726,7 +1729,264 @@ const vehicleModule = {
       }
       catch (error) {
         commit("setError", error)
-        console.log(error)
+        commit("setLoading", false)
+      }
+    },
+    
+    async fetchInsuranceProviders({ commit }, id){
+      const url = id ? `/insuranceProvider/${id}` : "/insuranceProvider/"
+
+      const response = await axiosIns.get(url)
+      const insuranceProviders = response.data
+
+
+      if(id){
+        commit("setInsuranceProvider", insuranceProviders)
+      }else{
+        commit("setInsuranceProviders", insuranceProviders)
+      }
+    },
+    async createInsuranceProvider({ commit }, insuranceProvider){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/insuranceProvider/", insuranceProvider)
+        const newInsuranceProvider = response.data
+  
+        commit("setInsuranceProvider", newInsuranceProvider)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async updateInsuranceProvider({ commit }, { id, insuranceProvider }){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.put(`/insuranceProvider/${id}/`, insuranceProvider)
+        const updatedInsuranceProvider = response.data
+      
+        commit("setInsuranceProvider", updatedInsuranceProvider)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteInsuranceProvider({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/insuranceProvider/${id}`)
+        commit("clearInsuranceProvider")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async fetchInsurances({ commit }, id){
+      const url = id ? `/insurance/${id}` : "/insuranceClaim/"
+
+      const response = await axiosIns.get(url)
+      const insurances = response.data
+
+      if(id){
+        commit("setInsurance", insurances)
+      }else{
+        commit("setInsurances", insurances)
+      }
+    },
+
+    async createInsurance({ commit }, insurance){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/insuranceClaim/", insurance)
+        const newInsurance = response.data
+  
+        commit("setInsurance", newInsurance)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateInsurance({ commit }, { id, insurance }){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearInsurance")
+
+      try {
+        const response = await axiosIns.put(`/insuranceClaim/${id}/`, insurance)
+        const updatedInsurance = response.data
+      
+        commit("setInsurance", updatedInsurance)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async deleteInsurance({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/insurance/${id}`)
+        commit("clearInsurance")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async fetchMaintenanceProviders({ commit }, id){
+      const url = id ? `/maintenanceProvider/${id}` : "/maintenanceProvider/"
+
+      const response = await axiosIns.get(url)
+      const maintenanceProviders = response.data
+
+      if(id){
+        commit("setMaintenanceProvider", maintenanceProviders)
+      }else{
+        commit("setMaintenanceProviders", maintenanceProviders)
+      }
+    },
+    async createMaintenanceProvider({ commit }, maintenanceProvider){
+      commit("setLoading", true)
+      commit("clearError")
+
+      try {
+        const response = await axiosIns.post("/maintenanceProvider/", maintenanceProvider)
+        const newMaintenanceProvider = response.data
+  
+        commit("setMaintenanceProvider", newMaintenanceProvider)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async updateMaintenanceProvider({ commit }, { id, maintenanceProvider }){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearMaintenanceProvider")
+
+      try {
+        const response = await axiosIns.put(`/maintenanceProvider/${id}/`, maintenanceProvider)
+        const updatedMaintenanceProvider = response.data
+      
+        commit("setMaintenanceProvider", updatedMaintenanceProvider)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async deleteMaintenanceProvider({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/maintenanceProvider/${id}`)
+        commit("clearMaintenanceProvider")
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+    async fetchMaintenances({ commit }, id) {
+      try {
+        const url = id ? `/maintenance/${id}` : "/maintenance/"
+    
+        const response = await axiosIns.get(url)
+        const maintenances = response.data
+    
+    
+        if (id) {
+          commit("setMaintenance", maintenances)
+        } else {
+          const updatedMaintenance = await Promise.all(
+            maintenances.map(async maintenance => {
+              const [truckResponse, maintenanceProviderResponse] = await Promise.all([
+                axiosIns.get(`/truck/${maintenance.TrkId}`),
+                axiosIns.get(`/maintenanceProvider/${maintenance.maintenanceProvider}`),
+              ])
+    
+              const truck = truckResponse.data
+
+              const [fleet] = await Promise.all([
+                axiosIns.get(`/fleet/${truck.FleetID}`),
+              ])
+    
+              const maintenanceProvider = maintenanceProviderResponse.data
+    
+              maintenance.TrkId = truck
+              maintenance.maintenanceProvider = maintenanceProvider
+              maintenance.TrkId.FleetID = fleet
+    
+              return maintenance
+            }),
+          )
+    
+          commit("setMaintenances", updatedMaintenance)
+        }
+      } catch (error) {
+        commit("setError", error.response || error)
+      }
+    },
+
+    async createMaintenance({ commit }, maintenance){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearMaintenance")
+
+      try {
+        const response = await axiosIns.post("/maintenance/", maintenance)
+        const newMaintenance = response.data
+  
+        commit("setMaintenance", newMaintenance)
+        commit("setLoading", false)
+      } catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async updateMaintenance({ commit }, { id, maintenance }){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearMaintenance")
+
+      try {
+        const response = await axiosIns.put(`/maintenance/${id}/`, maintenance)
+        const updatedMaintenance = response.data
+      
+        commit("setMaintenance", updatedMaintenance)
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
+        commit("setLoading", false)
+      }
+    },
+
+    async deleteMaintenance({ commit }, id){
+      commit("setLoading", true)
+      try {
+        await axiosIns.delete(`/maintenance/${id}`)
+        commit("clearMaintenance")
+        commit("setLoading", false)
+      }
+      catch (error) {
+        commit("setError", error.response)
         commit("setLoading", false)
       }
     },
@@ -1765,6 +2025,12 @@ const vehicleModule = {
     tireProvisions: state => state.tireProvisions,
     tireReturn: state => state.tireReturn,
     tireReturns: state => state.tireReturns,
+    insurance: state => state.insurance,
+    insurances: state => state.insurances,
+    insuranceProvider: state => state.insuranceProvider,
+    insuranceProviders: state => state.insuranceProviders,
+    maintenance: state => state.maintenance,
+    
   },
 }
 

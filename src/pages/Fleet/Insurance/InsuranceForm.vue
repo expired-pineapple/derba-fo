@@ -43,11 +43,9 @@ onBeforeMount(async () => {
 
 const error = store.getters.vehicleError
 
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", insuranceDataLocal.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createFleetInsurance", insuranceDataLocal.value)
+    await store.dispatch("createFleetInsurance", insuranceDataLocal.value)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -60,6 +58,21 @@ const submitForm = () => {
     }
   } catch (err) {
     console.error("Error dispatching action:", err)
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpired = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
   }
 }
 </script>
@@ -112,7 +125,7 @@ const submitForm = () => {
                       item-value="id"
                       item-title="FltId.fltFleetNo"
                       label="Truck"
-                      required
+                      :rules="[isEmptyValidator]"
                       :loading="loading"
                     />
                   </VCol>
@@ -126,8 +139,8 @@ const submitForm = () => {
                       item-value="id"
                       item-title="fltPlateNo"
                       label="Fleet plate number"
-                      required
-                      persistent-hint="Fleet plate number"
+                      :rules="[isEmptyValidator]"
+                      placeholder="Fleet plate number"
                       :loading="loading"
                     />
                   </VCol>
@@ -138,7 +151,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="insuranceDataLocal.FltInsRegistrationNo"
                       label="Insurance Registration Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -148,7 +161,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="insuranceDataLocal.FltInsIssuanceDate"
                       label="Issuance Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -159,7 +172,7 @@ const submitForm = () => {
                     <VTextField
                       v-model="insuranceDataLocal.FltInsExpireDate"
                       label="Expiry Date"
-                      required
+                      :rules="[isEmptyValidator, hasExpired]"
                       type="date"
                     />
                   </VCol>
@@ -170,13 +183,17 @@ const submitForm = () => {
                     <VTextField
                       v-model="insuranceDataLocal.FltInsPolicyNo"
                       label="Insurance Policy Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol cols="12">
-                    <VSwitch
+                    <VSelect
                       v-model="insuranceDataLocal.FltInscActive"
-                      label="Active"
+                      :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                      item-value="value"
+                      item-title="text"
+                      label="Insurance Status"
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                 </VRow>

@@ -37,11 +37,9 @@ onBeforeMount(async () => {
 
 const error = store.getters.vehicleError
 
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", tire.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createTireProvision", tire.value)
+    await store.dispatch("createTireProvision", tire.value)
     if(!error) {
       successAlert.value = true
       resetForm()
@@ -61,6 +59,14 @@ const items = [
   { value: true, text: 'Yes' },
   { value: false, text: 'No' },
 ]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -75,7 +81,7 @@ const items = [
           close-label="Close Alert"
           type="success"
           title="Success!"
-          text="Trailer details saved successfully"
+          text="Tire Provision details saved successfully"
           timeout="5000"
         />
         <VAlert
@@ -86,7 +92,7 @@ const items = [
           close-label="Close Alert"
           type="error"
           title="Error!"
-          text="Trailer details not saved successfully"
+          text="Tire Provision details not saved successfully"
           timeout="5000"
         />
         <VCard title="Tire Provision Details">
@@ -111,7 +117,7 @@ const items = [
                     item-title="FltId.fltFleetNo"
                     item-value="id"
                     placeholder="Select Truck"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -121,7 +127,7 @@ const items = [
                   <VTextField
                     v-model="tire.NewTyerIssuNo"
                     label="Issue Number"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -133,6 +139,7 @@ const items = [
                     label="Date"
                     required
                     type="date"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -144,6 +151,7 @@ const items = [
                     label="KM"
                     required
                     type="number"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -153,7 +161,7 @@ const items = [
                   <VTextField
                     v-model="tire.NewTyerBrand"
                     label="Brand"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -163,7 +171,7 @@ const items = [
                   <VTextField
                     v-model="tire.NewTyerSerialNo"
                     label="Serial Number"
-                    required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol>
@@ -174,6 +182,7 @@ const items = [
                     item-title="text"
                     label="Active"
                     color="primary"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol

@@ -27,13 +27,22 @@ const errorAlert = ref(false)
 const loading = ref(false)
 
 const fos = ref([])
+const advance = ref({})
+const edit = ref(false)
 
 const dispatch = async () => {
   try {
     await store.dispatch("fetchFos", route.params.id)
-  
+    await store.dispatch("fetchAdvances", route.params.id)
+
+    advance.value = store.getters.advance
     fos.value = store.getters.fo
-    console.log('fos:', fos.value)
+
+    if (advance.value !== null && advance.value.length > 0) {
+      edit.value = true
+      dataLocal.value = { ...advance.value[0] }
+    }
+
 
   } catch (err) {
     console.error('Error dispatching in advance form:', err)
@@ -65,13 +74,14 @@ const resetForm = () => {
 const store = useStore()
 
 const submitForm = () => {
-  store.dispatch("createAdvance", dataLocal.value)
-
-  console.log("Submitting form data:", dataLocal.value)
+  if (edit.value) {
+    store.dispatch("updateAdvance", dataLocal.value)
+  }else{
+    store.dispatch("createAdvance", dataLocal.value)
+  }
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createFo action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false

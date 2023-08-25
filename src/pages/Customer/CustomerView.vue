@@ -28,9 +28,7 @@ onMounted(() => {
   try {
     store.dispatch('fetchCustomers')
     items.value = store.getters.customers
-    console.log(store.getters.customers)
   } catch (err) {
-    console.error('Error dispatching fetchCustomers action:', err)
   } finally {
     loading.value = false
   }
@@ -40,7 +38,6 @@ onMounted(() => {
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: 'edit-customer', params: { id: clickedRow.id } })
 }
 

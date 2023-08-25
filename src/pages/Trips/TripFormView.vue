@@ -28,14 +28,13 @@ const resetForm = () => {
 
 const store = useStore()
 
-const submitForm = () => {
-  store.dispatch("createRoute", BaTripDataLocal.value)
+const submitForm = async() => {
+  await store.dispatch("createRoute", BaTripDataLocal.value)
 
-  console.log("Submitting form data:", BaTripDataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createRoute action:', error.value)
+
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -51,6 +50,14 @@ const submitForm = () => {
   }
   
 }
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -58,6 +65,7 @@ const submitForm = () => {
     <VRow>
       <VCol>
         <VAlert
+          v-model="successAlert"
           border="start"
           variant="tonal"
           closable
@@ -111,6 +119,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpOrigin"
                     label="Origin"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -122,6 +131,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpDestination"
                     label="Destination"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -133,6 +143,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpDistanceKm"
                     label="Distance (Km)"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -144,6 +155,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpRouteName"
                     label="Route Name"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -155,6 +167,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpTurnaroundTime"
                     label="Turnaround Time"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -166,6 +179,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpAvrgFuel"
                     label="Average Fuel"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -177,6 +191,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpDays"
                     label="Days"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -188,6 +203,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpLBltr"
                     label="Left Fuel (Ltr)"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -209,6 +225,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpSltr"
                     label="Spare Fuel (Ltr)"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <!-- 👉 Total Fuel -->
@@ -219,6 +236,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpTltr"
                     label="Total Fuel (Ltr)"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <!-- 👉 Used Fuel -->
@@ -229,6 +247,7 @@ const submitForm = () => {
                   <VTextField
                     v-model="BaTripDataLocal.trpUltr"
                     label="Used Fuel (Ltr)"
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 

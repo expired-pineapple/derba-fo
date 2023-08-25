@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
-
 const loading = ref(true)
 const expanded = ref(false)
 
@@ -33,7 +31,6 @@ const dispatch = async () => {
     
     data.value = store.getters.fleetInsurances
     insurance.value = store.getters.fleetInsurance
-    console.log('insurance:', insurance.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +43,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredInsurances = data.value.filter(item => {
@@ -63,11 +58,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-trailer-insurance', params: { id: item.id } })
   await store.dispatch('fetchTrailerInsurance', item.id)
   insurance.value = store.getters.trailerInsurance
-  console.log('Insurance:', insurance.value)
 }
 
 const editSelected = item => {
@@ -77,7 +70,6 @@ const editSelected = item => {
 const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerInsurance', insurance.value)
     await dispatch()
@@ -93,7 +85,6 @@ const submitForm = async () => {
       }, 3000)
     }
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -103,7 +94,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleetInsurance', item.id)
   await dispatch()
   router.push('/fleet-insurance')
@@ -114,6 +104,14 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -306,7 +304,7 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="FltId.FltFleetNo"
                             label="Truck"
-                            required
+                            :rules="[isEmptyValidator]"
                             :loading="loading"
                           />
                         </VCol>
@@ -320,8 +318,8 @@ const editEnabled = () => {
                             item-value="id"
                             item-title="plate_number"
                             label="Trailer"
-                            required
-                            persistent-hint="Trailer plate number"
+                            :rules="[isEmptyValidator]"
+                            placeholder="Trailer plate number"
                             :loading="loading"
                           />
                         </VCol>
@@ -332,7 +330,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsRegistrationNo"
                             label="Insurance Registration Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol
@@ -342,7 +340,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsIssuanceDate"
                             label="Issuance Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -353,7 +351,7 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsValidationDate"
                             label="Valid Date"
-                            required
+                            :rules="[isEmptyValidator]"
                             type="date"
                           />
                         </VCol>
@@ -364,13 +362,17 @@ const editEnabled = () => {
                           <VTextField
                             v-model="insurance.FltInsPolicyNo"
                             label="Insurance Policy Number"
-                            required
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                         <VCol cols="12">
-                          <VSwitch
+                          <VSelect
                             v-model="insurance.FltInscActive"
-                            label="Active"
+                            :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                            item-value="value"
+                            item-title="text"
+                            label="Insurance Status" 
+                            :rules="[isEmptyValidator]"
                           />
                         </VCol>
                       </VRow>

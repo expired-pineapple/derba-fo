@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const truckId = route.params.id
 
-console.log('Truck ID:', truckId)
-
 const loading = ref(true)
 
 const successAlert = ref(false)
@@ -24,7 +22,6 @@ const trucks = ref([])
 
 const dispatch = async () => {
   try {
-    console.log('Dispatching actions...')
     await store.dispatch('fetchTrucks')
     await store.dispatch('fetchTruckOnly', route.params.id)
     await store.dispatch('fetchDrivers')
@@ -35,16 +32,10 @@ const dispatch = async () => {
     drivers.value = store.getters.drivers
     fleets.value = store.getters.fleets
     trucks.value = store.getters.trucks
-    truck.value = store.getters.detailTruck
+    truck.value = store.getters.detailTruck  
 
-    console.log('Actions dispatched successfully!')
-    console.log('Trailers:', trailers.value)
-    console.log('Drivers:', drivers.value)
-    console.log('Fleets:', fleets.value)
-    console.log('Trucks:', trucks.value)
-    console.log('Truck:', truck.value)
   } catch (err) {
-    console.error('Error dispatching in truck form:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
@@ -55,8 +46,6 @@ onBeforeMount(async () => {
 })
 
 const searchTruck = () => {
-  console.log('Searching truck...')
-
   const search = searchValue.value
 
   const filteredTrucks = trucks.value.filter(item => {
@@ -72,7 +61,6 @@ const searchTruck = () => {
 }
 
 const editTruck = async item => {
-  console.log('Editing truck:', item)
   router.push({ name: "truck-details", params: { id: item.id } })
   await dispatch()
 }
@@ -82,7 +70,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTruck', truck.value)
     successAlert.value = true
@@ -91,7 +78,6 @@ const submitForm = async () => {
     }, 3000)
     await dispatch()
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -101,7 +87,6 @@ const submitForm = async () => {
 }
 
 const deleteTruck = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteTruck', item.id)
   await dispatch()
   router.push({ name: "trucks" })
@@ -112,6 +97,14 @@ const dialog = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -208,8 +201,7 @@ const editEnabled = () => {
             close-label="Close Alert"
             type="error"
             title="Error!"
-            text="Truck details not saved successfully"
-            timeout="5000"
+            text="Truck details not saved successful"
           />
           <!-- 👉 Form -->
           <VForm
@@ -296,6 +288,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Driver"
                   placeholder="Select a driver"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Fleet -->
@@ -311,6 +304,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Fleet"
                   placeholder="Select a fleet"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Trailer -->
@@ -326,6 +320,7 @@ const editEnabled = () => {
                   item-value="id"
                   label="Trailer"
                   placeholder="Select a trailer"
+                  :rules="[isEmptyValidator]"
                 />
               </VCol>
               <!-- 👉 Is Active -->
@@ -333,9 +328,12 @@ const editEnabled = () => {
                 cols="12"
                 md="6"
               >
-                <VSwitch
+                <VSelect
                   v-model="truck.trkActive"
                   label="Is Active"
+                  :items="[{text: 'Active', value: true}, {text: 'Inactive', value: false}]"
+                  item-value="value"
+                  item-title="text"
                 />
               </VCol>
               <!-- 👉 Form Actions -->

@@ -22,7 +22,6 @@ const headers = [
 
 ]
 
-const { fetchDjiboutiPasses } = mapActions('driver', ['fetchDjiboutiPasses'])
 
 const store = useStore()
 
@@ -30,7 +29,6 @@ onMounted(async () => {
   try {
     await store.dispatch("fetchDjiboutiPasses")
   } catch (err) {
-    console.error('Error dispatching Fetch Driver Licences action:', err)
   }
   finally{
     loading.value = !loading.value  
@@ -39,12 +37,10 @@ onMounted(async () => {
 
 const items = computed(() => store.getters.djiboutiPasses)
 
-console.log(items.value)
 
 const clickedRow = ref({})
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "driver-edit", params: { id: clickedRow.driverID.id } })
 }
 
@@ -53,9 +49,8 @@ const props = {
   subheader: "This is a list of all Driver's Djibouti Passes in the system.",
   button: {
     text: "Add Driver's Djibouti Pass",
-    to: '/register-drivers',
+    to: '/register-driver-djibouti-pass',
   },
-  buttonVisible: false,
   tableHeader: {
     headers,
     items,

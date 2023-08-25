@@ -3,265 +3,50 @@
 </template>
 
 <script lang="ts" setup>
-import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
-import { ref } from "vue"
-import { useTheme } from 'vuetify'
-import { list } from "postcss"
 import router from "@/router"
+import { ref, onMounted, computed } from "vue"
+import { mapActions, useStore } from 'vuex'
 
-const theme = useTheme()
-const currentTheme = theme.current.value.colors
-const background = currentTheme.background
+import ListLayout from "@/views/pages/page-layout/ListLayout.vue"
 
-
-const searchField = ["driver_name", "driver_dmc_id"]
+const searchField = ref("")
 const searchValue = ref("")
-  
+const loading = ref(true)
+
 const headers = [
   { text: "Driver DMC ID", value: "driver_dmc_id", sortable: true },
   { text: "Full Name", value: "driver_name", sortable: true },
   { text: "Job Title", value: "Job_title", sortable: true },
   { text: "Department", value: "department", sortable: true },
   { text: "Phone", value: "phone" },
+  { text: "Permanent Residence", value: "permanent_residence" },
+  { text: "Employment Status", value: "employment_status",  sortable: true  },
 ]
 
-const items = [
-  {
-    "driver_name": "Maria Smith",
-    "phone": "",
-    "email": "maria.smith@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D1234",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "John Doe",
-    "phone": "555-5678",
-    "email": "john.doe@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D5678",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Jane Smith",
-    "phone": "555-4321",
-    "email": "jane.smith@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D9012",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": false,
-    "employment_status": "Part-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Bob Johnson",
-    "phone": "555-8765",
-    "email": "bob.johnson@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D3456",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": "Requires additional training on hazardous materials",
-  },
-  {
-    "driver_name": "Samantha Lee",
-    "phone": "555-2345",
-    "email": "samantha.lee@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D7890",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "David Wang",
-    "phone": "555-8901",
-    "email": "david.wang@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D2345",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Emily Chen",
-    "phone": "555-6789",
-    "email": "emily.chen@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D0123",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Joshua Kim",
-    "phone": "555-3456",
-    "email": "joshua.kim@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D6789",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Rachel Nguyen",
-    "phone": "555-9012",
-    "email": "rachel.nguyen@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D3456",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": false,
-    "employment_status": "Part-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Michael Lee",
-    "phone": "555-4567",
-    "email": "michael.lee@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D7890",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Jessica Park",
-    "phone": "555-1234",
-    "email": "jessica.park@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D5678",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": "Excellent driver with high customer satisfaction ratings",
-  },
-  {
-    "driver_name": "Kevin Nguyen",
-    "phone": "555-5678",
-    "email": "kevin.nguyen@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D9012",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": false,
-    "employment_status": "Part-time",
-    "note_on_driver": "Limited availability due to school schedule",
-  },
-  {
-    "driver_name": "Vanessa Kim",
-    "phone": "555-4321",
-    "email": "vanessa.kim@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D3456",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Daniel Lee",
-    "phone": "555-8765",
-    "email": "daniel.lee@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D2345",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Grace Chen",
-    "phone": "555-2345",
-    "email": "grace.chen@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D7890",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": "Needs additional training on new delivery routes",
-  },
-  {
-    "driver_name": "Aiden Kim",
-    "phone": "555-8901",
-    "email": "aiden.kim@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D0123",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Olivia Nguyen",
-    "phone": "555-6789",
-    "email": "olivia.nguyen@example.com",
-    "permanent_residence": "Adama, Ethiopia",
-    "driver_dmc_id": "D6789",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": false,
-    "employment_status": "Part-time",
-    "note_on_driver": "Works only weekends due to other job",
-  },
-  {
-    "driver_name": "Ethan Lee",
-    "phone": "555-3456",
-    "email": "ethan.lee@example.com",
-    "permanent_residence": "Addis Ababa, Ethiopia",
-    "driver_dmc_id": "D3456",
-    "department": "Transportation",
-    "Job_title": "Truck Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": null,
-  },
-  {
-    "driver_name": "Sophia Park",
-    "phone": "555-9012",
-    "email": "sophia.park@example.com",
-    "permanent_residence": "Adama, Ethiopia",
-    "driver_dmc_id": "D7890",
-    "department": "Logistics",
-    "Job_title": "Delivery Driver",
-    "is_active": true,
-    "employment_status": "Full-time",
-    "note_on_driver": "Needs additional training on new delivery routes",
-  },
-]
+const store = useStore()
+
+onMounted(async () => {
+  try {
+    await store.dispatch("fetchDrivers")
+    loading.value = !loading.value  
+  } catch (err) {
+  }
+})
+
+const items = computed(() => store.getters.drivers)
+
+const clickedRow = ref({})
+
+const editDriver = clickedRow => {
+  router.push({ name: "driver-edit", params: { id: clickedRow.id } })
+}
 
 const props = {
   header: "Driver List",
   subheader: "This is a list of all drivers in the system.",
   button: {
     text: "Add Driver",
-    onClick: () => router.push({ name: "driver-form" }),
+    to: '/register-drivers',
   },
   tableHeader: {
     headers,
@@ -269,7 +54,29 @@ const props = {
     searchField,
     searchValue,
   },
-  buttonVisible: false,
+  clickedRow: editDriver,
+  loading: loading,
   rows: 10,
+  buttonVisible: false,
 }
 </script>
+
+<style scoped>
+.search {
+  padding: 5px;
+  border-block-end: 1px solid #0f8e3d;
+  inline-size: 100%;
+  margin-block-end: 10px;
+}
+
+.search-field {
+  padding: 5px;
+  border-block-end: none;
+  font-size: 0.8rem;
+  inline-size: 60%;
+}
+
+.search-field:focus {
+  outline: none;
+}
+</style>

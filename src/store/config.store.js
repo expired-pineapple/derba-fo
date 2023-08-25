@@ -9,7 +9,6 @@ async function fetchData(commit, url, successMutation, errorMutation) {
 
     commit(successMutation, response.data)
   } catch (error) {
-    console.log(error)
     commit(errorMutation, error.response.data.message)
   } finally {
     commit('isLoading', false)
@@ -25,7 +24,6 @@ async function createData(commit, url, successMutation, errorMutation) {
     commit(successMutation, response.data)
   }
   catch (error) {
-    console.log(error)
     commit(errorMutation, error.response.data.message)
   }
   finally {
@@ -42,7 +40,6 @@ async function updateData(commit, url, successMutation, errorMutation) {
     commit(successMutation, response.data)
   }
   catch (error) {
-    console.log(error)
     commit(errorMutation, error.response.data.message)
   }
   finally {
@@ -59,7 +56,6 @@ async function deleteData(commit, url, successMutation, errorMutation) {
     commit(successMutation, response.data)
   }
   catch (error) {
-    console.log(error)
     commit(errorMutation, error.response.data.message)
   }
   finally {

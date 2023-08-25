@@ -19,7 +19,7 @@ const formData = {
   emergency_contact: {
     drvContactName: "",
     drvContactPhone: "",
-    drvContactRelationship: "",
+    drvContactRelatinship: "",
     drvContactAdress: "",
     drvContactActiveStatus: false,
   },
@@ -91,6 +91,26 @@ const submitForm =async () => {
     console.log(error)
   }
 }
+
+const isActiveItems=[
+  { text: 'Yes', value: true },
+  { text: 'No', value: false },
+]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
+
+const hasExpiredValidator = value =>{
+  const date = new Date(value)
+  if(date < new Date()){
+    return "Document has expired"
+  }
+}
 </script>
 
 
@@ -140,16 +160,6 @@ const submitForm =async () => {
               <VCardText>
                 <!-- 👉 Form -->
                 <VForm class="">
-                  <!-- 👉Is Active -->
-                  <VRow>
-                    <VCol cols="12">
-                      <VSwitch
-                        v-model="formDataLocal.driverData.is_active"
-                        label="Is Active"
-                        color="primary"
-                      />
-                    </VCol>
-                  </VRow>
                   <VRow>
                     <!-- 👉 Full Name -->
                     <VCol
@@ -174,6 +184,7 @@ const submitForm =async () => {
                         label="E-mail"
                         type="email"
                         placeholder="johnDoe@example.com"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -186,6 +197,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.permanent_residence"
                         label="Permanent Residence"
                         placeholder="Addis Ababa, Ethiopia"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -198,6 +210,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.phone"
                         label="Phone Number"
                         placeholder="+251 912 3456 78"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -210,6 +223,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.driver_dmc_id"
                         label="Driver DMC ID"
                         placeholder="D01234"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -222,6 +236,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.department"
                         label="Department"
                         placeholder="Logistics"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -234,6 +249,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.Job_title"
                         label="Job Title"
                         placeholder="Driver"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -246,6 +262,17 @@ const submitForm =async () => {
                         v-model="formDataLocal.driverData.employment_status"
                         label="Employment Status"
                         :items="['Active', 'Inactive', 'On leave']"
+                        :rules="[isEmptyValidator]"
+                      />
+                    </VCol>
+                    <VCol cols="12">
+                      <VSelect
+                        v-model="formDataLocal.driverData.is_active"
+                        label="Is Active"
+                        :items="isActiveItems"
+                        item-title="text"
+                        item-value="value"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
   
@@ -309,7 +336,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.emergency_contact.drvContactName "
                         label="Contact Name "
                         placeholder="John Doe"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -320,7 +347,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.emergency_contact.drvContactPhone"
                         label="Contact Phone"
                         placeholder="+251 912 3456 78"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -331,7 +358,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.emergency_contact.drvContactRelatinship"
                         label="Contact Relationship"
                         placeholder="Sister"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -342,16 +369,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.emergency_contact.drvContactAdress"
                         label="Contact Adress"
                         placeholder="Addis Ababa, Ethiopia"
-                        required
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSwitch
-                        v-model="formDataLocal.emergency_contact.drvContactActiveStatus"
-                        label="Contact Active Status"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <!-- 👉 Form Actions -->
@@ -401,7 +419,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.passport.drvPassportNo"
                         label="Passport Number"
                         placeholder="A12345"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -412,7 +430,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.passport.drvPassportIssuanceDate"
                         label="Passport Issue Date"
                         placeholder="01/01/2021"
-                        required
+                        :rules="[isEmptyValidator]"
                         type="date"
                       />
                     </VCol>
@@ -424,7 +442,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.passport.drvPassportExpireDate"
                         label="Passport Expiry Date"
                         placeholder="01/01/2021"
-                        required
+                        :rules="[isEmptyValidator, hasExpiredValidator]"
                         type="date"
                       />
                     </VCol>
@@ -474,7 +492,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.licence.drvLicenceNumber"
                         label="Licence Number"
                         placeholder="A12345"
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -485,7 +503,7 @@ const submitForm =async () => {
                         v-model="formDataLocal.licence.drvLicenceAuthority"
                         label="Licence Authority"
                         placeholder=""
-                        required
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -497,6 +515,7 @@ const submitForm =async () => {
                         label="Licence Issue Date"
                         placeholder="01/01/2021"
                         type="date"
+                        :rules="[isEmptyValidator]"
                       />
                     </VCol>
                     <VCol
@@ -508,15 +527,7 @@ const submitForm =async () => {
                         label="Licence Expiry Date"
                         placeholder="01/01/2021"
                         type="date"
-                      />
-                    </VCol>
-                    <VCol
-                      md="6"
-                      cols="12"
-                    >
-                      <VSwitch
-                        v-model="formDataLocal.licence.drvLicenceActiveStatus"
-                        label="Licence Active Status"
+                        :rules="[isEmptyValidator, hasExpiredValidator]"
                       />
                     </VCol>
                     <!-- Form Actions -->

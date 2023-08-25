@@ -27,7 +27,6 @@ onBeforeMount(async () => {
 
 const items = ref(store.getters.trailerBoloes) 
 
-console.log(items.value) 
     
 const headers = [
   { text: "Plate Number", value: "TrlId.plate_number", sortable: true },
@@ -40,7 +39,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/trailer-bolo/${clickedRow.id}`)
 }
 
