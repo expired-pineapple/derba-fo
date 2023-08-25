@@ -13,7 +13,8 @@ const djiboutPassLocal = ref(structuredClone(djiboutPass))
 const editdjiboutPass = ref(false)
 
 const submitForm = () => {
-  console.log(djiboutPassLocal.value)
+  djiboutPassLocal.value = structuredClone(djiboutPass)
+  editdjiboutPass.value = false
 }
 </script>
 
@@ -67,15 +68,6 @@ const submitForm = () => {
             v-model="djiboutPassLocal.drvDjiboutiPExpDate"
             label="Djibouti Pass Expiry Date"
             type="date"
-          />
-        </VCol>
-        <VCol
-          md="6"
-          cols="12"
-        >
-          <VSwitch
-            v-model="djiboutPassLocal.drvDjiboutiPActiveStatus"
-            label="Djibouti Pass Active Status"
           />
         </VCol>
         <!-- 👉 Form Actions -->
