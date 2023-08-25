@@ -44,8 +44,6 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", trailerDataLocal.value)
   try {
     await store.dispatch("createTrailer", trailerDataLocal.value)
     if(!error) {
@@ -59,7 +57,7 @@ const submitForm = async() => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createtrailer action:", err)
+    errorAlert.value = true
   }
 }
 

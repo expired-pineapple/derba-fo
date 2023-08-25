@@ -31,11 +31,10 @@ const store = useStore()
 const submitForm = async() => {
   await store.dispatch("createRoute", BaTripDataLocal.value)
 
-  console.log("Submitting form data:", BaTripDataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createRoute action:', error.value)
+
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false

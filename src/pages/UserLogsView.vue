@@ -23,7 +23,6 @@ const loading = ref(true)
 onBeforeMount(async () => {
   await store.dispatch("fetchUserLogs")
   items.value = store.getters.userLogs
-  console.log(items.value)
   loading.value = false
 })
 

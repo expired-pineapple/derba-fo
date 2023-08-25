@@ -29,7 +29,6 @@ onMounted(async () => {
     await store.dispatch('fetchCustomers')
     customers.value = store.getters.customers
   } catch (err) {
-    console.error('Error dispatching fetchCustomers action:', err)
   }finally {
     loading.value = false
   }

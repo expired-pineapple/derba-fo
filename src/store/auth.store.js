@@ -57,10 +57,8 @@ const auth = {
         commit('setUser', userData.data)
 
         router.push('/')
-        console.log("here")
       } catch (error) {
         commit('setLoginError', error)
-        console.log(error)
       } finally {
         commit('setIsLoading', false)
       }
@@ -90,7 +88,6 @@ const auth = {
       try {
         const response = await axiosIns.post('/auth/users/', payload)
 
-        console.log("response", response)
         commit('setUser', response.data)
 
       }
@@ -119,7 +116,7 @@ const auth = {
         const users = await Promise.all(userLogPromise)
 
 
-        console.log("response", response)
+
         commit('setUserLogs', users)
 
       }

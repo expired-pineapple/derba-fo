@@ -41,8 +41,6 @@ onBeforeMount(async () => {
 })
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", boloLocal.value)
   try {
     await store.dispatch("createTrailerBolo", boloLocal.value)
 
@@ -59,7 +57,7 @@ const submitForm = async() => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createbolo action:", err)
+    errorAlert.value = true
   }
 }
 

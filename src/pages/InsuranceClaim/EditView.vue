@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('Commodity ID:', id)
 
 const loading = ref(true)
 const expand = ref(true)
@@ -26,9 +25,7 @@ const dispatch = async () => {
     await store.dispatch("fetchMtrcats")
     
     mtrcats.value = store.getters.mtrcats
-    console.log('Mtrcats:', mtrcats.value)
     data.value = store.getters.mtrcat
-    console.log('Commodity:', data.value)
   } catch (err) {
     console.error('Error dispatching in commodity form:', err)
   } finally {
@@ -41,8 +38,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredmtrcats = mtrcats.value.filter(item => {
@@ -58,11 +53,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing:', item)
   router.push({ name: 'edit-comodity', params: { id: item.id } })
   await store.dispatch('fetchCommodity', item.id)
   data.value = store.getters.commodity
-  console.log('data:', data.value)
 }
 
 const editSelected = item => {
@@ -71,7 +64,6 @@ const editSelected = item => {
 
 
 const submitForm = async () => {
-  console.log('Form submitted')
   await store.dispatch('updateMtrcat', { id: id, mtrcat: data.value })
 
   const error = computed(() => store.getters.foError)
@@ -90,7 +82,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteMtrcat', item.id)
   await dispatch()
   router.push('/category')

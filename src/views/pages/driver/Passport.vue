@@ -13,10 +13,8 @@ const drvPassportLocal = ref(drvPassport.drvPassport)
 
 const editPassport = ref(false)
 
-console.log(drvPassport)
 
 const submitForm = () => {
-  console.log(drvPassportLocal.value)
 }
 </script>
 

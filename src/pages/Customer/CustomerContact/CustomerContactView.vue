@@ -27,10 +27,8 @@ onBeforeMount(() => {
   try {
     store.dispatch('fetchCustomerContacts')
     items.value = store.getters.customerContacts
-    console.log(items.value, "Here")
-    console.log(store.getters.customerContacts)
   } catch (err) {
-    console.error('Error dispatching fetchCustomers action:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
@@ -43,14 +41,12 @@ const deleteItem = async item => {
     items.value = store.getters.customerContacts
     await store.dispatch('fetchCustomerContacts')
   } catch (err) {
-    console.error('Error dispatching deleteCustomerContact action:', err)
   }
 }
 
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: 'edit-customer', params: { id: clickedRow.id } })
 }
 

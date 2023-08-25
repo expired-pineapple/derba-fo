@@ -44,8 +44,6 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", insuranceDataLocal.value)
   try {
     await store.dispatch("createFleetInsurance", insuranceDataLocal.value)
     if(!error) {

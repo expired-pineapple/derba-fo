@@ -18,7 +18,6 @@ onBeforeMount(async () => {
   await store.dispatch('fetchInsuranceProviders')
   insuranceProviders.value=store.getters.insuranceProviders
   trucks.value = store.getters.trucks
-  console.log(trucks.value)
 })
 
 

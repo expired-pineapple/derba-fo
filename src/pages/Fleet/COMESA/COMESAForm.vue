@@ -38,7 +38,6 @@ onBeforeMount(async () => {
     trucks.value = store.getters.trucks
     fleets.value = store.getters.fleets
   } catch (err) {
-    console.error("Error dispatching fetch action:", err)
   }finally{
     loading.value=false
   }
@@ -48,8 +47,6 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", COMESADataLocal.value)
   try {
     await store.dispatch("createFleetCOMESA", COMESADataLocal.value)
     if(!error) {
@@ -63,7 +60,7 @@ const submitForm = async() => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createFleetCOMESA action:", err)
+    errorAlert.value = true
   }
 }
 

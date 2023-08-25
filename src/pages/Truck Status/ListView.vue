@@ -22,7 +22,6 @@ const items = ref([])
 const loading = ref(true)
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/tire-status/${clickedRow.id}`)
 }
 
@@ -31,7 +30,6 @@ onMounted(async () => {
     await store.dispatch("fetchTireStatus")
     items.value = store.getters.tireStatus
   } catch (err) {
-    console.error('Error dispatching fetchTrailers action:', err)
   } finally {
     loading.value = !loading.value
   }

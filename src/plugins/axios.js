@@ -24,8 +24,6 @@ axiosIns.interceptors.response.use(
         // Get the refresh token from localStorage
         const refreshToken = localStorage.getItem('refreshToken') || localStorage.getItem('refresh')
 
-        console.log("refreshToken", refreshToken)
-
         if (!refreshToken) {
           // Refresh token is expired or not available
           throw new Error('Refresh token expired or not available')
@@ -34,14 +32,11 @@ axiosIns.interceptors.response.use(
         try {
           const response = await axiosIns.post('auth/jwt/refresh/', { refresh: refreshToken })
 
-          console.log('Access token refreshed!')
-          console.log('response', response)
           localStorage.setItem('accessToken', response.data.access)
 
           // Update the authorization header with the new access token
           axiosIns.defaults.headers.common['Authorization'] = "JWT " + response.data.access
 
-          console.log("newAccessToken", response.data.access)
 
           isRefreshing = false
 
@@ -52,7 +47,6 @@ axiosIns.interceptors.response.use(
           
           return axiosIns(originalRequest)
         } catch (refreshError) {
-          console.log('Failed to refresh access token:', refreshError)
 
           // Handle the error here, such as redirect to login page or show an error message
           router.push('/login')
@@ -60,7 +54,6 @@ axiosIns.interceptors.response.use(
         }
       }
     } catch (e) {
-      console.log('An error occurred:', e)
 
       // Handle the error here, such as redirect to login page or show an error message
       router.push('/login')
@@ -68,7 +61,6 @@ axiosIns.interceptors.response.use(
 
     // Handle network errors and unexpected errors
     if (!error.response) {
-      console.log('Network error occurred:', error)
 
       // Handle the error here, such as redirect to error page or show an error message
       router.push('/error')

@@ -22,7 +22,6 @@ const submitForm = async() => {
     successAlert.value = true
     resetForm()
   } catch (err) {
-    console.error('Error dispatching createInfraction action:', err)
     errorAlert.value = true
   }
 }

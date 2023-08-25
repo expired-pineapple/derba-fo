@@ -43,7 +43,6 @@ const submitForm = async () => {
       successAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createCustomer action:", err)
   }
 }
 

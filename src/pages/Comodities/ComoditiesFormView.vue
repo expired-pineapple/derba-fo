@@ -15,7 +15,6 @@ const mtrCat = ref([])
 onBeforeMount(async () => {
   await store.dispatch('fetchMtrcats')
   mtrCat.value = store.getters.mtrcats
-  console.log(mtrCat.value)
 })
 
 const data = ref({
@@ -41,7 +40,6 @@ const submitForm = async() => {
   const error = computed(() => store.getters.foError)
 
   if (error.value) {
-    console.error('Error dispatching createComoditie action:', error.value)
     errorAlert.value = true
   } else {
     successAlert.value = true

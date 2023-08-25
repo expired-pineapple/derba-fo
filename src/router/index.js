@@ -504,7 +504,6 @@ router.beforeEach((to, from, next) => {
   const isLoggedIn = getIsLoggedIn()
 
   if (!isLoggedIn && to.name !== 'login') {
-    console.log("here")
     next({ name: 'login' }) // Redirect to the login route
   } else {
     next() // Allow navigation to the requested route

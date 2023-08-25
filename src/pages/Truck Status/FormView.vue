@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, onBeforeMount } from 'vue'
+import { ref, onBeforeMount, computed } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
@@ -31,18 +31,16 @@ onBeforeMount(async () => {
     await store.dispatch("fetchTrucks")
     trucks.value = store.getters.trucks
   } catch (err) {
-    console.error('Error dispatching fetchTrucks action:', err)
+
   }
 })
 
-const error = store.getters.vehicleError
-
-const submitForm = () => {
-  // Submit form data to backend
-  console.log("Submitting form data:", tire.value)
+const submitForm = async() => {
   try {
-    store.dispatch("createTireProvision", tire.value)
-    if(!error) {
+    await store.dispatch("createTireProvision", tire.value)
+
+    const error = computed(() => store.getters.vehicleError) 
+    if(!error.value) {
       successAlert.value = true
       resetForm()
       store.dispatch("fetchTireProvisions")
@@ -53,7 +51,6 @@ const submitForm = () => {
       errorAlert.value = true
     }
   } catch (err) {
-    console.error("Error dispatching createtireprovision action:", err)
   }
 }
 

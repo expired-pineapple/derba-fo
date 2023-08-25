@@ -16,7 +16,7 @@ const fetchItems = async () => {
   try {
     await store.dispatch("fetchTrailerThirdParties")
   } catch (err) {
-    console.error('Error dispatching fetchTrailerThirdParties action:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
@@ -38,7 +38,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/trailer-third-party/${clickedRow.id}`)
 }
 

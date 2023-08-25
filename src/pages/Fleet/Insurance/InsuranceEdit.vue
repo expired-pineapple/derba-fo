@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
-
 const loading = ref(true)
 const expanded = ref(false)
 
@@ -33,7 +31,6 @@ const dispatch = async () => {
     
     data.value = store.getters.fleetInsurances
     insurance.value = store.getters.fleetInsurance
-    console.log('insurance:', insurance.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +43,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredInsurances = data.value.filter(item => {
@@ -63,11 +58,9 @@ const search = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-trailer-insurance', params: { id: item.id } })
   await store.dispatch('fetchTrailerInsurance', item.id)
   insurance.value = store.getters.trailerInsurance
-  console.log('Insurance:', insurance.value)
 }
 
 const editSelected = item => {
@@ -77,7 +70,6 @@ const editSelected = item => {
 const error = computed(() => store.getters.vehicleError)
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailerInsurance', insurance.value)
     await dispatch()
@@ -93,7 +85,6 @@ const submitForm = async () => {
       }, 3000)
     }
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -103,7 +94,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleetInsurance', item.id)
   await dispatch()
   router.push('/fleet-insurance')

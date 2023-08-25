@@ -20,7 +20,6 @@ const loading = ref(true)
 onBeforeMount(async () => {
   await store.dispatch("fetchMtrcats")
   items.value = store.getters.mtrcats
-  console.log(items.value)
   loading.value = false
 })
 

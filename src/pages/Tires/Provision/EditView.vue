@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 
@@ -31,7 +30,6 @@ const dispatch = async () => {
     trucks.value = store.getters.trucks
 
     tire.value = store.getters.tireProvision
-    console.log('tire:', tire.value)
   } catch (err) {
     console.error('Error dispatching in tire form:', err)
   } finally {
@@ -44,8 +42,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredTires = tires.value.filter(item => {
@@ -61,7 +57,6 @@ const search = () => {
 }
 
 const editTire = async item => {
-  console.log('Editing:', item)
   router.push({ name: "edit-tire-provision", params: { id: item.id } })
   await dispatch()
 }
@@ -71,7 +66,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTireProvision', tire.value)
     successAlert.value = true
@@ -80,7 +74,6 @@ const submitForm = async () => {
     }, 3000)
     await dispatch()
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -90,7 +83,6 @@ const submitForm = async () => {
 }
 
 const deleteTire = async item => {
-  console.log('Deleting:', item)
   await store.dispatch('deleteTireProvision', item.id)
   await dispatch()
   router.push('/tire-provision')

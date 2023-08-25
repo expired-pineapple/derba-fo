@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const fleetId = route.params.id
 
-console.log('Fleet ID:', fleetId)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -28,7 +27,6 @@ const dispatch = async () => {
     
     fleets.value = store.getters.fleets
     fleet.value = store.getters.fleet
-    console.log('Fleet:', fleet.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -41,8 +39,6 @@ onBeforeMount(async () => {
 })
 
 const searchFleet = () => {
-  console.log('Searching fleet...')
-
   const search = searchValue.value
 
   const filteredFleets = fleets.value.filter(item => {
@@ -58,11 +54,9 @@ const searchFleet = () => {
 }
 
 const editFleet = async item => {
-  console.log('Editing fleet:', item)
   router.push({ name: 'edit-fleet', params: { id: item.id } })
   await store.dispatch('fetchFleet', item.id)
   fleet.value = store.getters.fleet
-  console.log('Fleet:', fleet.value)
 }
 
 const editSelected = item => {
@@ -70,7 +64,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleet', fleet.value)
     successAlert.value = true
@@ -89,7 +82,6 @@ const submitForm = async () => {
 }
 
 const deleteFleet = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleet', item.id)
   await dispatch()
   router.push('/fleet')

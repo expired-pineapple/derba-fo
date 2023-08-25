@@ -28,7 +28,6 @@ const items = ref([])
 const loading = ref(true)
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/tire-return/${clickedRow.id}`)
 }
 

@@ -46,8 +46,6 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", thirdPartyDataLocal.value)
   try {
     await store.dispatch("createFleetThirdParty", thirdPartyDataLocal.value)
     if(!error) {

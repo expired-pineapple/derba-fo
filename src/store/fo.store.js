@@ -157,7 +157,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createFuelStation({ commit }, fuelStation){
@@ -172,7 +171,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async updateFuelStation({ commit }, fuelStation){
@@ -189,7 +187,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async deleteFuelStation({ commit }, id){
@@ -203,7 +200,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
 
@@ -218,7 +214,6 @@ const FOModule = {
         const fuels = response.data
         if(id){
           commit("setFuel", fuels)
-          console.log(fuels)
         }else{
           const FuelPromise = fuels.map(async fuel => {
             const FOPromise = axiosIns.get(`/fo/${fuel.FoId}`)
@@ -233,7 +228,6 @@ const FOModule = {
 
           const updatedFuel = await Promise.all(FuelPromise)
 
-          console.log(updatedFuel)
           commit("setFuels", updatedFuel)
         }
          
@@ -242,11 +236,12 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createFuel({ commit }, fuel){
       commit("setLoading", true)
+      commit("clearError")
+
       try {
 
         const response = await axiosIns.post('/fuel/', fuel)
@@ -257,7 +252,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async updateFuel({ commit }, fuel){
@@ -275,7 +269,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async deleteFuel({ commit }, id){
@@ -289,7 +282,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
 
@@ -311,11 +303,12 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createPerdiuem({ commit }, perdiuem){
       commit("setLoading", true)
+      commit("clearError")
+
       try {
 
         const response = await axiosIns.post('/perdiuem/', perdiuem)
@@ -326,7 +319,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async updatePerdiuem({ commit }, perdiuem){
@@ -344,7 +336,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async deletePerdiuem({ commit }, id){
@@ -357,7 +348,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async fetchAdvances({ commit }, id){
@@ -389,7 +379,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createAdvance({ commit }, advance){
@@ -403,8 +392,7 @@ const FOModule = {
       }
       catch (error) {
         commit("setLoading", false)
-        commit("setError", error.response)
-        console.log(error)
+        commit("setError", error.response)  
       }
     },
     async updateAdvance({ commit }, advance){
@@ -422,7 +410,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async deleteAdvance({ commit }, id){
@@ -436,7 +423,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async fetchSettlements({ commit }, id) {
@@ -466,7 +452,6 @@ const FOModule = {
       } catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createSettlement({ commit }, settlement){
@@ -481,7 +466,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async updateSettlement({ commit }, settlement){
@@ -499,7 +483,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async deleteSettlement({ commit }, id){
@@ -513,7 +496,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
 
@@ -536,7 +518,6 @@ const FOModule = {
           fo.MtrId = commodity.data
           fo.TrkId = truck.data
 
-          console.log(fo)
 
           return fo
         })
@@ -548,7 +529,6 @@ const FOModule = {
       catch (error) {
         commit("setLoading", false)
         commit("setError", error.response)
-        console.log(error)
       }
     },
 
@@ -559,13 +539,12 @@ const FOModule = {
         const response = await axiosIns.get(`/fo/${id}/`)
         const fo = response.data
         
-        console.log(fo, "here")
+
         commit("setFo", fo)
         commit("setLoading", false)
       } catch (error) {
         commit("setError", error.response)
         commit("setLoading", false)
-        console.log(error, "here")
       }
     },
     async createFo({ commit }, fo){
@@ -590,12 +569,13 @@ const FOModule = {
       } catch (error) {
         commit("setError", error.response)
         commit("setLoading", false)
-        console.log(error)
       }
     },
 
     async updateFo({ commit }, { id, fo }){
       commit(setLoading, true)
+      commit("clearError")
+
       try {
         const response = await axiosIns.put(`/fo/${id}`, fo)
         const updatedFo = response.data
@@ -632,6 +612,8 @@ const FOModule = {
     },
     async createCustomer({ commit }, customer){
       commit("setLoading", true)
+      commit("clearError")
+
       try {
         const response = await axiosIns.post("/customer/", customer)
         const newCustomer = response.data
@@ -661,6 +643,7 @@ const FOModule = {
 
     updateCustomer: async ({ commit }, { id, customer }) => {
       commit('setLoading', true)
+      commit('clearError')
 
       try {
         const response = await axiosIns.put(`/customer/${id}/`, customer)
@@ -697,8 +680,6 @@ const FOModule = {
       const response = await axiosIns.get(url)
       const customerContacts = response.data
 
-      console.log(customerContacts)
-
       const customerContactsPromise = customerContacts.map(async customerContacts => {
         const customerPromise = axiosIns.get(`/customer/${customerContacts.customer}`)
         const [customer] = await Promise.all([customerPromise])
@@ -714,7 +695,6 @@ const FOModule = {
         commit("setCustomerContact", customerContacts)
       }else{
         commit("setCustomerContacts", customerContacts)
-        console.log(customerContacts, "CC")
       }
     },
     async createCustomerContact({ commit }, customerContact){
@@ -733,6 +713,8 @@ const FOModule = {
     },
     async updateCustomerContact({ commit }, { id, customerContact }){
       commit(setLoading, true)
+      commit("clearError")
+
       try {
         const response = await axiosIns.put(`/customercontact/${id}`, customerContact)
         const updatedCustomerContact = response.data
@@ -763,8 +745,6 @@ const FOModule = {
       const response = await axiosIns.get(url)
       const routes = response.data
 
-      console.log(routes)
-
       if(id){
         commit("setRoute", routes)
       }else{
@@ -774,15 +754,15 @@ const FOModule = {
 
     async createRoute({ commit }, route){
       commit("setLoading", true)
+      commit("clearError")
+
       try {
         const response = await axiosIns.post("/trip/", route)
         const newRoute = response.data
 
-        console.log(newRoute)
         commit("setRoute", newRoute)
         commit("setLoading", false)
       } catch (error) {
-        console.log(error)
         commit("setError", error.response)
         commit("setLoading", false)
 
@@ -791,6 +771,8 @@ const FOModule = {
 
     async updateRoute({ commit }, { id, route }){
       commit("setLoading", true)
+      commit("clearError")
+
       try {
         const response = await axiosIns.put(`/trip/${id}/`, route)
         const updatedRoute = response.data
@@ -819,7 +801,6 @@ const FOModule = {
         const response = await axiosIns.get("/bbmtrl/")
 
         const bbmtrlPromise = response.data.map(async bbmtrl => {
-          console.log(bbmtrl)
 
           const mtrcatPromise = axiosIns.get(`/mtrcat/${bbmtrl.mtrCat}`)
           const [mtrcat] = await Promise.all([mtrcatPromise])
@@ -835,7 +816,6 @@ const FOModule = {
 
       }catch(error){
         commit("setError", error.response)
-        console.log(error)
       }
 
     },
@@ -849,7 +829,6 @@ const FOModule = {
 
       }catch(error){
         commit("setError", error.response)
-        console.log(error)
       }
 
     },
@@ -868,6 +847,10 @@ const FOModule = {
       }
     },
     async updateCommodity({ commit }, { id, commodity }){
+      commit("setLoading", true)
+      commit("clearError")
+      commit("clearCommodity")
+
       try {
         const response = await axiosIns.put(`/bbmtrl/${id}`, commodity)
         const updatedCommodity = response.data
@@ -901,7 +884,6 @@ const FOModule = {
 
       }catch(error){
         commit("setError", error.response)
-        console.log(error)
       }
     },
 
@@ -916,7 +898,6 @@ const FOModule = {
 
       }catch(error){
         commit("setError", error.response)
-        console.log(error)
       }
     },
     async createMtrcat({ commit }, mtrcat){
@@ -936,6 +917,9 @@ const FOModule = {
 
     async updateMtrcat({ commit }, { id, mtrcat }){
       commit(setLoading, true)
+      commit("clearError")
+      commit("clearMtrcat")
+
       try {
         const response = await axiosIns.put(`/mtrcat/${id}`, mtrcat)
         const updatedMtrcat = response.data
@@ -952,6 +936,9 @@ const FOModule = {
 
     async deleteMtrcat({ commit }, id){
       commit("setLoading", true)
+      commit("clearMtrcat")
+      commit("clearError")
+
       try {
         await axiosIns.delete(`/mtrcat/${id}`)
         commit("clearMtrcat")

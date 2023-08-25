@@ -79,7 +79,6 @@ const router = useRouter()
 const userData= store.getters.user
 
 const logout = () => {
-  console.log('logout')
   store.dispatch('logout')
   router.push('/login')
 }

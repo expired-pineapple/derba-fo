@@ -56,7 +56,6 @@ const submitForm = async() => {
       resetForm()
     }
   } catch (err) {
-    console.error('Error dispatching createAccount action:', err)
     errorAlert.value = true
   }
 }

@@ -33,10 +33,8 @@ onBeforeMount(async () => {
     await store.dispatch("fetchTrailers")
     drivers.value = store.getters.drivers
     trailer.value = store.getters.trailers
-    console.log("Fetching trailer", trailer.value)
     fleet.value = store.getters.fleets
   } catch (err) {
-    console.error("Error dispatching in truck form:", err)
   } finally {
     driverLoading.value = false
     trailerLoading.value = false
@@ -51,7 +49,6 @@ const resetForm = () => {
 
 const submitForm = async() => {
   // Submit form data to backend
-  console.log("Submitting form data:", truckDataLocal.value)
   try {
     await store.dispatch("createTruck", truckDataLocal.value)
 
@@ -59,7 +56,6 @@ const submitForm = async() => {
 
     if (error.value) {
       errorAlert.value = true
-      console.error("Error dispatching createTruck action:", error)
     }else{
       successAlert.value = true
       store.dispatch("fetchTrucks")
@@ -67,7 +63,6 @@ const submitForm = async() => {
     resetForm()
   } catch (err) {
     errorAlert.value = true
-    console.error("Error dispatching createTruck action:", err)
   }
 }
 

@@ -23,8 +23,6 @@ const headers = [
 
 const items = ref(leaveProps.driverLeave)
 
-console.log(items.value, "leave")
-
 const props = {
   buttonVisible: false,
  

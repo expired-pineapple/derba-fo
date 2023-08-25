@@ -42,7 +42,6 @@ const error = store.getters.vehicleError
 
 
 const submitForm = async() => {
-  console.log("Submitting form data:", boloLocal.value)
   try {
     await store.dispatch("createFleetBolo", boloLocal)
     if(!error) {

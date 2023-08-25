@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('Fleet ID:', id)
-
 const loading = ref(true)
 const expanded = ref(false)
 
@@ -33,7 +31,6 @@ const dispatch = async () => {
     
     data.value = store.getters.fleetBoloes
     bolo.value = store.getters.fleetBolo
-    console.log('Bolo:', bolo.value)
   } catch (err) {
     console.error('Error dispatching in truck form:', err)
   } finally {
@@ -46,8 +43,6 @@ onBeforeMount(async () => {
 })
 
 const searchFleet = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredBoloes = data.value.filter(item => {
@@ -63,11 +58,9 @@ const searchFleet = () => {
 }
 
 const edit = async item => {
-  console.log('Editing Bolo:', item)
   router.push({ name: 'edit-fleet-bolo', params: { id: item.id } })
   await store.dispatch('fetchFleetBolo', item.id)
   bolo.value = store.getters.fleetBolo
-  console.log('Bolo:', bolo.value)
 }
 
 const editSelected = item => {
@@ -75,7 +68,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleetBolo', bolo)
     successAlert.value = true
@@ -94,7 +86,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting truck:', item)
   await store.dispatch('deleteFleetBolo', item.id)
   await dispatch()
   router.push('/fleet-bolo')

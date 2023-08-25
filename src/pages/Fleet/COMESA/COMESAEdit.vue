@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('Fleet ID:', id)
 
 const loading = ref(true)
 const expanded = ref(false)
@@ -35,9 +34,8 @@ const dispatch = async () => {
     fleets.value = store.getters.fleets
     data.value = store.getters.fleetCOMESAs
     COMESA.value = store.getters.fleetCOMESA
-    console.log('COMESAs:', COMESA.value)
   } catch (err) {
-    console.error('Error dispatching in truck form:', err)
+    loading.value = false
   } finally {
     loading.value = false
   }
@@ -48,8 +46,6 @@ onBeforeMount(async () => {
 })
 
 const searchFleet = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filtered = data.value.filter(item => {
@@ -64,11 +60,9 @@ const searchFleet = () => {
 }
 
 const edit = async item => {
-  console.log('Editing:', item)
   await store.dispatch('fetchFleetCOMESA', item.id)
   router.push({ name: 'edit-fleet-comesa', params: { id: item.id } })
   COMESA.value = store.getters.fleetCOMESA
-  console.log('fleetCOMESA:', COMESA.value)
 }
 
 const editSelected = item => {
@@ -76,7 +70,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateFleetCOMESA', COMESA.value)
     successAlert.value = true
@@ -85,7 +78,6 @@ const submitForm = async () => {
     }, 3000)
     await dispatch()
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -95,7 +87,6 @@ const submitForm = async () => {
 }
 
 const deleteItem = async item => {
-  console.log('Deleting:', item)
   await store.dispatch('deleteFleetCOMESA', item.id)
   await dispatch()
   router.push('/fleet-comesa')
@@ -112,8 +103,6 @@ const searchV = ref('')
 const searchTruck = ref('')
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchV.value
 
   const filtered = fleets.value.filter(item => {
@@ -128,8 +117,6 @@ const search = () => {
 }
 
 const searchT = () => {
-  console.log('Searching...')
-
   const search = searchTruck.value
 
   const filtered = trucks.value.filter(item => {

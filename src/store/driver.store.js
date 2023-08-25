@@ -118,9 +118,8 @@ const driverModule = {
         const response = await axiosIns.get('/drivers')
 
         commit('SET_DRIVERS', response.data)
-        console.log(response.data)
       } catch (error) {
-        console.error('Error fetching drivers:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -133,11 +132,9 @@ const driverModule = {
 
         const response = await axiosIns.get(`/drivers/${driverId}`)
 
-        console.log(response.data)
-
         commit('SET_DRIVER', response.data)
       } catch (error) {
-        console.error('Error fetching driver:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -151,11 +148,9 @@ const driverModule = {
 
         const response = await axiosIns.get(`/drvery?driverID=${driverID}`)
 
-        console.log(response.data, "eeeeee")
-
         commit('SET_EMERGENCY_CONTACT', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -188,7 +183,7 @@ const driverModule = {
 
         commit('SET_EMERGENCY_CONTACTS', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -202,11 +197,9 @@ const driverModule = {
 
         const response = await axiosIns.get(`/drvls/?driverID=${driverID}`)
 
-        console.log(response.data)
-
         commit('SET_DRIVER_LICENCE', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -237,7 +230,7 @@ const driverModule = {
 
         commit('SET_DRIVER_LICENCES', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -253,11 +246,10 @@ const driverModule = {
 
         const response = await axiosIns.get(`/drvps/?DrvId=${driverID}`)
 
-        console.log(response.data, "pass")
 
         commit('SET_DRIVER_PASSPORT', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -290,7 +282,7 @@ const driverModule = {
 
         commit('SET_DRIVER_PASSPORTS', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -306,7 +298,7 @@ const driverModule = {
 
         commit('SET_DRIVER_LEAVE_LOG', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -320,11 +312,10 @@ const driverModule = {
 
         const response = await axiosIns.get(`/drvlv/${leaveId}/`)
 
-        console.log(response.data, "leave")
 
         commit('SET_DRIVER_LEAVE_LOG', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -338,14 +329,12 @@ const driverModule = {
         
         const response = await axiosIns.get('/drvlv/')
 
-        console.log(response.data, "leave")
 
         const driverLeaveLogsPromises = response.data.map(async driverLeaveLogs => {
           const driverPromise = axiosIns.get(`/drivers/${driverLeaveLogs.driverID}/`)
           const [driverResponse] = await Promise.all([driverPromise])
 
           driverLeaveLogs.driverID = driverResponse.data
-          console.log(driverLeaveLogs, "driverLeaveLogs")
           
           return driverLeaveLogs
         })
@@ -360,7 +349,26 @@ const driverModule = {
 
         commit('SET_DRIVER_LEAVE_LOGS', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
+
+    async createDriverLeaveLog({ commit }, data) {
+      commit('clear_driver_leave_log')
+      commit('clear_error')
+
+      try {
+        commit('isLoading', true)
+
+        const response = await axiosIns.post('/drvlv/', data)
+
+        commit('SET_DRIVER_LEAVE_LOG', response.data)
+
+      } catch (error) {
+        console.log(error)
+        commit('SET_CREATE_ERROR', error)
       } finally {
         commit('isLoading', false)
       }
@@ -375,11 +383,10 @@ const driverModule = {
 
         const response = await axiosIns.get(`/djiboutipass?DrvId=${driverId}`)
 
-        console.log(response.data, "djibouti pass")
 
         commit('SET_DJIBOUTI_PASS', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -412,12 +419,29 @@ const driverModule = {
 
         commit('SET_DJIBOUTI_PASSES', response.data)
       } catch (error) {
-        console.error('Error fetching:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
     },
 
+    async createDriverDjiboutiPass({ commit }, data) {
+      commit('clear_djibouti_pass')
+      commit('clear_error')
+
+      try {
+        commit('isLoading', true)
+
+        const response = await axiosIns.post('/djiboutipass/', data)
+
+        commit('SET_DJIBOUTI_PASS', response.data)
+
+      } catch (error) {
+        commit('SET_CREATE_ERROR', error.response.data)
+      } finally {
+        commit('isLoading', false)
+      }
+    },
 
     async createDriver({ commit }, data) {
       try {
@@ -446,8 +470,7 @@ const driverModule = {
         commit('SET_DRIVER_LICENCE', driverLicenseResponse.data)
         commit('SET_DRIVER_PASSPORT', driverPassportResponse.data)
       } catch (error) {
-        commit('SET_CREATE_ERROR', error.response.data)
-        console.error('Error creating driver:', error)
+        commit('SET_CREATE_ERROR', error.response.data || error)
       } finally {
         commit('isLoading', false)
       }
@@ -456,12 +479,13 @@ const driverModule = {
       try {
         commit('isLoading', true)
         commit('clear_error')
+        commit('clear_driver')
 
         const response = await axiosIns.put(`/drivers/${driverId}/`, driverData)
 
         commit('SET_DRIVER', response.data)
       } catch (error) {
-        console.error('Error updating driver:', error)
+        commit('SET_CREATE_ERROR', error.message)
       } finally {
         commit('isLoading', false)
       }
@@ -473,7 +497,6 @@ const driverModule = {
         await axios.delete(`${BASE_URL}/drivers/${driverId}`)
         commit('SET_DRIVER', {})
       } catch (error) {
-        console.error('Error deleting driver:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -487,10 +510,8 @@ const driverModule = {
         const response = await axiosIns.put(`/drvlv/${leaveId}/`, leaveData)
 
         commit('SET_DRIVER_LEAVE_LOG', response.data)
-        console.log(response.data, "leave")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating driver leave log:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -505,10 +526,8 @@ const driverModule = {
         const response = await axiosIns.put(`/drvery/${emergencyId}/`, emergencyData)
 
         commit('SET_EMERGENCY_CONTACT', response.data)
-        console.log(response.data, "emergency")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating emergency contact:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -523,10 +542,8 @@ const driverModule = {
         const response = await axiosIns.put(`/drvls/${licenceData.id}/`, licenceData)
 
         commit('SET_DRIVER_LICENCE', response.data)
-        console.log(response.data, "licence")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating driver licence:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -541,10 +558,8 @@ const driverModule = {
         const response = await axiosIns.put(`/drvps/${passportId}/`, passportData)
 
         commit('SET_DRIVER_PASSPORT', response.data)
-        console.log(response.data, "passport")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating driver passport:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -561,7 +576,6 @@ const driverModule = {
         commit('SET_DJIBOUTI_PASS', response.data)
       } catch (error) {
         commit('SET_CREATE_ERROR', error.response.data)
-        console.error('Error creating djibouti pass:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -576,10 +590,8 @@ const driverModule = {
         const response = await axiosIns.put(`/djiboutipass/${djiboutiPassData.id}/`, djiboutiPassData)
 
         commit('SET_DJIBOUTI_PASS', response.data)
-        console.log(response.data, "djibouti pass")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating djibouti pass:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -595,7 +607,6 @@ const driverModule = {
         commit('SET_INFRACTION', response.data)
       } catch (error) {
         commit('SET_CREATE_ERROR', error.response.data)
-        console.error('Error creating infraction:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -609,10 +620,8 @@ const driverModule = {
         const response = await axiosIns.put(`/infraction/${infractionData.id}/`, infractionData)
 
         commit('SET_INFRACTION', response.data)
-        console.log(response.data, "infraction")
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating infraction:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -628,7 +637,6 @@ const driverModule = {
         commit('SET_INFRACTION_TYPE', response.data)
       } catch (error) {
         commit('SET_CREATE_ERROR', error.response.data)
-        console.error('Error creating infraction type:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -642,10 +650,9 @@ const driverModule = {
         const response = await axiosIns.put(`/infractiontype/${infractionTypeData.id}/`, infractionTypeData)
 
         commit('SET_INFRACTION_TYPE', response.data)
-        console.log(response.data, "infraction type")
+
       } catch (error) {
         commit('SET_CREATE_ERROR', error.message)
-        console.error('Error updating infraction type:', error)
       } finally {
         commit('isLoading', false)
       }
@@ -657,7 +664,7 @@ const driverModule = {
         await axiosIns.delete(`/infraction/${infractionId}`)
         commit('SET_INFRACTION', {})
       } catch (error) {
-        console.error('Error deleting infraction:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -670,7 +677,7 @@ const driverModule = {
         await axiosIns.delete(`/infractiontype/${infractionTypeId}`)
         commit('SET_INFRACTION_TYPE', {})
       } catch (error) {
-        console.error('Error deleting infraction type:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -696,8 +703,7 @@ const driverModule = {
     
         commit('SET_INFRACTIONS', updatedInfractions)
       } catch (error) {
-        console.error('Error fetching infractions:', error)
-        commit('setError', error.message) // Assuming you have an 'setError' mutation to store the error message
+        commit('SET_CREATE_ERROR', error.message)
       } finally {
         commit('isLoading', false)
       }
@@ -713,7 +719,7 @@ const driverModule = {
 
         commit('SET_INFRACTION', response.data)
       } catch (error) {
-        console.error('Error fetching infraction:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -727,7 +733,7 @@ const driverModule = {
 
         commit('SET_INFRACTION_TYPES', response.data)
       } catch (error) {
-        console.error('Error fetching infraction types:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }
@@ -742,7 +748,7 @@ const driverModule = {
 
         commit('SET_INFRACTION_TYPE', response.data)
       } catch (error) {
-        console.error('Error fetching infraction types:', error)
+        commit('SET_CREATE_ERROR', error.message || error)
       } finally {
         commit('isLoading', false)
       }

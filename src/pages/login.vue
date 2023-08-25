@@ -32,7 +32,6 @@ async function login() {
     await store.dispatch('login', form.value)
     await store.dispatch('fetchUser')
   } catch (err) {
-    console.log(err)
     error.value = err.message
   }
 }

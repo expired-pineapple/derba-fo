@@ -19,8 +19,6 @@ const loading = ref(false)
 const editEmergencyContact = ref(false)
 
 const emergencyContact = ref(emergencyProps.emergencyContact)
-
-console.log(emergencyContact.value, "asdfg")
 </script>
 
 

@@ -38,8 +38,6 @@ onBeforeMount(async () => {
 const error = store.getters.vehicleError
 
 const submitForm = async() => {
-  // Submit form data to backend
-  console.log("Submitting form data:", tire.value)
   try {
     await store.dispatch("createTireProvision", tire.value)
     if(!error) {

@@ -17,7 +17,6 @@ const store = useStore()
 onBeforeMount(async () => {
   try {
     await store.dispatch("fetchFleetBoloes")
-    console.log('Fleet Boloes:', store.getters.fleetBoloes)
   } catch (err) {
     console.error('Error dispatching fetchFleet action:', err)
   } finally {
@@ -26,9 +25,6 @@ onBeforeMount(async () => {
 })
 
 const items = ref(store.getters.fleetBoloes) 
-
-console.log(items.value)
-
 
 
     
@@ -43,7 +39,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/fleet-bolo/${clickedRow.id}`)
 }
 

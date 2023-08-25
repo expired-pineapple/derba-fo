@@ -30,7 +30,6 @@ const submitForm = async() => {
   const error = computed(() => store.getters.foError)
 
   if (error.value) {
-    console.error('Error dispatching createCommodityCategory action:', error.value)
     errorAlert.value = true
   } else {
     successAlert.value = true

@@ -13,7 +13,8 @@ const djiboutPassLocal = ref(structuredClone(djiboutPass))
 const editdjiboutPass = ref(false)
 
 const submitForm = () => {
-  console.log(djiboutPassLocal.value)
+  djiboutPassLocal.value = structuredClone(djiboutPass)
+  editdjiboutPass.value = false
 }
 </script>
 

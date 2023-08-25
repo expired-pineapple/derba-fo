@@ -17,7 +17,6 @@ onMounted(async () => {
     await store.dispatch("fetchDriverLicence", id)
   
   } catch (err) {
-    console.error('Error dispatching fetchDriverLicence action:', err)
   }
 })
 
@@ -31,7 +30,6 @@ const submitForm = () => {
   try {
     store.dispatch("updateDriverLicence", licence_local.value)
   } catch (err) {
-    console.error('Error dispatching updateDriverLicence action:', err)
   }
 }
 </script>

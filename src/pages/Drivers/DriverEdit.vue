@@ -35,7 +35,6 @@ onMounted(async () => {
     loading.value = true
     await store.dispatch("fetchDriver")
   } catch (err) {
-    console.error('Error dispatching fetchDrivers action:', err)
   }
   finally{
     loading.value = !loading.value  
