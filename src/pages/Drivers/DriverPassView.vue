@@ -39,12 +39,9 @@ onMounted(async () => {
 
 const items = computed(() => store.getters.driverPassports)
 
-console.log(items.value)
-
 const clickedRow = ref({})
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "driver-edit", params: { id: clickedRow.driverID.id } })
 }
 

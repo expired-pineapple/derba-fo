@@ -21,7 +21,6 @@ const loading = ref(true)
 onBeforeMount(async () => {
   await store.dispatch("fetchCommodities")
   items.value = store.getters.commodities
-  console.log(items.value)
   loading.value = false
 })
 

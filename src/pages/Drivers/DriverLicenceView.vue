@@ -39,12 +39,10 @@ onMounted(async () => {
 
 const items = computed(() => store.getters.driverLicences)
 
-console.log(items.value)
 
 const clickedRow = ref({})
 
 const editDriversLicence = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "driver-edit", params: { id: clickedRow.driverID.id } })
 }
 

@@ -13,7 +13,7 @@ const loading = ref(true)
 
 const store = useStore()
 
-
+const error = ref(null)
 const items = ref([]) 
 
 onBeforeMount(async () => {
@@ -21,14 +21,12 @@ onBeforeMount(async () => {
     await store.dispatch("fetchTrailerCOMESAs")
     items.value = store.getters.trailerCOMESAs
   } catch (err) {
-    console.error('Error dispatching fetchFleet action:', err)
+    error.value=err
   } finally {
     loading.value = false
   }
 })
 
-
-console.log(items.value)
 
 const headers = [
   { text: "Plate Number", value: "TrlId.plate_number", sortable: true },
@@ -43,7 +41,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/trailer-comesa/${clickedRow.id}`)
 }
 

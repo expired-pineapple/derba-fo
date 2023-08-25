@@ -35,7 +35,6 @@ onMounted(async () => {
   try {
     await store.dispatch("fetchSettlements")
     items.value = store.getters.settlements
-    console.log('items', items.value)
   } catch (err) {
     console.error('Error dispatching fetchTrailers action:', err)
   } finally {

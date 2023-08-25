@@ -38,10 +38,9 @@ const dispatch = async () => {
     
     fo.value = store.getters.fo
     fos.value = store.getters.fos
-    console.log('fos:', fos.value)
+ 
 
     perdieum.value = store.getters.perdiuem
-    console.log('perdieum:', perdieum.value)
     if (perdieum.value != null && perdieum.value.length > 0) {
       dataLocal.value = { ...perdieum.value[0] }
       edit.value = true
@@ -90,11 +89,8 @@ const submitForm = () => {
     store.dispatch("createPerdiuem", dataLocal.value)
   }
 
-  console.log("Submitting form data:", dataLocal.value)
-
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createPerdiuem action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false

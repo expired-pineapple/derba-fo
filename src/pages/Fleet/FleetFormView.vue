@@ -30,11 +30,11 @@ const resetForm = () => {
   fleetDataLocal.value = structuredClone(fleetData)
 }
 
-const submitForm = () => {
+const submitForm = async () => {
   // Submit form data to backend
   console.log("Submitting form data:", fleetDataLocal.value)
   try {
-    store.dispatch("createFleet", fleetDataLocal.value)
+    await store.dispatch("createFleet", fleetDataLocal.value)
     if(!store.getters.vehicleError  ) {
       successAlert.value = true
       resetForm()
@@ -49,6 +49,14 @@ const submitForm = () => {
   } catch (err) {
     console.error("Error dispatching createFleet action:", err)
   }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -93,26 +101,13 @@ const submitForm = () => {
                   md="6"
                   cols="12"
                 >
-                  <VSwitch
-                    v-model="fleetDataLocal.fltActive"
-                    label="Is Active"
-                    required
-                    outlined
-                    dense
-                  />
-                </VCol>
-              </VRow>
-              <VRow>
-                <VCol
-                  md="6"
-                  cols="12"
-                >
                   <VTextField
                     v-model="fleetDataLocal.fltFleetNo"
                     label="Fleet Number"
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -125,6 +120,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -137,6 +133,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -149,6 +146,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -161,6 +159,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -173,6 +172,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -185,6 +185,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -197,6 +198,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -209,6 +211,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -221,6 +224,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -233,6 +237,7 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -245,9 +250,28 @@ const submitForm = () => {
                     required
                     outlined
                     dense
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
-
+                <VCol
+                  md="6"
+                  cols="12"
+                >
+                  <VSelect
+                    v-model="fleetDataLocal.fltActive"
+                    label="Is Active"
+                    :items="[
+                      { text: 'Yes', value: true },
+                      { text: 'No', value: false },
+                    ]"
+                    item-value="value"
+                    item-title="text"
+                    required
+                    outlined
+                    dense
+                    :rules="[isEmptyValidator]"
+                  />
+                </VCol>
                 <VCol
                   cols="12"
                   class="d-flex flex-wrap gap-4"

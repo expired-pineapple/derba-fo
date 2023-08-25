@@ -27,8 +27,6 @@ onBeforeMount(async () => {
 })
 
 
-console.log(items.value)
-
 
 const headers = [
   { text: "Fleet Number", value: "FltId.fltFleetNo", sortable: true },
@@ -44,7 +42,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/fleet-comesa/${clickedRow.id}`)
 }
 

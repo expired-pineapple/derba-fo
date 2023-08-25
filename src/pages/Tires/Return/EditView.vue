@@ -9,7 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const id = route.params.id
 
-console.log('ID:', id)
 
 const loading = ref(true)
 
@@ -35,7 +34,6 @@ const dispatch = async () => {
     newTires.value = store.getters.tireProvisions
 
     tire.value = store.getters.tireReturn
-    console.log('tire:', tire.value)
   } catch (err) {
     console.error('Error dispatching in tire form:', err)
   } finally {
@@ -48,8 +46,6 @@ onBeforeMount(async () => {
 })
 
 const search = () => {
-  console.log('Searching...')
-
   const search = searchValue.value
 
   const filteredTires = tires.value.filter(item => {
@@ -76,7 +72,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTireReturn', tire.value)
     successAlert.value = true
@@ -85,7 +80,6 @@ const submitForm = async () => {
     }, 3000)
     await dispatch()
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -95,7 +89,6 @@ const submitForm = async () => {
 }
 
 const deleteTire = async item => {
-  console.log('Deleting:', item)
   await store.dispatch('deleteTireReturn', item.id)
   await dispatch()
   router.push('/tire-return')
@@ -113,6 +106,14 @@ const items = [
   { value: true, text: 'Yes' },
   { value: false, text: 'No' },
 ]
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
+}
 </script>
 
 <template>
@@ -297,7 +298,7 @@ const items = [
                       item-value="id"
                       label="Truck"
                       item-title="FltId.fltFleetNo"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -310,7 +311,7 @@ const items = [
                       label="Tire"
                       item-title="NewTyerBrand"
                       item-value="id"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -320,7 +321,7 @@ const items = [
                     <VTextField
                       v-model="tire.ReturningIssuNo"
                       label="Issue Number"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol>
                   <VCol
@@ -330,7 +331,7 @@ const items = [
                     <VTextField
                       v-model="tire.RtrnTyerClosingDate"
                       label="Tyer Closing Date"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="date"
                     />
                   </VCol>
@@ -341,7 +342,7 @@ const items = [
                     <VTextField
                       v-model="tire.RtrnTyerClosingKM"
                       label="KM"
-                      required
+                      :rules="[isEmptyValidator]"
                       type="number"
                     />
                   </VCol>
@@ -361,7 +362,7 @@ const items = [
                     <VTextarea
                       v-model="tire.TyerClosingRemark"
                       label="Remark"
-                      required
+                      :rules="[isEmptyValidator]"
                     />
                   </VCol> 
                   <VCol

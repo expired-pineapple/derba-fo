@@ -9,8 +9,6 @@ const route = useRoute()
 const searchValue = ref('')
 const trailerId = route.params.id
 
-console.log('Truck ID:', trailerId)
-
 const loading = ref(true)
 
 const successAlert = ref(false)
@@ -28,7 +26,6 @@ const dispatch = async () => {
     trailers.value = store.getters.trailers
 
     trailer.value = store.getters.trailer
-    console.log('Trailer:', trailer.value)
   } catch (err) {
     console.error('Error dispatching in trailer form:', err)
   } finally {
@@ -41,8 +38,6 @@ onBeforeMount(async () => {
 })
 
 const searchTrailer = () => {
-  console.log('Searching trailer...')
-
   const search = searchValue.value
 
   const filteredTrailers = trailers.value.filter(item => {
@@ -58,7 +53,6 @@ const searchTrailer = () => {
 }
 
 const editTrailer = async item => {
-  console.log('Editing trailer:', item)
   router.push({ name: "trailer-edit", params: { id: item.id } })
   await dispatch()
 }
@@ -68,7 +62,6 @@ const editSelected = item => {
 }
 
 const submitForm = async () => {
-  console.log('Submitting form...')
   try {
     await store.dispatch('updateTrailer', trailer.value)
     successAlert.value = true
@@ -77,7 +70,6 @@ const submitForm = async () => {
     }, 3000)
     await dispatch()
   } catch (err) {
-    console.error('Error submitting form:', err)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
@@ -87,7 +79,6 @@ const submitForm = async () => {
 }
 
 const deleteTrailer = async item => {
-  console.log('Deleting Trailer:', item)
   await store.dispatch('deleteTrailer', item.id)
   await dispatch()
   router.push('/trailers')
@@ -99,6 +90,14 @@ const expanded = ref(false)
 
 const editEnabled = () => {
   disabled.value = false
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
+  }
+  
+  return true
 }
 </script>
 
@@ -279,7 +278,7 @@ const editEnabled = () => {
                 <VSwitch
                   v-model="trailer.is_active"
                   label="Is Active"
-                  required
+                  :rules="[isEmptyValidator]"
                   outlined
                   dense
                 />
@@ -292,7 +291,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.fleet_number"
                     label="Fleet Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -304,7 +303,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.plate_number"
                     label="Plate Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -316,7 +315,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.trailer_model"
                     label="Trailer Model"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -328,7 +327,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.trailer_type"
                     label="Trailer Type"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -343,7 +342,7 @@ const editEnabled = () => {
                     item-title="driver_name"
                     item-value="id"
                     label="Driver"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -355,7 +354,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.capacity"
                     label="Capacity"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -367,7 +366,7 @@ const editEnabled = () => {
                   <VTextField
                     v-model="trailer.chasis_number"
                     label="Chasis Number"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -382,7 +381,7 @@ const editEnabled = () => {
                     item-title="condition"
                     item-value="id"
                     label="Condition"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />
@@ -394,7 +393,7 @@ const editEnabled = () => {
                   <VTextarea
                     v-model="trailer.remarks"
                     label="Remarks"
-                    required
+                    :rules="[isEmptyValidator]"
                     outlined
                     dense
                   />

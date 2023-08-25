@@ -11,7 +11,7 @@ import { useStore } from 'vuex'
 
 const headers = [
   { text: "Tire", value: "NewTyerID.NewTyerSerialNo", sortable: true },
-  { text: "Truck", value: "TrkId", sortable: true },
+  { text: "Truck", value: "TrkId.FltId.flt", sortable: true },
   { text: "Issue No", value: "ReturningIssuNo", sortable: true },
   { text: "Date", value: "RtrnTyerClosingDate", sortable: true  },
   { text: "KM", value: "RtrnTyerClosingKM", sortable: true },
@@ -28,7 +28,6 @@ const items = ref([])
 const loading = ref(true)
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/tire-return/${clickedRow.id}`)
 }
 

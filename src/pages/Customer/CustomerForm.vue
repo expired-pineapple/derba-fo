@@ -31,19 +31,27 @@ const resetForm = () => {
 }
 
 
-const submitForm = () => {
-  store.dispatch("createCustomer", data.value)
+const submitForm = async () => {
+  try {
+    await store.dispatch("createCustomer", data.value)
 
-  const error = computed(() => store.getters.error)
+    const error = computed(() => store.getters.foError)
 
-  if (error.value) {
-    console.error('Error dispatching createCustomer action:', error.value)
-    errorAlert.value = true
-  } else {
-    successAlert.value = true
-    resetForm()
+    if (error.value) {
+      errorAlert.value = true
+    } else {
+      successAlert.value = true
+    }
+  } catch (err) {
+  }
+}
+
+const isEmptyValidator = value => {
+  if (!value) {
+    return "This field is required."
   }
   
+  return true
 }
 </script>
 
@@ -89,6 +97,7 @@ const submitForm = () => {
                     v-model="data.cmrCode"
                     label="Customer Code"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -99,6 +108,7 @@ const submitForm = () => {
                     v-model="data.cmrName"
                     label="Customer Name"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -109,6 +119,7 @@ const submitForm = () => {
                     v-model="data.cmrTIN"
                     label="Customer TIN"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
                 <VCol
@@ -119,6 +130,7 @@ const submitForm = () => {
                     v-model="data.cmrAddress"
                     label="Customer Address"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
 
@@ -130,6 +142,7 @@ const submitForm = () => {
                     v-model="data.cmrPhone"
                     label="Customer Phone"
                     required
+                    :rules="[isEmptyValidator]"
                   />
                 </VCol>
               </VRow>

@@ -44,7 +44,6 @@ const headers = [
 
 
 const edit = clickedRow => {
-  console.log(clickedRow)
   router.push(`/fleet/${clickedRow.id}`)
 }
 

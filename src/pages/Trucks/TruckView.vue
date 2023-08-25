@@ -26,7 +26,7 @@ onMounted(async () => {
     await store.dispatch("fetchTrucks")
     items.value = store.getters.trucks
   } catch (err) {
-    console.error('Error dispatching fetchDriverAssignedTrucks action:', err)
+    loading.value = !loading.value
   }finally{
     loading.value = !loading.value
   }
@@ -48,7 +48,6 @@ const registerForm = () => {
 }
 
 const editTrucks = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "truck-details", params: { id: clickedRow.id } })
 }
 

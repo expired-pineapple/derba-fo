@@ -41,7 +41,6 @@ const items = computed(() => store.getters.drivers)
 const clickedRow = ref({})
 
 const editDriver = clickedRow => {
-  console.log(clickedRow)
   router.push({ name: "driver-edit", params: { id: clickedRow.id } })
 }
 

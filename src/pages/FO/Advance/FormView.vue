@@ -36,9 +36,7 @@ const dispatch = async () => {
     await store.dispatch("fetchAdvances", route.params.id)
 
     advance.value = store.getters.advance
-    console.log('advance:', advance.value)
     fos.value = store.getters.fo
-    console.log('fos:', fos.value)
 
     if (advance.value !== null && advance.value.length > 0) {
       edit.value = true
@@ -81,11 +79,9 @@ const submitForm = () => {
   }else{
     store.dispatch("createAdvance", dataLocal.value)
   }
-  console.log("Submitting form data:", dataLocal.value)
 
   const error = computed(() => store.getters.foError)
   if (error.value) {
-    console.error('Error dispatching createFo action:', error.value)
     errorAlert.value = true
     setTimeout(() => {
       errorAlert.value = false
